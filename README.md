@@ -11,9 +11,11 @@ version 0.11.0.
 * install the Yeoman AngularJS generator with `npm install -g generator-angular`
   
 * git clone this repo
-* install local node modules with `npm install`
 * install Ruby if you don't already have it
 * install compass with `gem install compass`
+* install local node modules with `npm install`
+* install local node modules with `bower install`
+
 * launch the application in your browser by running `grunt serve`
 
 ## Build & development
