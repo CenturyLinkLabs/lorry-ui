@@ -1,0 +1,17 @@
+<div ng-controller="SearchCtrl">
+  <form ng-submit="doSearch(query)" novalidate>
+    <label>Search:</label>
+    <input type="text" id="query" placeholder="panamax" ng-model="query"/>
+    <button type="submit">Search</button>
+    <button type="button" ng-click="doCancel()">Cancel</button>
+  </form>
+  <hr/>
+  <div ng-hide="noResults">
+    Results:
+    <ul>
+      <li ng-repeat="result in searchResults">
+        {{result.name}} | {{result.source}} | {{result.description}} | {{result.stars}}
+      </li>
+    </ul>
+  </div>
+</div>
