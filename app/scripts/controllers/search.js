@@ -8,30 +8,38 @@
  * Controller of the lorryApp
  */
 angular.module('lorryApp')
-  .controller('SearchCtrl', function($scope) {
-    $scope.apiEndpoint = 'http://panamax.local:3001/search?q=';
+  .controller('SearchCtrl', ['$scope' , 'Repository', 'Tag', function($scope, Repository, Tag) {
     $scope.noResults = true;
     $scope.searchResults = [];
-    $scope.resultData = [
-      {'name': 'panamax-ui', 'source': 'centurylink/panamax-ui', 'description': 'lorem ipsum ui', 'stars': '10', 'tags': 'latest'},
-      {'name': 'panamax-api', 'source': 'centurylink/panamax-api', 'description': 'lorem ipsum api', 'stars': '4', 'tags': 'latest'}
-    ];
 
-    $scope.doSearch = function(query){
-      //this.searchUrl = this.apiEndpoint + query;
-      if (query === '' || query === undefined) {
+    $scope.doSearch = function(qterm){
+      if (qterm === '' || qterm === undefined) {
         console.log('Need to specify a query term to search.');
         $scope.searchResults = [];
         $scope.noResults = true;
         return;
       }
-      console.log('Searching for: ' + query);
-      $scope.searchResults = $scope.resultData;
+      $scope.searchResults = Repository.query({searchTerm:qterm});
       $scope.noResults = false;
+
+    };
+
+    $scope.insertTags = function(){
+      angular.forEach($scope.searchResults, function(value, key) {
+        value.tags = $scope.getTags(value.username, value.reponame);
+      });
+    };
+
+    $scope.getTags = function(username, reponame) {
+      return Tag.query({
+        repoUser: username,
+        repoName: reponame
+      });
     };
 
     $scope.doCancel = function(){
       $scope.noResults = true;
+      $scope.searchResults = [];
     };
 
-  });
+  }]);

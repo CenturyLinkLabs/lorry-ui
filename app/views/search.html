@@ -1,16 +1,32 @@
 <div ng-controller="SearchCtrl">
-  <form ng-submit="doSearch(query)" novalidate>
+  <form ng-submit="doSearch(qterm)" novalidate>
     <label>Search:</label>
-    <input type="text" id="query" placeholder="panamax" ng-model="query"/>
+    <input type="search" placeholder="panamax" ng-model="qterm"/>
     <button type="submit">Search</button>
     <button type="button" ng-click="doCancel()">Cancel</button>
+    <button type="button" ng-click="insertTags()">Get Tags</button>
   </form>
   <hr/>
   <div ng-hide="noResults">
-    Results:
+    Search Results for '{{qterm}}': {{searchResults.length}} hits
     <ul>
-      <li ng-repeat="result in searchResults">
-        {{result.name}} | {{result.source}} | {{result.description}} | {{result.stars}}
+      <li ng-repeat="(username, repos) in (searchResults | groupBy: 'username')">
+        Username: {{username}}
+        <ul ng-repeat="repo in repos">
+          <li>
+            <strong>{{repo.name}}</strong> |
+            Stars: {{repo.star_count}}
+            <strong ng-show="repo.is_official">| Official</strong>
+            <strong ng-show="repo.is_trusted">| Trusted</strong>
+            <br/>
+            {{repo.description}}
+            <ul>
+              <li ng-repeat="tag in repo.tags">
+                Tag: {{tag.name}}
+              </li>
+            </ul>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>

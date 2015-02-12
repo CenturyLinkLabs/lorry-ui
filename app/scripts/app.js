@@ -8,8 +8,13 @@ angular
     'ngResource',
     'ngSanitize',
     'ngLodash',
-    'ngDialog'
+    'ngDialog',
+    'docker-registry',
+    'angular.filter'
   ])
+  .constant('appConfig', {
+    'REGISTRY_API_ENDPOINT': 'https://index.docker.io'
+  })
   .config(function ($httpProvider) {
       //Enable cross domain calls
       $httpProvider.defaults.useXDomain = true;

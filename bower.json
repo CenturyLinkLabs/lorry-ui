@@ -8,6 +8,7 @@
     "angular-messages": "^1.3.0",
     "angular-resource": "^1.3.0",
     "angular-sanitize": "^1.3.0",
+    "angular-filter": "~0.5.2",
     "ng-lodash": "~0.2.0",
     "jquery": "~2.1.3",
     "ngDialog": "~0.3.11"
