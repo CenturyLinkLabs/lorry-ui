@@ -14,13 +14,13 @@ angular.module('lorryApp')
 
     $scope.doSearch = function(qterm){
       if (qterm === '' || qterm === undefined) {
-        console.log('Need to specify a query term to search.');
-        $scope.searchResults = [];
+        $scope.searchResults = {};
         $scope.noResults = true;
-        return;
       }
-      $scope.searchResults = Repository.query({searchTerm:qterm});
-      $scope.noResults = false;
+      else {
+        $scope.searchResults = Repository.query({searchTerm:qterm});
+        $scope.noResults = false;
+      }
 
     };
 
