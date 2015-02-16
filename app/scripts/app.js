@@ -13,7 +13,8 @@ angular
     'angular.filter'
   ])
   .constant('appConfig', {
-    'REGISTRY_API_ENDPOINT': 'https://index.docker.io'
+    'REGISTRY_API_ENDPOINT': 'https://index.docker.io',
+    'LORRY_API_ENDPOINT' : 'http://localhost:9292'
   })
   .config(function ($httpProvider) {
       //Enable cross domain calls
