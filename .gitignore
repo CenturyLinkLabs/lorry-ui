@@ -1,5 +1,6 @@
 node_modules
 dist
+*.log
 .tmp
 .sass-cache
 bower_components

@@ -26,6 +26,7 @@ module.exports = function(config) {
       'bower_components/angular-messages/angular-messages.js',
       'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
+      'bower_components/angular-filter/dist/angular-filter.js',
       'bower_components/ng-lodash/build/ng-lodash.js',
       'bower_components/ngDialog/js/ngDialog.js',
       'bower_components/angular-mocks/angular-mocks.js',
@@ -57,7 +58,8 @@ module.exports = function(config) {
     // Which plugins to enable
     plugins: [
       'karma-phantomjs-launcher',
-      'karma-jasmine'
+      'karma-jasmine',
+      "karma-spec-reporter"
     ],
 
     // Continuous Integration mode
@@ -76,5 +78,7 @@ module.exports = function(config) {
     // },
     // URL root prevent conflicts with the site root
     // urlRoot: '_karma_'
+    reporters: ['spec'],
+    specReporter: {maxLogLines: 5}
   });
 };
