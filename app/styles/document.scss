@@ -1,0 +1,38 @@
+#documentPane {
+  float: left;
+  width: 100%;
+}
+
+.serviceDefinition {
+  float: left;
+  width: 100%;
+}
+
+.line {
+
+  clear: both;
+  float: left;
+  width: 100%;
+
+  &.error {
+    background-color: red;
+  }
+
+  .gutter {
+    float: left;
+    width: 35px;
+    border-right: 1px solid darkgray;
+    margin-right: 3px;
+    padding-right: 3px;
+    text-align: right
+  }
+
+  .line-text {
+    float: left;
+  }
+
+  .line-info {
+    float: right;
+    display: none;
+  }
+}
