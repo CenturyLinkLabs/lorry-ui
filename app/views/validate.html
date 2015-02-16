@@ -1,4 +1,4 @@
-<div ng-hide="yamlValidation.lines">
+<div>
   <form name="yamlValidator">
     <textarea rows="30"
               cols="80"
@@ -7,14 +7,9 @@
               ng-model="yamlValidation.document"></textarea>
   </form>
 </div>
-<div ng-repeat="line in yamlValidation.lines track by $index" ng-show="yamlValidation.lines">
-  <div style="float: left; width: 35px; border-right: 1px solid darkgray; margin-right: 3px; padding-right: 3px; text-align: right"><code>{{$index + 1}}</code></div>
-  <div><code ng-bind-html="line | nonbreakify"></code></div>
-</div>
-<div class="errors">
-  <div ng-repeat="err in yamlValidation.errors">
-    <span class="errLine" ng-show="err.error.line">line: {{err.error.line}}</span>
-    <span class="errColumn" ng-show="err.error.column">col: {{err.error.column}}</span>
-    <span class="errMessage">{{err.error.message}}</span>
+
+<div id="documentPane">
+  <div ng-repeat="serviceDefinition in serviceDefinitions">
+    <service-definition-display service-definition="serviceDefinition"/>
   </div>
 </div>

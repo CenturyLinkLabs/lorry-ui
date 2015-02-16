@@ -12,6 +12,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/document.css">
     <!-- endbuild -->
   </head>
   <body ng-app="lorryApp">
@@ -31,12 +32,14 @@
     </footer>
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/ng-lodash/build/ng-lodash.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -47,6 +50,8 @@
         <script src="scripts/services/yaml-validator.js"></script>
         <script src="scripts/filters/nonbreakify.js"></script>
         <script src="scripts/services/validation-host.js"></script>
+        <script src="scripts/directives/service-definition-display.js"></script>
+        <script src="scripts/directives/document-line.js"></script>
         <!-- endbuild -->
 </body>
 </html>

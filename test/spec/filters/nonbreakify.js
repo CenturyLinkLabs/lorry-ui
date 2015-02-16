@@ -11,9 +11,9 @@ describe('Filter: nonbreakify', function () {
     nonbreakify = $filter('nonbreakify');
   }));
 
-  it('should return the input prefixed with "nonbreakify filter:"', function () {
-    var text = 'angularjs';
-    expect(nonbreakify(text)).toBe('nonbreakify filter: ' + text);
+  it('should return the input with spaces replaced by non-breaking spaces', function () {
+    var text = 'some text';
+    expect(nonbreakify(text).toString()).toBe('some&nbsp;text');
   });
 
 });

@@ -6,7 +6,8 @@ angular
     'ngCookies',
     'ngMessages',
     'ngResource',
-    'ngSanitize'
+    'ngSanitize',
+    'ngLodash'
   ])
   .config(function ($httpProvider) {
       //Enable cross domain calls
