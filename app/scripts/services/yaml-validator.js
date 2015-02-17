@@ -1,14 +1,10 @@
 'use strict';
 
 angular.module('lorryApp')
-  .factory('yamlValidator', ['$http', '$log', 'validationHost', function ($http, $log, validationHost) {
-    var documentValidation = function(yamlDocument) {
-      return $http.post(validationHost + '/validation', { 'document': yamlDocument });
-    };
-
+  .factory('yamlValidator', ['$http', '$log', 'appConfig', function ($http, $log, appConfig) {
     return {
       validate: function(yamlDocument) {
-        return documentValidation(yamlDocument);
+        return $http.post(appConfig.LORRY_API_ENDPOINT + '/validation', { 'document': yamlDocument });
       }
     };
   }]);

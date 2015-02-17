@@ -9,7 +9,7 @@ angular.module('lorryApp')
       restrict: 'E',
       replace: 'true',
       link: function postLink(scope, element, attrs) {
-        $log.log(scope.serviceDefinition);
+        //$log.log(scope.serviceDefinition);
       },
       templateUrl: '/scripts/directives/service-definition-display.html'
     };
