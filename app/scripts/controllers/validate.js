@@ -4,22 +4,44 @@ angular.module('lorryApp').controller('ValidateCtrl', ['$scope', '$log', 'yamlVa
   function ($scope, $log, yamlValidator, lodash, ngDialog) {
     $scope.yamlValidation = {};
 
+    $scope.dialogOptions = {
+      dialogPane: 'upload',
+      title: 'Import compose.yml'
+    };
+
     $scope.importDialog = function () {
       $scope.dialog = ngDialog.open({
         template: '/views/import-dialog.html',
-        className: 'ngdialog-theme-plain',
+        className: 'ngdialog-theme-lorry',
+        showClose: false,
         scope: $scope
       });
+    };
+
+    $scope.setDialogPane = function (pane) {
+      $scope.dialogOptions.dialogPane = pane;
+    };
+
+    $scope.importYaml = function() {
+      switch ($scope.dialogOptions.dialogPane) {
+        case 'remote':
+          break;
+        case 'paste':
+          $scope.validateYaml();
+          break;
+        default:
+          $scope.upload();
+      }
+      $scope.dialog.close();
     };
 
     $scope.upload = function() {
       var fr = new FileReader();
       fr.addEventListener('load', handleFileLoaded);
       fr.readAsText($scope.files[0]);
-      $scope.dialog.close();
     };
 
-    $scope.validateYAML = function() {
+    $scope.validateYaml = function() {
       yamlValidator.validate($scope.yamlValidation.document)
                    .then(handleValidationSuccess)
                    .catch(handleValidationError);
@@ -27,7 +49,7 @@ angular.module('lorryApp').controller('ValidateCtrl', ['$scope', '$log', 'yamlVa
 
     var handleFileLoaded = function(e) {
       $scope.yamlValidation.document = e.target.result;
-      $scope.validateYAML();
+      $scope.validateYaml();
     };
 
     var handleValidationSuccess = function (response) {

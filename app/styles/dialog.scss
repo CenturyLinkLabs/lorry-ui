@@ -1,0 +1,52 @@
+.ngdialog-theme-lorry {
+  padding-bottom: 160px;
+  padding-top: 160px;
+
+  .ngdialog-content {
+    background: #fff;
+    margin: 0 auto;
+    max-width: 100%;
+    position: relative;
+    width: 780px;
+
+    .ngdialog-close {
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .ngdialog-close:before {
+      background: transparent;
+      color: #bbb;
+      content: "\00D7";
+      font-size: 26px;
+      font-weight: 400;
+      height: 30px;
+      line-height: 26px;
+      position: absolute;
+      right: 3px;
+      text-align: center;
+      top: 3px;
+      width: 30px;
+    }
+
+    .ngdialog-close:hover:before,
+    .ngdialog-close:active:before {
+      color: #777;
+    }
+
+    .dialog-title,
+    .dialog-instructions,
+    .dialog-content,
+    .dialog-footer {
+      padding:15px;
+    }
+
+    textarea {
+      width: 750px;
+      height: 400px;
+    }
+  }
+
+}

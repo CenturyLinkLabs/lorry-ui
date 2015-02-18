@@ -18,7 +18,49 @@ describe('Controller: ValidateCtrl', function () {
     yamlValidator = _yamlValidator_;
   }));
 
-  describe('$scope.validateYAML', function() {
+  describe('$scope.setDialogPane', function () {
+    it ('sets the $scope.dialogOptions.dialogPane to the argument passed', function () {
+      scope.setDialogPane('foo');
+      expect(scope.dialogOptions.dialogPane).toBe('foo');
+    });
+  });
+
+  describe('$scope.importYaml', function () {
+    beforeEach(function () {
+      scope.dialog = jasmine.createSpyObj('dialog', ['close']);
+      spyOn(scope, 'validateYaml');
+      spyOn(scope, 'upload');
+    });
+
+    describe("when the dialogPane is 'remote'", function () {
+      it('triggers the function to fetch from the remote address', function () {
+        pending(); //TODO
+      });
+    });
+
+    describe("when the dialogPane is 'paste'", function () {
+      it('triggers $scope.validateYaml', function () {
+        scope.dialogOptions.dialogPane = 'paste';
+        scope.importYaml();
+        expect(scope.validateYaml).toHaveBeenCalled();
+      });
+    });
+
+    describe("when the dialogPane is 'upload'", function () {
+      it('triggers $scope.validateYaml', function () {
+        scope.dialogOptions.dialogPane = 'upload';
+        scope.importYaml();
+        expect(scope.upload).toHaveBeenCalled();
+      });
+    });
+
+    it('triggers the closing of the import dialog', function(){
+      scope.importYaml();
+      expect(scope.dialog.close).toHaveBeenCalled();
+    });
+  });
+
+  describe('$scope.validateYaml', function() {
 
     describe('when validation succeeds', function() {
       var deferredSuccess;
@@ -26,7 +68,7 @@ describe('Controller: ValidateCtrl', function () {
       beforeEach(inject(function($q) {
         deferredSuccess = $q.defer();
         spyOn(yamlValidator, 'validate').and.returnValue(deferredSuccess.promise);
-        scope.validateYAML();
+        scope.validateYaml();
         deferredSuccess.resolve({data: {lines: ['line'], errors: ['error']}});
         scope.$digest();
       }));
@@ -48,7 +90,7 @@ describe('Controller: ValidateCtrl', function () {
       beforeEach(inject(function($q) {
         deferredError = $q.defer();
         spyOn(yamlValidator, 'validate').and.returnValue(deferredError.promise);
-        scope.validateYAML();
+        scope.validateYaml();
         deferredError.reject({data: {error: 'something went wrong'}});
         scope.$digest();
       }));
@@ -73,8 +115,7 @@ describe('Controller: ValidateCtrl', function () {
     beforeEach(function(){
       scope.files = [fakeFile];
       spyOn(window, "FileReader").and.returnValue(reader);
-      scope.dialog = jasmine.createSpyObj('dialog', ['close']);
-      spyOn(scope, 'validateYAML');
+      spyOn(scope, 'validateYaml');
       scope.upload();
     });
 
@@ -93,11 +134,7 @@ describe('Controller: ValidateCtrl', function () {
           result : 'foo: file content'
         }
       });
-      expect(scope.validateYAML).toHaveBeenCalled();
-    });
-
-    it('trigers the closing of the import dialog', function(){
-      expect(scope.dialog.close).toHaveBeenCalled();
+      expect(scope.validateYaml).toHaveBeenCalled();
     });
   });
 
