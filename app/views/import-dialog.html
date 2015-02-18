@@ -19,7 +19,7 @@
     </div>
     <div ng-show="dialogOptions.dialogPane === 'paste'">
       <p>Paste your compose.yml contents below</p>
-      <textarea placeholder="Paste or write your YAML here" ng-model="yamlValidation.document"></textarea>
+      <textarea placeholder="Paste or write your YAML here" ng-model="yamlDocument.raw"></textarea>
     </div>
     <div ng-show="dialogOptions.dialogPane === 'remote'">
       <p>Paste the full URI of your remote compose.yml</p>

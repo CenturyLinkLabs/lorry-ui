@@ -1,21 +1,21 @@
 'use strict';
 
-describe('Controller: ValidateCtrl', function () {
+describe('Controller: DocumentImportCtrl', function () {
 
   // load the controller's module
   beforeEach(module('lorryApp'));
 
-  var ValidateCtrl,
-    scope,
-    yamlValidator;
+  var DocumentImportCtrl,
+    scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_) {
+  beforeEach(inject(function ($controller, $rootScope) {
+    $rootScope.validateYaml = function(){}; // mock the parent scope validateYaml()
+    $rootScope.yamlDocument = {}; // mock the parent scope yamlDocument
     scope = $rootScope.$new();
-    ValidateCtrl = $controller('ValidateCtrl', {
+    DocumentImportCtrl = $controller('DocumentImportCtrl', {
       $scope: scope
     });
-    yamlValidator = _yamlValidator_;
   }));
 
   describe('$scope.setDialogPane', function () {
@@ -39,7 +39,7 @@ describe('Controller: ValidateCtrl', function () {
     });
 
     describe("when the dialogPane is 'paste'", function () {
-      it('triggers $scope.validateYaml', function () {
+      it('triggers validateYaml on the $parent scope', function () {
         scope.dialogOptions.dialogPane = 'paste';
         scope.importYaml();
         expect(scope.validateYaml).toHaveBeenCalled();
@@ -60,53 +60,6 @@ describe('Controller: ValidateCtrl', function () {
     });
   });
 
-  describe('$scope.validateYaml', function() {
-
-    describe('when validation succeeds', function() {
-      var deferredSuccess;
-
-      beforeEach(inject(function($q) {
-        deferredSuccess = $q.defer();
-        spyOn(yamlValidator, 'validate').and.returnValue(deferredSuccess.promise);
-        scope.validateYaml();
-        deferredSuccess.resolve({data: {lines: ['line'], errors: ['error']}});
-        scope.$digest();
-      }));
-
-      it ('adds validation data to the scope', function() {
-        expect(scope.yamlValidation.lines).toEqual(['line']);
-        expect(scope.yamlValidation.errors).toEqual(['error']);
-      });
-
-      it ('builds the service definitions', function() {
-        expect(scope.serviceDefinitions).toBeDefined();
-        expect(scope.serviceDefinitions).toContain([{ text: 'line', lineNumber: 1, errors: [  ] }]);
-      });
-    });
-
-    describe('when validation fails', function() {
-      var deferredError;
-
-      beforeEach(inject(function($q) {
-        deferredError = $q.defer();
-        spyOn(yamlValidator, 'validate').and.returnValue(deferredError.promise);
-        scope.validateYaml();
-        deferredError.reject({data: {error: 'something went wrong'}});
-        scope.$digest();
-      }));
-
-      it ('adds the error to the scope', function() {
-        expect(scope.yamlValidation.lines).toBeUndefined();
-        expect(scope.yamlValidation.errors).toEqual([{error: {message: 'something went wrong'}}]);
-      });
-
-      it ('does not build the service definitions', function () {
-        expect(scope.serviceDefinitions).toBeUndefined();
-      })
-    });
-
-  });
-
   describe('$scope.upload', function(){
     var eventListener = jasmine.createSpy();
     var reader = { addEventListener: eventListener, readAsText: function (file) {} };
@@ -125,7 +78,7 @@ describe('Controller: ValidateCtrl', function () {
           result : 'foo: file content'
         }
       });
-      expect(scope.yamlValidation.document).toEqual('foo: file content');
+      expect(scope.yamlDocument.raw).toEqual('foo: file content');
     });
 
     it('triggers validation of the document', function() {
@@ -137,5 +90,4 @@ describe('Controller: ValidateCtrl', function () {
       expect(scope.validateYaml).toHaveBeenCalled();
     });
   });
-
 });
