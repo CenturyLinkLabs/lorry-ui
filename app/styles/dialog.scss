@@ -1,3 +1,6 @@
+@import '_colors';
+@import '_variables';
+
 .ngdialog-theme-lorry {
   padding-bottom: 160px;
   padding-top: 160px;
@@ -18,34 +21,68 @@
 
     .ngdialog-close:before {
       background: transparent;
-      color: #bbb;
+      color: $white;
       content: "\00D7";
       font-size: 26px;
       font-weight: 400;
       height: 30px;
       line-height: 26px;
       position: absolute;
-      right: 3px;
+      right: 15px;
       text-align: center;
-      top: 3px;
+      top: 15px;
       width: 30px;
     }
 
     .ngdialog-close:hover:before,
     .ngdialog-close:active:before {
-      color: #777;
+      color: $lighter_grey;
     }
 
     .dialog-title,
     .dialog-instructions,
     .dialog-content,
     .dialog-footer {
-      padding:15px;
+      padding:20px;
+    }
+
+    .dialog-title {
+      background-color: $medium_grey;
+      color: $white;
+    }
+
+    .dialog-content,
+    .dialog-instructions {
+      color: $light_grey;
+
+      a {
+        color: $light_grey;
+
+        &:hover {
+          color: $darkest_grey;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .dialog-content {
+      border-top: 2px solid $lighter_grey;
+      border-bottom: 2px solid $lighter_grey;
     }
 
     textarea {
       width: 750px;
       height: 400px;
+    }
+
+    .dialog-footer {
+      position: relative;
+      overflow: auto;
+
+      button {
+        margin-left: 20px;
+        float: right;
+      }
     }
   }
 

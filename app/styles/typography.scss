@@ -1,0 +1,22 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding-bottom: 0.6em;
+  margin-bottom: 0.6em;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+h1 {
+  font-size: 2.5em;
+  font-weight: 200;
+}

@@ -1,0 +1,61 @@
+@import 'colors';
+@import 'mixins';
+
+button {
+  cursor: pointer;
+}
+
+.button-primary {
+  display: inline-block;
+//  @include border-radius(0.3em);
+  border: 0;
+  min-width: 10em;
+  padding: 10px 15px 11px;
+  background-color: $ctl_light_green;
+  color: $white;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    @include box-shadow(0, 0, 5px, rgba( $ctl_light_green, 0.6 ));
+    background-color: darken( $ctl_light_green, 5% );
+    transition: background-color 0.25s ease;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &[disabled] {
+    background-color: $light_grey;
+    color: $medium_grey;
+
+    &:hover {
+      @include box-shadow(0, 0, 5px, rgba( $ctl_light_green, 0.0 ));
+      cursor: not-allowed;
+    }
+  }
+}
+
+a.button-primary {
+  @extend .button-primary;
+  padding-top: .9em;
+  padding-bottom: .9em;
+  text-decoration: none;
+}
+
+
+.button-secondary {
+  @extend .button-primary;
+  background-color: $medium_grey;
+
+  &:hover {
+    @extend .button-primary;
+    @include box-shadow(0, 0, 5px, rgba( $dark_grey, 0.6 ));
+    background-color: darken( $medium_grey, 15% );
+  }
+}
+
+
