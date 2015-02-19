@@ -9,8 +9,8 @@ angular
     'ngSanitize',
     'ngLodash',
     'ngDialog',
-    'docker-registry',
-    'angular.filter'
+    'angular.filter',
+    'docker-registry'
   ])
   .constant('appConfig', {
     'REGISTRY_API_ENDPOINT': 'https://index.docker.io',
