@@ -2,6 +2,14 @@
   <a href="" ng-click="importDialog()">Import compose.yml</a>
 </div>
 
+<div id="documentErrorsPane" ng-messages="yamlDocument">
+  <div ng-message="loadFailure" class="error">
+    The document supplied could not be parsed.
+    <span ng-show="yamlDocument.errors">{{yamlDocument.errors[0].error.message}}</span>
+  </div>
+  <div ng-message="parseErrors" class="error">{{yamlDocument.errors.length}} errors were possibly detected.</div>
+</div>
+
 <div id="documentPane">
   <div ng-repeat="serviceDefinition in serviceDefinitions">
     <service-definition-display service-definition="serviceDefinition"/>

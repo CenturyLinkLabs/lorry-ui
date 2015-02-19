@@ -9,7 +9,7 @@ angular.module('lorryApp')
       restrict: 'E',
       replace: true,
       link: function postLink(scope, element, attrs) {
-        if (!lodash.isEmpty(scope.line.errors)) {
+        if (lodash.any(scope.line.errors)) {
           element.addClass('error');
           element.find('.line-info')
             .attr('title', scope.line.errors[0].error.message)
