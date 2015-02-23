@@ -6,11 +6,14 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
     $scope.yamlDocument = {};
 
     $scope.validateYaml = function() {
-      yamlValidator.validate($scope.yamlDocument.raw)
+      var yaml = $scope.yamlDocument.raw;
+
+      yamlValidator.validate(yaml)
         .then(function (response) {
           $scope.yamlDocument = {
             lines: response.data.lines,
-            errors: response.data.errors
+            errors: response.data.errors,
+            json: jsyaml.safeLoad(yaml)
           };
           if(lodash.any(response.data.errors)) {
             $scope.yamlDocument.parseErrors = true;

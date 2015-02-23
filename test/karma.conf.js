@@ -29,6 +29,7 @@ module.exports = function(config) {
       'bower_components/angular-filter/dist/angular-filter.js',
       'bower_components/ng-lodash/build/ng-lodash.js',
       'bower_components/ngDialog/js/ngDialog.js',
+      'bower_components/js-yaml/dist/js-yaml.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
