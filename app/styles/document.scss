@@ -28,6 +28,16 @@
 .serviceDefinition {
   float: left;
   width: 100%;
+
+  &.highlightable {
+    &:hover {
+      background-color: $light_black;
+
+      .line:not(.error) .gutter {
+        background-color: $light_black;
+      }
+    }
+  }
 }
 
 .line {
