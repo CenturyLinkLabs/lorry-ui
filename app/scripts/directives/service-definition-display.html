@@ -1,9 +1,5 @@
 <div class="service-definition" ng-class="classes()">
-  <div class="action-menu" ng-if="hasLines()">
-    <div class="icon-x-large"></div>
-    <div class="icon-pencil-large"></div>
-  </div>
-  <div class="action-menu" ng-if="hasLines() === false"></div>
+  <action-menu enabled="hasLines()"></action-menu>
   <document-line line="lineObj" ng-repeat="lineObj in serviceDefinition track by $index"></document-line>
 </div>
 
