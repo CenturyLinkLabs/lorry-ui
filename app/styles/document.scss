@@ -9,18 +9,25 @@
   line-height: 1.5em;
 }
 
+#documentActionsPane {
+  overflow: hidden;
+  position: relative;
+  margin: 15px;
+}
+
+#documentResetPane {
+  float: right;
+}
+
 #documentImportPane {
-  float: left;
-  padding: 15px;
+  margin-right: 210px;
 }
 
 #documentErrorsPane {
-  float: left;
-  width: 100%;
+  margin-right: 210px;
 
   .error {
-    padding: 15px;
-    margin: 15px;
+    padding: 12px;
     background-color: $dark_red;
     color: $white;
   }

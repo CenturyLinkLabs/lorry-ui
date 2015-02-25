@@ -37,8 +37,10 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog
     $scope.upload = function() {
       var fr = new FileReader();
       fr.addEventListener('load', function(e) {
-        $scope.yamlDocument.raw = e.target.result;
-        $scope.validateYaml();
+        $scope.$apply(function(){
+          $scope.yamlDocument.raw = e.target.result;
+          $scope.validateYaml();
+        });
       });
       fr.readAsText($scope.files[0]);
     };

@@ -95,4 +95,52 @@ describe('Controller: DocumentCtrl', function () {
 
   });
 
+  describe('$scope.resetWorkspace', function () {
+    it('resets the $scope.yamlDocument to an empty object', function () {
+      scope.yamlDocument = { foo: 'bar' };
+      expect(scope.yamlDocument).toEqual({ foo: 'bar' });
+      scope.resetWorkspace();
+      expect(scope.yamlDocument).toEqual({});
+    });
+  });
+
+  describe('yamlDocument.raw watcher', function () {
+    beforeEach(function () {
+      scope.resettable = false;
+      scope.importable = true;
+      scope.yamlDocument = {};
+    });
+
+    describe('when $scope.yamlDocument.raw is undefined', function () {
+      beforeEach(function () {
+        scope.yamlDocument.raw = undefined;
+        scope.$digest();
+      });
+
+      it('sets $scope.resettable false', function () {
+        expect(scope.resettable).toBe(false);
+      });
+
+      it('sets $scope.importable true', function () {
+        expect(scope.importable).toBe(true);
+      });
+    });
+
+    describe('when $scope.yamlDocument.raw is defined', function () {
+      beforeEach(function () {
+        scope.yamlDocument.raw = 'asdf';
+        scope.$digest();
+      });
+
+      it('sets $scope.resettable true', function () {
+        expect(scope.resettable).toBe(true);
+      });
+
+      it('sets $scope.importable false', function () {
+        expect(scope.importable).toBe(false);
+      });
+    });
+
+  });
+
 });
