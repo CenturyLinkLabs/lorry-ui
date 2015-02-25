@@ -1,9 +1,5 @@
-<div class="serviceDefinition" ng-class="classes()">
-  <div class="actionMenu" ng-if="hasLines()">
-    <!-- show edit menu -->
-  </div>
-  <div ng-repeat="lineObj in serviceDefinition track by $index">
-    <document-line line="lineObj"></document-line>
-  </div>
+<div class="service-definition" ng-class="classes()">
+  <action-menu enabled="hasLines()"></action-menu>
+  <document-line line="lineObj" ng-repeat="lineObj in serviceDefinition track by $index"></document-line>
 </div>
 
