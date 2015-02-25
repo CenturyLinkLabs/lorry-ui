@@ -11,6 +11,6 @@ angular.module('lorryApp')
       link: function postLink(scope, element, attrs) {
         // TODO: setup delete and edit click handlers
       },
-      templateUrl: 'scripts/directives/action-menu.html'
+      templateUrl: '/scripts/directives/action-menu.html'
     };
   });
