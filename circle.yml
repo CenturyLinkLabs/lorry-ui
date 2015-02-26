@@ -1,0 +1,16 @@
+machine:
+  services:
+    - docker
+
+test:
+  post:
+    - grunt build
+    - docker build -t centurylink/lorry-ui:qa .
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push centurylink/lorry-ui:qa
+      - ./bin/deploy_qa.sh

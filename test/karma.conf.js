@@ -16,6 +16,15 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
+    preprocessors: {
+      'app/scripts/directives/*.html': 'ng-html2js'
+    },
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'app',
+      moduleName: 'tpl'
+    },
+
     // list of files / patterns to load in the browser
     files: [
       // bower:js
@@ -29,11 +38,13 @@ module.exports = function(config) {
       'bower_components/angular-filter/dist/angular-filter.js',
       'bower_components/ng-lodash/build/ng-lodash.js',
       'bower_components/ngDialog/js/ngDialog.js',
+      'bower_components/js-yaml/dist/js-yaml.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      'test/spec/**/*.js',
+      'app/scripts/directives/*.html'
     ],
 
     // list of files / patterns to exclude
@@ -59,7 +70,8 @@ module.exports = function(config) {
     plugins: [
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      "karma-spec-reporter"
+      'karma-spec-reporter',
+      'karma-ng-html2js-preprocessor'
     ],
 
     // Continuous Integration mode

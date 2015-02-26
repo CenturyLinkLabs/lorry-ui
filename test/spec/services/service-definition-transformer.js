@@ -31,19 +31,39 @@ describe('Service: service-definition-transformer', function () {
             { error: { message: 'error2', line: 2, column: 3} }
           ]
         }
+      ],
+      [
+        {
+          text: 'web:\\n',
+          lineNumber: 3,
+          errors: [
+            { error: { message: 'error3', line: 3, column: 2} }
+          ]
+        },
+        {
+          text: '  image: apache:latest\\n',
+          lineNumber: 4,
+          errors: [
+            { error: { message: 'error4', line: 4, column: 3} }
+          ]
+        }
       ]
     ];
 
-    var rawYaml = "db:\\n  image: postgres:latest\\n";
+    var rawYaml = "db:\\n  image: postgres:latest\\nweb:\\n  image: apache:latest\\n";
 
     var yamlDoc = {
       lines: [
         'db:\\n',
-        '  image: postgres:latest\\n'
+        '  image: postgres:latest\\n',
+        'web:\\n',
+        '  image: apache:latest\\n'
       ],
       errors: [
         { error: { message: 'error1', line: 1, column: 2} },
-        { error: { message: 'error2', line: 2, column: 3} }
+        { error: { message: 'error2', line: 2, column: 3} },
+        { error: { message: 'error3', line: 3, column: 2} },
+        { error: { message: 'error4', line: 4, column: 3} }
       ]
     };
 
@@ -63,6 +83,7 @@ describe('Service: service-definition-transformer', function () {
         var sDefResp = serviceDefTransformer.fromYamlDocument(yamlDoc);
 
         expect(serviceDefs).toEqual(sDefResp);
+        expect(serviceDefs.length).toEqual(2);
       });
 
     });

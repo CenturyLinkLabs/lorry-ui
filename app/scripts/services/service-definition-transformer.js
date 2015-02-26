@@ -12,21 +12,31 @@ angular.module('lorryApp')
         });
         return yaml;
       },
-      fromYamlDocument: function (yamlDoc) {
-        var serviceDefs = [], serviceDef = [];
-        if (yamlDoc.lines != undefined) {
-          yamlDoc.lines.forEach(function(line, index) {
-            var lineNumber = index + 1;
-            var lineDef = {
-              text: line,
-              lineNumber: lineNumber,
-              errors: lodash.select(yamlDoc.errors, { error: { line: lineNumber } })
-            };
-            serviceDef.push(lineDef);
-          });
-          serviceDefs.push(serviceDef);
+      fromYamlDocument: function (yamlDocument) {
+        var srvcDef = [];
+        var serviceDefinitions = [];
+
+        lodash.forEach(yamlDocument.lines, function(line, index){
+          var lineNumber = index + 1;
+          var lineDetails = {
+            text: line,
+            lineNumber: lineNumber,
+            errors: lodash.select(yamlDocument.errors, { error: { line: lineNumber } })
+          };
+
+          if (/^(?:\s|-)/i.test(line)) {
+            srvcDef.push(lineDetails);
+          } else {
+            if (srvcDef.length > 0) {
+              serviceDefinitions.push(srvcDef);
+            }
+            srvcDef = [lineDetails];
+          }
+        });
+        if (srvcDef.length > 0) {
+          serviceDefinitions.push(srvcDef);
         }
-        return serviceDefs;
+        return serviceDefinitions;
       }
     };
   }]);

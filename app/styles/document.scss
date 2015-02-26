@@ -1,5 +1,6 @@
 @import '_colors';
 @import '_variables';
+@import 'icons';
 
 #documentPane {
   float: left;
@@ -8,33 +9,47 @@
   line-height: 1.5em;
 }
 
+#documentActionsPane {
+  overflow: hidden;
+  position: relative;
+  margin: 15px;
+}
+
+#documentResetPane {
+  float: right;
+}
+
 #documentImportPane {
-  float: left;
-  padding: 15px;
+  margin-right: 210px;
 }
 
 #documentErrorsPane {
-  float: left;
-  width: 100%;
+  margin-right: 210px;
 
   .error {
-    padding: 15px;
-    margin: 15px;
+    padding: 12px;
     background-color: $dark_red;
     color: $white;
   }
 }
 
-.serviceDefinition {
+.service-definition {
+  position: relative;
   float: left;
   width: 100%;
+
+  &.highlightable {
+    &:hover {
+      background-color: $light_black;
+
+      .line:not(.error) .gutter {
+        background-color: $light_black;
+      }
+    }
+  }
 }
 
 .line {
-
-  clear: both;
-  float: left;
-  width: 100%;
 
   &.error,
   &.error .gutter{
@@ -45,7 +60,7 @@
   .gutter {
     background-color: $dark_grey;
     color: $light_grey;
-    float: left;
+    display: inline-block;
     width: 50px;
     margin-right: 15px;
     padding-right: 15px;
@@ -53,11 +68,10 @@
   }
 
   .line-text {
-    float: left;
+    display: inline-block;
   }
 
   .line-info {
-    float: right;
     display: none;
   }
 }
