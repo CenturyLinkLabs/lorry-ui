@@ -1,6 +1,9 @@
-<div ng-controller="DocumentImportCtrl">
-  <div id="documentImportPane">
+<div id="documentActionsPane" ng-controller="DocumentImportCtrl">
+  <div id="documentImportPane" ng-if="importable">
     <a class="button-primary" href="" ng-click="importDialog()">Import compose.yml</a>
+  </div>
+  <div id="documentResetPane" ng-if="resettable">
+    <a class="button-secondary" href="" ng-click="resetWorkspace()">Clear Workspace</a>
   </div>
   <div id="documentErrorsPane" ng-messages="yamlDocument">
     <div ng-message="loadFailure" class="error">
@@ -9,7 +12,6 @@
     </div>
     <div ng-message="parseErrors" class="error">{{yamlDocument.errors.length}} errors were possibly detected.</div>
   </div>
-
 </div>
 
 <div id="documentPane">

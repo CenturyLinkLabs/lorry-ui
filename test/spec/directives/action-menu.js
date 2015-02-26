@@ -5,16 +5,16 @@ describe('Directive: actionMenu', function () {
   // load the directive's module
   beforeEach(module('lorryApp'));
 
-  var element,
-    scope;
+  beforeEach(module('tpl'));
 
-  beforeEach(inject(function ($rootScope) {
+  var scope,
+    compile,
+    element;
+
+  beforeEach(inject(function($compile, $rootScope){
     scope = $rootScope.$new();
+    compile = $compile;
   }));
 
-  it('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<action-menu></action-menu>');
-    element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the actionMenu directive');
-  }));
+
 });
