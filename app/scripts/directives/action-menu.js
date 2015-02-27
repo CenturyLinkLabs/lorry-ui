@@ -3,13 +3,14 @@
 angular.module('lorryApp')
   .directive('actionMenu', function () {
     return {
-      scope: {
-        enabled: '='
-      },
+      scope: false,
       restrict: 'E',
       replace: true,
       link: function postLink(scope, element, attrs) {
-        // TODO: setup delete and edit click handlers
+        scope.deleteServiceDefinition = function () {
+          var serviceName = scope.serviceName();
+          scope.$emit('deleteService', serviceName);
+        }
       },
       templateUrl: '/scripts/directives/action-menu.html'
     };

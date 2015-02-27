@@ -23,6 +23,9 @@ angular.module('lorryApp')
           if ($scope.hasLines()) return 'highlightable';
         };
 
+        $scope.serviceName = function () {
+          return $scope.serviceDefinition[0].text.split(':')[0]
+        };
       }
     };
   });

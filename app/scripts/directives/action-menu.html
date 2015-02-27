@@ -1,4 +1,4 @@
 <div class="action-menu">
-  <div class="icon-x-large" ng-if="enabled"></div>
-  <div class="icon-pencil-large" ng-if="enabled"></div>
+  <div class="icon-x-large" ng-if="hasLines()" ng-click="deleteServiceDefinition()"></div>
+  <div class="icon-pencil-large" ng-if="hasLines()"></div>
 </div>

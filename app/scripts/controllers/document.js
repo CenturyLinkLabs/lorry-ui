@@ -34,6 +34,23 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
       $scope.yamlDocument = {};
     };
 
+    $scope.$on('deleteService', function (e, serviceName) {
+      $log.debug('deleting ' + serviceName);
+      if ($scope.yamlDocument.json.hasOwnProperty(serviceName)) {
+        delete $scope.yamlDocument.json[serviceName];
+        $scope.validateJson();
+      }
+    });
+
+    $scope.validateJson = function () {
+      if(lodash.isEmpty($scope.yamlDocument.json)) {
+        $scope.resetWorkspace();
+      } else {
+        $scope.yamlDocument.raw = jsyaml.safeDump($scope.yamlDocument.json);
+        $scope.validateYaml();
+      }
+    };
+
     $scope.$watchGroup(['yamlDocument.lines', 'yamlDocument.errors'], function(){
       $scope.serviceDefinitions = serviceDefTransformer.fromYamlDocument($scope.yamlDocument);
     });
