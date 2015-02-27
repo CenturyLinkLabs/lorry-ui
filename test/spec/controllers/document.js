@@ -237,4 +237,72 @@ describe('Controller: DocumentCtrl', function () {
     });
   });
 
+  describe('$scope.validateJson', function () {
+    describe('when the yamlDocument has no/empty json', function () {
+      beforeEach(function () {
+        spyOn(scope, 'resetWorkspace');
+        spyOn(scope, 'validateYaml');
+      });
+
+      it('resets the workspace', function () {
+        scope.yamlDocument.json = {};
+        scope.validateJson();
+        expect(scope.resetWorkspace).toHaveBeenCalled();
+      });
+    });
+
+    describe('when the yamlDocument has json', function () {
+      beforeEach(function () {
+        spyOn(scope, 'validateYaml');
+        scope.yamlDocument.raw = null;
+        scope.yamlDocument.json = {'foo': 'bar'};
+        scope.validateJson();
+      });
+
+      it('stores the yamlized json into the yamlDocument.raw property', function () {
+        expect(scope.yamlDocument.raw).not.toBeNull();
+      });
+
+      it('calls validatesYaml', function () {
+        expect(scope.validateYaml).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('deleteService event handler', function () {
+    beforeEach(function () {
+      spyOn(scope, 'validateJson');
+    });
+
+    describe('when the yamlDocument.json has a service matching the serviceName in the event', function () {
+      beforeEach(function () {
+        scope.yamlDocument.json = { someService: [] };
+        scope.$emit('deleteService', 'someService');
+      });
+
+      it('should not change the yamlDocument.json', function () {
+        expect(scope.yamlDocument.json).toEqual({});
+      });
+
+      it('should not call validateJson', function () {
+        expect(scope.validateJson).toHaveBeenCalled();
+      });
+    });
+
+    describe('when the yamlDocument.json does not have a service matching the serviceName in the event', function () {
+      beforeEach(function () {
+        scope.yamlDocument.json = { someOtherService: [] };
+        scope.$emit('deleteService', 'someService');
+      });
+
+      it('should not change the yamlDocument.json', function () {
+        expect(scope.yamlDocument.json).toEqual({ someOtherService: [] });
+      });
+
+      it('should not call validateJson', function () {
+        expect(scope.validateJson).not.toHaveBeenCalled();
+      });
+    });
+  });
+
 });
