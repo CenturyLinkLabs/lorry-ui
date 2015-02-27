@@ -1,0 +1,19 @@
+<div class="line-edit">
+  <div ng-show="isImageOrBuild()">
+    <input type='radio' value='Image' ng-checked="line.name == 'image'">Image
+    <input type='radio' value='Build' ng-checked="line.name == 'build'">Build
+    <input type='text' value='{{line.value}}' size="50px"/>
+  </div>
+  <div ng-hide="isImageOrBuild()">
+    <div ng-hide="hasMultipleItems()">
+      <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
+      <input type='text' value='{{line.value}}' size="50px"/>
+    </div>
+    <div ng-show="hasMultipleItems()" ng-repeat="item in line.value track by $index">
+      <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
+      <input type='text' value='{{item}}' size="50px"/>
+    </div>
+  </div>
+  <div class="line-edit-info"></div>
+  <div class="line-edit-delete"></div>
+</div>

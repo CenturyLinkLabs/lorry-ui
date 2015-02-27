@@ -17,6 +17,6 @@
 <div id="documentPane">
   <div ng-repeat="serviceDefinition in serviceDefinitions">
     <service-definition-display service-definition="serviceDefinition"></service-definition-display>
-    <service-definition-edit service-definition="serviceDefinition"/>
+    <service-definition-edit section-name="serviceName(serviceDefinition)" section-json="yamlDocument.json[serviceName(serviceDefinition)]"></service-definition-edit>
   </div>
 </div>

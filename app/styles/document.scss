@@ -37,15 +37,41 @@
   position: relative;
   float: left;
   width: 100%;
+  border-bottom: 1px solid $darkest_grey;
+
+  div[class^="icon-"] {
+    @include icon-grey;
+    margin: 20px auto;
+  }
 
   &.highlightable {
-    &:hover {
-      background-color: $light_black;
 
-      .line:not(.error) .gutter {
-        background-color: $light_black;
+    &:hover {
+      background-color: $darkest_grey;
+
+      div[class^="icon-"] {
+        @include icon-light-grey;
+
+        &:hover {
+          @include icon-white;
+          cursor: pointer;
+        }
+      }
+
+      .line:not(.error) .gutter,
+      .action-menu {
+        background-color: $darker_grey;
       }
     }
+  }
+
+  .action-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 100%;
+    background-color: $dark_grey;
   }
 }
 

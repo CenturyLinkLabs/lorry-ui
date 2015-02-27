@@ -140,7 +140,33 @@ describe('Controller: DocumentCtrl', function () {
         expect(scope.importable).toBe(false);
       });
     });
+  });
 
+  describe('$scope.serviceName', function () {
+
+    it('returns the service name', function () {
+      var serviceDef =
+        [
+          {
+            text: 'db:\\n',
+            lineNumber: 1,
+            errors: [
+              { error: { message: 'error1', line: 1, column: 2} }
+            ]
+          },
+          {
+            text: '  image: postgres:latest\\n',
+            lineNumber: 2,
+            errors: [
+              { error: { message: 'error2', line: 2, column: 3} }
+            ]
+          }
+        ];
+
+      var sName = scope.serviceName(serviceDef);
+
+      expect(sName).toEqual('db');
+    });
   });
 
 });

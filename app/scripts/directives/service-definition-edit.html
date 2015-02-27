@@ -1,8 +1,12 @@
-<div class="serviceDefinition">
-  <form>
-    <div>
-      <document-section-edit section="serviceDefinition"/>
-    </div>
-  </form>
+<div class="section-edit" ng-init="transformToJson()">
+  <input type="text" placeholder="section name" value="{{sectionName}}"/>
+  <div ng-repeat="linesObj in editableJson">
+    <document-line-edit line="linesObj"></document-line-edit>
+  </div>
+  <div>
+    <a class="button-primary" href="" ng-click="">+ Add a Row</a>
+    <a class="button-secondary" href="" ng-click="">Cancel</a>
+    <a class="button-primary" href="" ng-click="">Save Changes</a>
+  </div>
 </div>
 

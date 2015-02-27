@@ -44,4 +44,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
       $scope.importable = !documentDefined;
     });
 
+    $scope.serviceName = function (srvcDef) {
+      return srvcDef[0].text.split(':')[0]
+    };
+
+
   }]);
