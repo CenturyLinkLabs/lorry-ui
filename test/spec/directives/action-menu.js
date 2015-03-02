@@ -34,14 +34,17 @@ describe('Directive: actionMenu', function () {
     });
 
     it('is triggered when the delete icon is clicked', function () {
+      spyOn(scope, 'deleteServiceDefinition');
       var deleteIcon = element.find('.icon-x-large')[0];
       angular.element(deleteIcon).triggerHandler('click');
-      expect(scope.$emit).toHaveBeenCalled();
+      expect(scope.deleteServiceDefinition).toHaveBeenCalled();
     });
 
-    it('emits deleteService with the name of the service definition to be deleted', function () {
+    it('calls deleteService on the parent with the name of the service definition to be deleted', function () {
+      var p = jasmine.createSpyObj('$parent',['deleteService']);
+      scope.$parent = p;
       scope.deleteServiceDefinition();
-      expect(scope.$emit).toHaveBeenCalledWith('deleteService', 'someService');
+      expect(p.deleteService).toHaveBeenCalledWith('someService');
     });
   });
 

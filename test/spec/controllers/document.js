@@ -26,7 +26,7 @@ describe('Controller: DocumentCtrl', function () {
       beforeEach(inject(function($q) {
         deferredSuccess = $q.defer();
         spyOn(yamlValidator, 'validate').and.returnValue(deferredSuccess.promise);
-        scope.validateYaml();
+        DocumentCtrl.validateYaml();
         deferredSuccess.resolve({data: {lines: ['line'], errors: ['error']}});
         scope.$digest();
       }));
@@ -56,7 +56,7 @@ describe('Controller: DocumentCtrl', function () {
 
       describe('due to a status other than 500 (e.g. 422)', function () {
         beforeEach(inject(function() {
-          scope.validateYaml();
+          DocumentCtrl.validateYaml();
           deferredError.reject({data: {error: 'something went wrong'}});
           scope.$digest();
         }));
@@ -77,7 +77,7 @@ describe('Controller: DocumentCtrl', function () {
 
       describe('when validation fails because of a 500 error', function () {
         beforeEach(inject(function() {
-          scope.validateYaml();
+          DocumentCtrl.validateYaml();
           deferredError.reject({status: 500, data: {error: 'something went wrong'}});
           scope.$digest();
         }));
@@ -106,6 +106,7 @@ describe('Controller: DocumentCtrl', function () {
 
   describe('yamlDocument.raw watcher', function () {
     beforeEach(function () {
+      spyOn(DocumentCtrl, 'validateYaml');
       scope.resettable = false;
       scope.importable = true;
       scope.yamlDocument = {};
@@ -172,23 +173,22 @@ describe('Controller: DocumentCtrl', function () {
   describe('$scope.validateJson', function () {
     describe('when the yamlDocument has no/empty json', function () {
       beforeEach(function () {
-        spyOn(scope, 'resetWorkspace');
-        spyOn(scope, 'validateYaml');
+        spyOn(DocumentCtrl, 'reset');
       });
 
       it('resets the workspace', function () {
         scope.yamlDocument.json = {};
-        scope.validateJson();
-        expect(scope.resetWorkspace).toHaveBeenCalled();
+        DocumentCtrl.validateJson();
+        expect(DocumentCtrl.reset).toHaveBeenCalled();
       });
     });
 
     describe('when the yamlDocument has json', function () {
       beforeEach(function () {
-        spyOn(scope, 'validateYaml');
+        spyOn(DocumentCtrl, 'validateYaml');
         scope.yamlDocument.raw = null;
         scope.yamlDocument.json = {'foo': 'bar'};
-        scope.validateJson();
+        DocumentCtrl.validateJson();
       });
 
       it('stores the yamlized json into the yamlDocument.raw property', function () {
@@ -196,35 +196,35 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('calls validatesYaml', function () {
-        expect(scope.validateYaml).toHaveBeenCalled();
+        expect(DocumentCtrl.validateYaml).toHaveBeenCalled();
       });
     });
   });
 
-  describe('deleteService event handler', function () {
+  describe('deleteService', function () {
     beforeEach(function () {
-      spyOn(scope, 'validateJson');
+      spyOn(DocumentCtrl, 'validateJson');
     });
 
     describe('when the yamlDocument.json has a service matching the serviceName in the event', function () {
       beforeEach(function () {
         scope.yamlDocument.json = { someService: [] };
-        scope.$emit('deleteService', 'someService');
+        scope.deleteService('someService');
       });
 
-      it('should not change the yamlDocument.json', function () {
+      it('should change the yamlDocument.json', function () {
         expect(scope.yamlDocument.json).toEqual({});
       });
 
-      it('should not call validateJson', function () {
-        expect(scope.validateJson).toHaveBeenCalled();
+      it('should call validateJson', function () {
+        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
       });
     });
 
     describe('when the yamlDocument.json does not have a service matching the serviceName in the event', function () {
       beforeEach(function () {
         scope.yamlDocument.json = { someOtherService: [] };
-        scope.$emit('deleteService', 'someService');
+        scope.deleteService('someService');
       });
 
       it('should not change the yamlDocument.json', function () {
@@ -232,75 +232,7 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should not call validateJson', function () {
-        expect(scope.validateJson).not.toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe('$scope.validateJson', function () {
-    describe('when the yamlDocument has no/empty json', function () {
-      beforeEach(function () {
-        spyOn(scope, 'resetWorkspace');
-        spyOn(scope, 'validateYaml');
-      });
-
-      it('resets the workspace', function () {
-        scope.yamlDocument.json = {};
-        scope.validateJson();
-        expect(scope.resetWorkspace).toHaveBeenCalled();
-      });
-    });
-
-    describe('when the yamlDocument has json', function () {
-      beforeEach(function () {
-        spyOn(scope, 'validateYaml');
-        scope.yamlDocument.raw = null;
-        scope.yamlDocument.json = {'foo': 'bar'};
-        scope.validateJson();
-      });
-
-      it('stores the yamlized json into the yamlDocument.raw property', function () {
-        expect(scope.yamlDocument.raw).not.toBeNull();
-      });
-
-      it('calls validatesYaml', function () {
-        expect(scope.validateYaml).toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe('deleteService event handler', function () {
-    beforeEach(function () {
-      spyOn(scope, 'validateJson');
-    });
-
-    describe('when the yamlDocument.json has a service matching the serviceName in the event', function () {
-      beforeEach(function () {
-        scope.yamlDocument.json = { someService: [] };
-        scope.$emit('deleteService', 'someService');
-      });
-
-      it('should not change the yamlDocument.json', function () {
-        expect(scope.yamlDocument.json).toEqual({});
-      });
-
-      it('should not call validateJson', function () {
-        expect(scope.validateJson).toHaveBeenCalled();
-      });
-    });
-
-    describe('when the yamlDocument.json does not have a service matching the serviceName in the event', function () {
-      beforeEach(function () {
-        scope.yamlDocument.json = { someOtherService: [] };
-        scope.$emit('deleteService', 'someService');
-      });
-
-      it('should not change the yamlDocument.json', function () {
-        expect(scope.yamlDocument.json).toEqual({ someOtherService: [] });
-      });
-
-      it('should not call validateJson', function () {
-        expect(scope.validateJson).not.toHaveBeenCalled();
+        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
       });
     });
   });

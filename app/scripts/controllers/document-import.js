@@ -8,7 +8,7 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog
       title: 'Import compose.yml'
     };
 
-    $scope.importDialog = function () {
+    $scope.showImportDialog = function () {
       $scope.dialog = ngDialog.open({
         template: '/views/import-dialog.html',
         className: 'ngdialog-theme-lorry',
@@ -21,12 +21,12 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog
       $scope.dialogOptions.dialogPane = pane;
     };
 
-    $scope.importYaml = function() {
+    $scope.importYaml = function(docImport) {
       switch ($scope.dialogOptions.dialogPane) {
         case 'remote':
           break;
         case 'paste':
-          $scope.validateYaml();
+          $scope.yamlDocument.raw = docImport.raw;
           break;
         default:
           $scope.upload();
@@ -39,7 +39,6 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog
       fr.addEventListener('load', function(e) {
         $scope.$apply(function(){
           $scope.yamlDocument.raw = e.target.result;
-          $scope.validateYaml();
         });
       });
       fr.readAsText($scope.files[0]);

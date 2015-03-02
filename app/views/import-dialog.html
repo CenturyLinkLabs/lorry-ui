@@ -19,15 +19,15 @@
     </div>
     <div ng-show="dialogOptions.dialogPane === 'paste'">
       <p>Paste your compose.yml contents below</p>
-      <textarea placeholder="Paste or write your YAML here" ng-model="yamlDocument.raw"></textarea>
+      <textarea placeholder="Paste or write your YAML here" ng-model="docImport.raw"></textarea>
     </div>
     <div ng-show="dialogOptions.dialogPane === 'remote'">
       <p>Paste the full URI of your remote compose.yml</p>
-      <input type="text">
+      <input type="text" ng-model="docImport.remote">
     </div>
   </div>
   <div class="dialog-footer">
-    <button class="button-primary" ng-click="importYaml()">Import</button>
+    <button class="button-primary" ng-click="importYaml(docImport)">Import</button>
     <button class="button-secondary" ng-click="closeThisDialog()">Cancel</button>
   </div>
 </form>

@@ -39,10 +39,11 @@ describe('Controller: DocumentImportCtrl', function () {
     });
 
     describe("when the dialogPane is 'paste'", function () {
-      it('triggers validateYaml on the $parent scope', function () {
+      it('it sets the value pasted into $scope.yamlDocument.raw', function () {
+        var docImport = {raw: 'asdf'};
         scope.dialogOptions.dialogPane = 'paste';
-        scope.importYaml();
-        expect(scope.validateYaml).toHaveBeenCalled();
+        scope.importYaml(docImport);
+        expect(scope.yamlDocument.raw).toEqual(docImport.raw);
       });
     });
 
@@ -72,22 +73,13 @@ describe('Controller: DocumentImportCtrl', function () {
       scope.upload();
     });
 
-    it('sets the uploaded document into scope', function() {
+    it('sets the uploaded document contents into scope', function() {
       eventListener.calls.mostRecent().args[1]({
         target : {
           result : 'foo: file content'
         }
       });
       expect(scope.yamlDocument.raw).toEqual('foo: file content');
-    });
-
-    it('triggers validation of the document', function() {
-      eventListener.calls.mostRecent().args[1]({
-        target : {
-          result : 'foo: file content'
-        }
-      });
-      expect(scope.validateYaml).toHaveBeenCalled();
     });
   });
 });
