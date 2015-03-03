@@ -19,7 +19,7 @@ angular.module('lorryApp')
           $scope.editableJson = $scope.transformToEditableJson($scope.sectionJson)
         };
 
-        $scope.transformToEditableJson = function(json) {
+        $scope.transformToEditableJson = function (json) {
           var fixedJson = [];
           angular.forEach(json, function(svalue, skey) {
             var sectionObj = {};
@@ -38,16 +38,35 @@ angular.module('lorryApp')
                 lines.push(lineObj);
               });
             }
-            sectionObj.name = skey;
-            if (lines.length > 0) {
-              sectionObj.value = lines;
-            } else {
-              sectionObj.value = svalue;
+            if (skey != 'editMode') {
+              sectionObj.name = skey;
+              if (lines.length > 0) {
+                sectionObj.value = lines;
+              } else {
+                sectionObj.value = svalue;
+              }
+              fixedJson.push(sectionObj);
             }
-            fixedJson.push(sectionObj);
           });
 
           return fixedJson;
+        };
+
+        $scope.transformToYamlDocumentFragment = function (editedJson) {
+          var yamlFrag = {};
+          angular.forEach(editedJson, function(svalue, skey) {
+            yamlFrag[svalue.name] = svalue.value;
+          });
+          return yamlFrag;
+        };
+
+        $scope.saveServiceDefinition = function () {
+          $scope.sectionJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
+          $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.sectionJson);
+        };
+
+        $scope.cancelEditing = function () {
+          $scope.$emit('cancelEditing', $scope.sectionName);
         };
 
       }

@@ -1,13 +1,14 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash', 'jsyaml', 'yamlValidator', 'serviceDefTransformer',
-  function ($scope, $log, lodash, jsyaml, yamlValidator, serviceDefTransformer) {
+angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'yamlValidator', 'serviceDefTransformer',
+  function ($rootScope, $scope, $log, lodash, jsyaml, yamlValidator, serviceDefTransformer) {
 
     var self = this;
 
     $scope.yamlDocument = {};
     $scope.resettable = false;
     $scope.importable = true;
+    $rootScope.serviceNameList = [];
 
     $scope.hasErrors = function () {
       return lodash.any($scope.yamlDocument.errors);
@@ -64,7 +65,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
         .then(function (response) {
           $scope.yamlDocument.lines = response.data.lines;
           $scope.yamlDocument.errors = response.data.errors;
-          if(lodash.any(response.data.errors)) {
+          if (lodash.any(response.data.errors)) {
             $scope.yamlDocument.parseErrors = true;
           }
         })
@@ -79,6 +80,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
         })
         .finally(function () {
           self.buildServiceDefinitions();
+          $rootScope.serviceNameList = $scope.serviceNames();
         }
       );
     };
@@ -89,6 +91,30 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
 
     $scope.serviceName = function (srvcDef) {
       return srvcDef[0].text.split(':')[0];
+    };
+
+    $scope.editService = function (serviceName) {
+      if ($scope.yamlDocument.json.hasOwnProperty(serviceName)) {
+        $scope.yamlDocument.json[serviceName].editMode = true;
+      }
+    };
+
+    $scope.$on('saveService', function (e, oldServiceName, newServiceName, updatedSectionData) {
+      // Update the json for the service name
+      if (oldServiceName != newServiceName) {
+        delete $scope.yamlDocument.json[oldServiceName];
+      }
+      $scope.yamlDocument.json[newServiceName] = updatedSectionData;
+      delete $scope.yamlDocument.json[newServiceName].editMode;
+      self.validateJson();
+    });
+
+    $scope.$on('cancelEditing', function (e, serviceName) {
+      delete $scope.yamlDocument.json[serviceName].editMode;
+    });
+
+    $scope.serviceNames = function () {
+      return lodash.keys($scope.yamlDocument.json);
     };
 
   }]);

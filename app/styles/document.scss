@@ -89,6 +89,63 @@
   }
 }
 
+.section-edit {
+  position: relative;
+  float: left;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  .gutter {
+    background-color: $dark_grey;
+    color: $light_grey;
+    display: inline-block;
+    width: 20px;
+    margin-right: 15px;
+    padding-right: 15px;
+    text-align: right
+  }
+
+  .section-name {
+    display: inline-block;
+    margin-left: 0px;
+    margin-bottom: 10px;
+  }
+}
+
+.line-edit {
+  display: inline-block;
+  margin-left: 20px;
+  margin-bottom: 10px;
+
+  .multi-line-edit {
+    margin: 0px;
+    margin-bottom: 10px;
+  }
+
+  .radio-edit-group {
+    display: inline-block;
+    height: 14px;
+    padding: 16px;
+    padding-left: 0px;
+  }
+
+  input[type='text'] {
+    width: 500px;
+  }
+
+  select {
+    width: 150px;
+    height: 39px;
+  }
+
+  .data-select {
+    width: 522px;
+    height: 39px;
+  }
+
+}
+
 .line {
 
   &.warning,
@@ -102,8 +159,8 @@
     color: $light_grey;
     display: inline-block;
     width: 50px;
-    margin-right: 15px;
-    padding-right: 15px;
+    margin-right: 5px;
+    padding-right: 5px;
     text-align: right
   }
 

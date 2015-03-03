@@ -1,0 +1,44 @@
+@import 'mixins';
+@import 'colors';
+@import 'icons';
+
+label {
+  cursor: pointer;
+}
+
+label.optional,
+dt.optional {
+  &:after {
+    content: ' (Optional)';
+    font-weight: normal;
+    font-style: italic;
+  }
+}
+
+input[type='text'],
+input[type='radio'],
+input[type='number'],
+input[type='email'],
+textarea {
+  padding: 10px;
+  font-size: 13px;
+  color: $light_grey;
+  border: $light_grey 1px solid;
+
+  &:focus {
+    color: $dark_grey;
+    border-color: $dark_grey;
+    outline: none;
+  }
+}
+select {
+  padding: 20px;
+  font-size: 13px;
+  color: $light_grey;
+  border: $light_grey 1px solid;
+}
+
+input[type='number'] {
+  padding-right: 5px;
+}
+

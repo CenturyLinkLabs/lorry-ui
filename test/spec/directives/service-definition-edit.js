@@ -5,11 +5,16 @@ describe('Directive: serviceDefinitionEdit', function () {
   beforeEach(module('lorryApp'));
 
   var scope,
+    rootScope,
     compile,
     element;
 
   beforeEach(inject(function($compile, $rootScope){
     scope = $rootScope.$new();
+    rootScope = $rootScope;
+    rootScope.serviceNames = function() {
+      return ['foo', 'bar'];
+    };
     compile = $compile;
   }));
 
@@ -48,6 +53,7 @@ describe('Directive: serviceDefinitionEdit', function () {
           element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
           scope.$digest();
         });
+
         it ('returns valid editable json', function () {
           var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
           expect(result).toEqual(editableJson);

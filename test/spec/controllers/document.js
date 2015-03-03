@@ -280,4 +280,33 @@ describe('Controller: DocumentCtrl', function () {
     });
   });
 
+  describe('editService', function () {
+    describe('when the yamlDocument.json has a service matching the serviceName in the event', function () {
+      beforeEach(function () {
+        scope.yamlDocument.json = { someService: [] };
+        scope.editService('someService');
+      });
+
+      it('should add an editMode property to the yamlDocument.json section', function () {
+        expect(scope.yamlDocument.json['someService']).hasOwnProperty('editMode');
+      });
+
+      it('should set the yamlDocument.json section to edit mode', function () {
+        expect(scope.yamlDocument.json['someService'].editMode).toEqual(true);
+      });
+
+    });
+
+    describe('when the yamlDocument.json does not have a service matching the serviceName in the event', function () {
+      beforeEach(function () {
+        scope.yamlDocument.json = { someOtherService: [] };
+        scope.editService('someService');
+      });
+
+      it('should not add an editMode property to the yamlDocument.json section', function () {
+        !expect(scope.yamlDocument.json['someService']).hasOwnProperty('editMode');
+      });
+
+    });
+  });
 });

@@ -1,15 +1,14 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('documentLineEdit', ['$log', 'lodash', function ($log, lodash) {
+  .directive('documentLineEdit', ['$rootScope', '$log', 'lodash', function ($rootScope, $log, lodash) {
     return {
-      scope: {
-        line: '='
-      },
       restrict: 'E',
       replace: true,
       link: function postLink(scope, element, attrs) {
         //$log.log(scope.line);
+        scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
+
         scope.isImageOrBuild = function () {
           return (scope.line.name == 'image' || scope.line.name == 'build');
         };
@@ -18,7 +17,8 @@ angular.module('lorryApp')
           return Array.isArray(scope.line.value);
         };
 
-        scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links']
+        scope.serviceNameList = $rootScope.serviceNameList;
+
       },
       templateUrl: '/scripts/directives/document-line-edit.html'
     };

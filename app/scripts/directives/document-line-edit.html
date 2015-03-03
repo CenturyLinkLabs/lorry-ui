@@ -1,19 +1,22 @@
 <div class="line-edit">
   <div ng-show="isImageOrBuild()">
-    <input type='radio' value='Image' ng-checked="line.name == 'image'">Image
-    <input type='radio' value='Build' ng-checked="line.name == 'build'">Build
-    <input type='text' value='{{line.value}}' size="50px"/>
+    <div class="radio-edit-group">
+      <input type='radio' ng-model="line.name" value='image' ng-checked="line.name == 'image'">Image
+      <input type='radio' ng-model="line.name" value='build' ng-checked="line.name == 'build'">Build
+    </div>
+    <input type='text' ng-model="line.value" value='{{line.value}}'/>
   </div>
   <div ng-hide="isImageOrBuild()">
     <div ng-hide="hasMultipleItems()">
       <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
-      <input type='text' value='{{line.value}}' size="50px"/>
+      <input type='text' ng-model="line.value" value='{{line.value}}' />
     </div>
-    <div ng-show="hasMultipleItems()" ng-repeat="item in line.value track by $index">
+    <div class="multi-line-edit" ng-show="hasMultipleItems()" ng-repeat="item in line.value track by $index">
       <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
-      <input type='text' value='{{item}}' size="50px"/>
+      <input type='text' ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
+      <select class="data-select" ng-if="line.name == 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
     </div>
   </div>
-  <div class="line-edit-info"></div>
-  <div class="line-edit-delete"></div>
+  <div class="line-info"></div>
+  <div class="line-delete"></div>
 </div>
