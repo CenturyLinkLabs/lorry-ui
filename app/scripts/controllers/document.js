@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash', 'yamlValidator', 'serviceDefTransformer',
-  function ($scope, $log, lodash, yamlValidator, serviceDefTransformer) {
+angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash', 'jsyaml', 'yamlValidator', 'serviceDefTransformer',
+  function ($scope, $log, lodash, jsyaml, yamlValidator, serviceDefTransformer) {
 
     var self = this;
 
@@ -22,7 +22,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
 
     $scope.$watchCollection('yamlDocument.raw', function() {
       var documentDefined = (angular.isDefined($scope.yamlDocument) && angular.isDefined($scope.yamlDocument.raw));
-      if (documentDefined) self.validateYaml();
+      if (documentDefined) { self.validateYaml(); }
       $scope.resettable = documentDefined;
       $scope.importable = !documentDefined;
     });
@@ -72,7 +72,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
     };
 
     $scope.serviceName = function (srvcDef) {
-      return srvcDef[0].text.split(':')[0]
+      return srvcDef[0].text.split(':')[0];
     };
 
   }]);
