@@ -34,8 +34,8 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-        tasks: ['newer:jshint:all'],
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.js', '<%= yeoman.app %>/scripts/directives/**/*.html'],
+        tasks: ['html2js', 'newer:jshint:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -229,6 +229,23 @@ module.exports = function (grunt) {
       }
     },
 
+    // pre-process angular templates
+    html2js: {
+      options: {
+        base: 'app',
+        rename: function (moduleName) {
+          return '/' + moduleName;
+        },
+        useStrict: true,
+        quoteChar: '\'',
+        module: 'directive-templates'
+      },
+      dist: {
+        src: [ '<%= yeoman.app %>/scripts/directives/**/*.html' ],
+        dest: '<%= yeoman.app %>/scripts/directives/templates.js'
+      }
+    },
+
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
@@ -411,6 +428,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'wiredep',
+      'html2js',
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
@@ -429,12 +447,14 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
+    'html2js',
     'karma'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',
     'wiredep',
+    'html2js',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',

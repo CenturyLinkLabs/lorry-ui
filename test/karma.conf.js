@@ -16,15 +16,6 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
-    preprocessors: {
-      'app/scripts/directives/*.html': 'ng-html2js'
-    },
-
-    ngHtml2JsPreprocessor: {
-      stripPrefix: 'app',
-      moduleName: 'tpl'
-    },
-
     // list of files / patterns to load in the browser
     files: [
       // bower:js
@@ -43,8 +34,7 @@ module.exports = function(config) {
       // endbower
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
-      'test/spec/**/*.js',
-      'app/scripts/directives/*.html'
+      'test/spec/**/*.js'
     ],
 
     // list of files / patterns to exclude
@@ -70,8 +60,7 @@ module.exports = function(config) {
     plugins: [
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-spec-reporter',
-      'karma-ng-html2js-preprocessor'
+      'karma-spec-reporter'
     ],
 
     // Continuous Integration mode

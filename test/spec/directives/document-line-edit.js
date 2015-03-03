@@ -4,8 +4,6 @@ describe('Directive: documentLineEdit', function () {
 
   beforeEach(module('lorryApp'));
 
-  beforeEach(module('tpl'));
-
   var scope, compile, element;
 
   beforeEach(inject(function($compile, $rootScope){

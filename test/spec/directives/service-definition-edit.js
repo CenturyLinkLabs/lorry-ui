@@ -4,8 +4,6 @@ describe('Directive: serviceDefinitionEdit', function () {
 
   beforeEach(module('lorryApp'));
 
-  beforeEach(module('tpl'));
-
   var scope,
     compile,
     element;

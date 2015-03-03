@@ -9,6 +9,7 @@ angular
     'ngSanitize',
     'ngLodash',
     'ngDialog',
+    'directive-templates',
     'angular.filter',
     'docker-registry'
   ])

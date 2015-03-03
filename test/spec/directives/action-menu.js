@@ -4,8 +4,6 @@ describe('Directive: actionMenu', function () {
 
   beforeEach(module('lorryApp'));
 
-  beforeEach(module('tpl'));
-
   var parentScope, scope,
     compile,
     element;
