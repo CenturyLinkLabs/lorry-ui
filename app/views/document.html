@@ -10,7 +10,7 @@
       The document supplied could not be parsed.
       <span ng-show="yamlDocument.errors">{{yamlDocument.errors[0].error.message}}</span>
     </div>
-    <div ng-message="parseErrors" class="error">{{yamlDocument.errors.length}} errors were possibly detected.</div>
+    <div ng-message="parseErrors" class="warning">{{yamlDocument.errors.length}} errors were possibly detected.</div>
   </div>
 </div>
 
