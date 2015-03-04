@@ -20,6 +20,18 @@ describe('Controller: DocumentCtrl', function () {
     jsyaml = _jsyaml_;
   }));
 
+  describe('$scope.hasErrors', function () {
+    it('returns truthy when the yamlDocumet has errors', function () {
+      scope.yamlDocument = {errors: ['err']};
+      expect(scope.hasErrors()).toBeTruthy();
+    });
+
+    it('returns falsy when the yamlDocument has no errors', function () {
+      scope.yamlDocument = {};
+        expect(scope.hasErrors()).toBeFalsy();
+    });
+  });
+
   describe('#failFastOrValidateYaml', function () {
     describe('when jsyaml cannot load the document', function () {
       beforeEach(function () {
@@ -53,7 +65,7 @@ describe('Controller: DocumentCtrl', function () {
     });
   });
 
-  describe('#validateYaml', function() {
+  describe('$scope.validateYaml', function() {
 
     describe('when validation succeeds', function() {
       var deferredSuccess;
