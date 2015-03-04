@@ -54,10 +54,10 @@ describe('Controller: DocumentCtrl', function () {
         spyOn(yamlValidator, 'validate').and.returnValue(deferredError.promise);
       }));
 
-      describe('due to a status other than 500 (e.g. 422)', function () {
+      describe('due to a status 422)', function () {
         beforeEach(inject(function() {
           DocumentCtrl.validateYaml();
-          deferredError.reject({data: {error: 'something went wrong'}});
+          deferredError.reject({status: 422, data: {error: 'something went wrong'}});
           scope.$digest();
         }));
 
@@ -75,7 +75,7 @@ describe('Controller: DocumentCtrl', function () {
         });
       });
 
-      describe('when validation fails because of a 500 error', function () {
+      describe('when validation fails because of a non-422 error', function () {
         beforeEach(inject(function() {
           DocumentCtrl.validateYaml();
           deferredError.reject({status: 500, data: {error: 'something went wrong'}});

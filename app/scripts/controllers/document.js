@@ -54,12 +54,13 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
           }
         })
         .catch(function (response) {
-          $scope.yamlDocument.lines = response.data.lines;
-          $scope.yamlDocument.errors = [{error: {message: response.data.error}}];
-          $scope.yamlDocument.loadFailure = true;
-          if (response.status === 500) {
+          if (response.status === 422 && response.data) {
+            $scope.yamlDocument.lines = response.data.lines;
+            $scope.yamlDocument.errors = [{error: {message: response.data.error}}];
+          } else {
             $scope.yamlDocument.errors = [{error: {message: 'An internal server error has occurred'}}];
           }
+          $scope.yamlDocument.loadFailure = true;
         })
         .finally(function () {
           self.buildServiceDefinitions();
