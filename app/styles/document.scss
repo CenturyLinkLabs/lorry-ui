@@ -26,16 +26,24 @@
 #documentAlertsPane {
   margin-right: 210px;
 
-  .error {
+  &.error {
     padding: 12px;
     background-color: $dark_red;
     color: $white;
   }
 
-  .warning {
+  &.warning {
     padding: 12px;
     background-color: $orange;
     color: $white;
+  }
+
+  .dismiss-alerts {
+    float: right;
+
+    a {
+      color: $white;
+    }
   }
 }
 
