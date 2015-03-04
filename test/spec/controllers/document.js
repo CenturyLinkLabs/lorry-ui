@@ -7,18 +7,53 @@ describe('Controller: DocumentCtrl', function () {
 
   var DocumentCtrl,
     scope,
-    yamlValidator;
+    yamlValidator,
+    jsyaml;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_) {
+  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_) {
     scope = $rootScope.$new();
     DocumentCtrl = $controller('DocumentCtrl', {
       $scope: scope
     });
     yamlValidator = _yamlValidator_;
+    jsyaml = _jsyaml_;
   }));
 
-  describe('$scope.validateYaml', function() {
+  describe('#failFastOrValidateYaml', function () {
+    describe('when jsyaml cannot load the document', function () {
+      beforeEach(function () {
+        spyOn(jsyaml, 'safeLoad').and.throwError('boom');
+        DocumentCtrl.failFastOrValidateYaml();
+      });
+
+      it('adds an error message to the yamlDocument.errors', function () {
+        expect(scope.yamlDocument.errors).toEqual([{error: {message: 'boom'}}]);
+      });
+
+      it('sets loadFailure to true on the yamlDocument', function () {
+        expect(scope.yamlDocument.loadFailure).toBe(true);
+      });
+    });
+
+    describe('when jsyaml loads the document without exception', function () {
+      beforeEach(function () {
+        spyOn(jsyaml, 'safeLoad').and.returnValue({});
+        spyOn(DocumentCtrl, 'validateYaml');
+        DocumentCtrl.failFastOrValidateYaml();
+      });
+
+      it('calls validateYaml', function () {
+        expect(DocumentCtrl.validateYaml).toHaveBeenCalled();
+      });
+
+      it('sets the parsed json on the yamlDocument', function () {
+        expect(scope.yamlDocument.json).toEqual({});
+      });
+    });
+  });
+
+  describe('#validateYaml', function() {
 
     describe('when validation succeeds', function() {
       var deferredSuccess;
@@ -170,7 +205,7 @@ describe('Controller: DocumentCtrl', function () {
     });
   });
 
-  describe('$scope.validateJson', function () {
+  describe('#validateJson', function () {
     describe('when the yamlDocument has no/empty json', function () {
       beforeEach(function () {
         spyOn(DocumentCtrl, 'reset');
@@ -194,14 +229,10 @@ describe('Controller: DocumentCtrl', function () {
       it('stores the yamlized json into the yamlDocument.raw property', function () {
         expect(scope.yamlDocument.raw).not.toBeNull();
       });
-
-      it('calls validatesYaml', function () {
-        expect(DocumentCtrl.validateYaml).toHaveBeenCalled();
-      });
     });
   });
 
-  describe('deleteService', function () {
+  describe('$scope.deleteService', function () {
     beforeEach(function () {
       spyOn(DocumentCtrl, 'validateJson');
     });
