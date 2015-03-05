@@ -22,7 +22,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
 
     $scope.$watchCollection('yamlDocument.raw', function() {
       var documentDefined = (angular.isDefined($scope.yamlDocument) && angular.isDefined($scope.yamlDocument.raw));
-      if (documentDefined) { self.validateYaml(); }
+      if (documentDefined) { self.failFastOrValidateYaml(); }
       $scope.resettable = documentDefined;
       $scope.importable = !documentDefined;
     });
@@ -37,7 +37,19 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
         this.reset();
       } else {
         $scope.yamlDocument.raw = jsyaml.safeDump($scope.yamlDocument.json);
-        this.validateYaml();
+      }
+    };
+
+    this.failFastOrValidateYaml = function () {
+      var yaml = $scope.yamlDocument.raw;
+
+      try {
+        $scope.yamlDocument.json = jsyaml.safeLoad(yaml);
+        self.validateYaml();
+      } catch(YamlException) {
+        // if jsyaml can't load the document, don't bother calling the server
+        $scope.yamlDocument.errors = [{error: {message: YamlException.message}}];
+        $scope.yamlDocument.loadFailure = true;
       }
     };
 
@@ -48,7 +60,6 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
         .then(function (response) {
           $scope.yamlDocument.lines = response.data.lines;
           $scope.yamlDocument.errors = response.data.errors;
-          $scope.yamlDocument.json = jsyaml.safeLoad(yaml);
           if(lodash.any(response.data.errors)) {
             $scope.yamlDocument.parseErrors = true;
           }
