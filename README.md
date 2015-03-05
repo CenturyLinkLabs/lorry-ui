@@ -25,3 +25,10 @@ Run `grunt` for building and `grunt serve` for preview.
 ## Testing
 
 Running `grunt test` will run the unit tests with karma.
+
+## Environment configuration
+
+By default, the application will assume you are running, testing, or building in development mode.  If you want to 
+change that for some reason, you can set a 'LORRY_ENV' environment variable to ‘develop', ‘qa', or ‘production’.  
+It is this environment variable that will determine which of the config files in the '/config' directory are used when 
+the grunt task generates the app.js file.
