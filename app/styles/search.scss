@@ -1,0 +1,127 @@
+@import 'colors';
+@import 'mixins';
+@import 'icons';
+
+#frmSearch {
+
+  input[type='text'] {
+    float: left;
+    width: 77%;
+    height: 39px;
+    margin-right: 20px;
+    color: $dark_grey;
+    background-color: $lightest_grey;
+    border: none;
+  }
+
+}
+
+.spinner {
+  width: 100%;
+  text-align: left;
+  padding: 20px 20px 20px 0;
+  display: inline-block;
+
+  img {
+    position: relative;
+    top: 2px;
+  }
+}
+
+.results-container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px $lightest_grey;
+}
+
+.result-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  &:after {
+    content: '';
+    width: 1px;
+    height: 1px;
+    clear: both;
+    display: block;
+  }
+
+  .result-badge {
+    @include border-radius(5em);
+    float: left;
+    width: 80px;
+    margin-right: 20px;
+    height: 80px;
+    text-align: center;
+    line-height: 80px;
+    background-color: $light_grey;
+    color: $white;
+    font-size: 0.9em;
+    overflow: hidden;
+  }
+
+  .result-info {
+    float: left;
+    width: 315px;
+    margin-right: 15px;
+
+    h3 {
+      display: inline;
+      font-size: 1.2em;
+      font-weight: 600;
+      color: $light_grey;
+      margin-right: 7px;
+    }
+
+    p {
+      font-size: 0.9em;
+      padding-top: 10px;
+    }
+
+    a {
+      color: $light_grey;
+      text-decoration: underline;
+      font-size: 0.9em;
+      font-weight: normal;
+    }
+
+    .star-count {
+      padding-left: 25px;
+      padding-right: 5px;
+      position: relative;
+      font-size: 0.8em;
+
+      &:before {
+        @extend .icon-star-large;
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0px;
+        top: -5px;
+      }
+    }
+
+  }
+
+  .result-tag {
+    display: inline;
+    float: left;
+    margin-right: 10px;
+
+    select {
+      height: 40px;
+      width: 120px;
+      border: none;
+      background-color: $lightest_grey;
+    }
+
+    span {
+      font-size: 0.9em;
+    }
+  }
+
+  .add-image {
+    float:right;
+    margin-right: 5px;
+  }
+}

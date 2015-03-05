@@ -1,27 +1,45 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name lorryApp.controller:SearchCtrl
- * @description
- * # SearchCtrl
- * Controller of the lorryApp
- */
 angular.module('lorryApp')
-  .controller('SearchCtrl', ['$scope' , 'Repository', 'Tag', function($scope, Repository, Tag) {
+  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'Repository', 'Tag', function($scope, ngDialog, Repository, Tag) {
     $scope.noResults = true;
     $scope.searchResults = [];
+    $scope.tagResults = [];
+    $scope.selectedImageName = '';
+    $scope.selectedImage = {
+      repo: {},
+      tag: {}
+    };
 
-    $scope.doSearch = function(qterm){
-      if (qterm === '' || qterm === undefined) {
-        $scope.searchResults = {};
-        $scope.noResults = true;
-      }
-      else {
+    $scope.dialogOptions = {
+      dialogPane: 'search',
+      title: 'Search the Docker Hub'
+    };
+
+    $scope.setDialogPane = function (pane) {
+      $scope.dialogOptions.dialogPane = pane;
+    };
+
+    $scope.searchDialog = function () {
+      $scope.dialog = ngDialog.open({
+        template: '/views/search-dialog.html',
+        className: 'ngdialog-theme-lorry',
+        showClose: false,
+        scope: $scope
+      });
+    };
+
+    $scope.selectImage = function(selImage) {
+      $scope.$parent.$parent.selectedImageName = selImage.repo.name + ":" + selImage.tag.name;
+      $scope.dialog.close();
+    };
+
+    $scope.performSearch = function(qterm){
+      $scope.resetSearch();
+      if (qterm != '' && qterm != undefined) {
         $scope.searchResults = Repository.query({searchTerm:qterm});
         $scope.noResults = false;
       }
-
     };
 
     $scope.insertTags = function(){
@@ -31,15 +49,17 @@ angular.module('lorryApp')
     };
 
     $scope.getTags = function(username, reponame) {
-      return Tag.query({
+      $scope.tagResults = Tag.query({
         repoUser: username,
         repoName: reponame
       });
+      return $scope.tagResults;
     };
 
-    $scope.doCancel = function(){
-      $scope.noResults = true;
+    $scope.resetSearch = function(){
       $scope.searchResults = [];
+      $scope.tagResults = [];
+      $scope.noResults = true;
     };
 
   }]);

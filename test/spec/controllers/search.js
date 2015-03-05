@@ -9,7 +9,7 @@ describe('Controller: SearchCtrl', function () {
     $provide.constant('ENV', {'REGISTRY_API_ENDPOINT': 'https://foobar.io'});
   }));
 
-  var $controller, httpBackend, SearchCtrl, Repository, Tag, scope;
+  var controller, scope, Repository, Tag, httpBackend, SearchCtrl;
   var searchResponse = {
     "results": [{
       "name": "baruser/foo",
@@ -31,20 +31,20 @@ describe('Controller: SearchCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$controller_, $rootScope, _Repository_, _Tag_, $httpBackend) {
     scope = $rootScope.$new();
-    $controller = _$controller_;
+    controller = _$controller_;
     httpBackend = $httpBackend;
     Repository = _Repository_;
     Tag = _Tag_;
-    SearchCtrl = $controller('SearchCtrl', {
+    SearchCtrl = controller('SearchCtrl', {
       $scope: scope, Repository: _Repository_, Tag: _Tag_
     });
 
   }));
 
-  describe('search: ', function () {
+  describe('performSearch: ', function () {
     it('should get results on successful search', function () {
       httpBackend.expectGET('https://foobar.io/v1/search?q=foo').respond(searchResponse);
-      scope.doSearch('foo');
+      scope.performSearch('foo');
       httpBackend.flush();
 
       expect(scope.searchResults[0].name).toBe('baruser/foo');
@@ -52,31 +52,31 @@ describe('Controller: SearchCtrl', function () {
       expect(scope.searchResults[0].reponame).toBe('foo');
     });
 
-    it('should call Repository query for search', function () {
+    it('should call Repository query', function () {
       spyOn(Repository, 'query');
 
-      scope.doSearch('foo');
+      scope.performSearch('foo');
 
       expect(Repository.query).toHaveBeenCalled();
     });
 
     it('should get no results on empty search term', function () {
-      scope.doSearch('');
+      scope.performSearch('');
 
       expect(Object.keys(scope.searchResults).length).toBe(0);
       expect(scope.noResults).toBeTruthy();
     });
 
-    it('should not call Repository query for search with empty term', function () {
+    it('should not call Repository query with empty search term', function () {
       spyOn(Repository, 'query');
 
-      scope.doSearch('');
+      scope.performSearch('');
 
       expect(Repository.query).not.toHaveBeenCalled();
     });
   });
 
-  describe('tags: ', function () {
+  describe('getTags: ', function () {
 
     it('should get tags on successful tag query', function () {
       httpBackend.expectGET('https://foobar.io/v1/repositories/baruser/foo/tags').respond(tagsResponse);
@@ -88,7 +88,7 @@ describe('Controller: SearchCtrl', function () {
 
     });
 
-    it('should call Tag query for getting tags', function () {
+    it('should call Tag query', function () {
       spyOn(Tag, 'query');
 
       scope.getTags('baruser', 'foo');
@@ -96,15 +96,9 @@ describe('Controller: SearchCtrl', function () {
       expect(Tag.query).toHaveBeenCalled();
     });
 
-    it('should call get tags for inserting tags', function () {
-      spyOn(scope, 'getTags');
+  });
 
-      // simulate search was performed
-      scope.searchResults = searchResponse.results;
-      scope.insertTags('baruser', 'foo');
-
-      expect(scope.getTags).toHaveBeenCalled();
-    });
+  describe('insertTags: ', function () {
 
     it('should insert tags to the search results', function () {
       // simulate search was performed
@@ -119,6 +113,24 @@ describe('Controller: SearchCtrl', function () {
 
     });
 
+    it('should call getTags for inserting tags', function () {
+      spyOn(scope, 'getTags');
+
+      // simulate search was performed
+      scope.searchResults = searchResponse.results;
+      scope.insertTags('baruser', 'foo');
+
+      expect(scope.getTags).toHaveBeenCalled();
+    });
+
+
+  });
+
+  describe('setDialogPane', function () {
+    it ('sets the $scope.dialogOptions.dialogPane to the argument passed', function () {
+      scope.setDialogPane('foo');
+      expect(scope.dialogOptions.dialogPane).toBe('foo');
+    });
   });
 
 });

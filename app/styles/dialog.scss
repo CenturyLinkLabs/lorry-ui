@@ -49,6 +49,12 @@
     .dialog-title {
       background-color: $medium_grey;
       color: $white;
+      height: 60px;
+
+      h2 {
+        font-size: 1.2em;
+        font-weight: 600;
+      }
     }
 
     .dialog-content,

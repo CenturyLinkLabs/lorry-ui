@@ -5,9 +5,9 @@
     <div ng-repeat="line in editableJson">
       <document-line-edit ng-model="line"></document-line-edit>
     </div>
-    <a class="button-primary" href="" ng-click="">+ Add a Row</a>
-    <a class="button-secondary" href="" ng-click="cancelEditing()">Cancel</a>
-    <a class="button-primary" href="" ng-click="saveServiceDefinition()">Save Changes</a>
+    <span class="link">+<a href="" ng-click="">Add a Row</a>
+    <button class="button-secondary" href="" ng-click="cancelEditing()">Cancel</button>
+    <button class="button-primary" href="" ng-click="saveServiceDefinition()">Save Changes</button>
   </div>
 </div>
 
