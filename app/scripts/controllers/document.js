@@ -9,6 +9,10 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$scope', '$log', 'lodash
     $scope.resettable = false;
     $scope.importable = true;
 
+    $scope.hasErrors = function () {
+      return lodash.any($scope.yamlDocument.errors);
+    };
+
     $scope.resetWorkspace = function () {
       self.reset();
     };

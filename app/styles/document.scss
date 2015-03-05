@@ -23,13 +23,27 @@
   margin-right: 210px;
 }
 
-#documentErrorsPane {
+#documentAlertsPane {
   margin-right: 210px;
 
-  .error {
+  &.error {
     padding: 12px;
     background-color: $dark_red;
     color: $white;
+  }
+
+  &.warning {
+    padding: 12px;
+    background-color: $orange;
+    color: $white;
+  }
+
+  .dismiss-alerts {
+    float: right;
+
+    a {
+      color: $white;
+    }
   }
 }
 
@@ -58,7 +72,7 @@
         }
       }
 
-      .line:not(.error) .gutter,
+      .line:not(.warning) .gutter,
       .action-menu {
         background-color: $darker_grey;
       }
@@ -77,9 +91,9 @@
 
 .line {
 
-  &.error,
-  &.error .gutter{
-    background-color: $dark_red;
+  &.warning,
+  &.warning .gutter{
+    background-color: $orange;
     color: $white;
   }
 
