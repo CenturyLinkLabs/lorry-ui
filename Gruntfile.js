@@ -21,11 +21,32 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  var env = process.env.LORRY_ENV || 'development';
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
     // Project settings
     yeoman: appConfig,
+
+    template: {
+      test: {
+        options: {
+          data: require('./config/' + env + '.json')
+        },
+        files: {
+          '<%= yeoman.app %>/scripts/app.js': ['<%= yeoman.app %>/scripts/app.js.tpl']
+        }
+      },
+      dist: {
+        options: {
+          data: require('./config/' + env + '.json')
+        },
+        files: {
+          '.tmp/scripts/app.js': ['<%= yeoman.app %>/scripts/app.js.tpl']
+        }
+      }
+    },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
@@ -142,7 +163,7 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: '.tmp'
+      server: ['.tmp', '<%= yeoman.app %>/scripts/app.js']
     },
 
     // Add vendor prefixed styles
@@ -419,6 +440,9 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.registerTask('configure', 'build the app.js with template config', function (target) {
+    grunt.task.run(['template:' + target]);
+  });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -427,6 +451,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'configure:test',
       'wiredep',
       'html2js',
       'concurrent:server',
@@ -443,6 +468,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'configure:test',
     'wiredep:test',
     'concurrent:test',
     'autoprefixer',
@@ -453,6 +479,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'configure:dist',
     'wiredep',
     'html2js',
     'useminPrepare',

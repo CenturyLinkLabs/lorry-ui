@@ -14,6 +14,6 @@ angular
     'docker-registry'
   ])
   .constant('appConfig', {
-    'REGISTRY_API_ENDPOINT': 'https://index.docker.io',
-    'LORRY_API_ENDPOINT' : 'http://localhost:9292'
+    'REGISTRY_API_ENDPOINT': '<%= REGISTRY_API_ENDPOINT %>',
+    'LORRY_API_ENDPOINT' : '<%= LORRY_API_ENDPOINT %>'
   });
