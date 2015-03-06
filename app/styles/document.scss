@@ -2,6 +2,19 @@
 @import '_variables';
 @import 'icons';
 
+._720kb-tooltip {
+  background-color: $lightest_grey;
+  color: $dark_grey;
+}
+
+._720kb-tooltip-title {
+  color: $dark_grey;
+}
+
+._720kb-tooltip-caret:before {
+  border: 6px solid $lightest_grey;
+}
+
 #documentPane {
   float: left;
   width: 100%;
@@ -147,12 +160,8 @@
 }
 
 .line {
-
-  &.warning,
-  &.warning .gutter{
-    background-color: $orange;
-    color: $white;
-  }
+  position: relative;
+  margin-right: 60px;
 
   .gutter {
     background-color: $dark_grey;
@@ -168,7 +177,33 @@
     display: inline-block;
   }
 
-  .line-info {
-    display: none;
+  &.warning {
+    margin-right: 120px;
+    background-color: $orange;
+    color: $white;
+
+    .gutter{
+      background-color: $orange;
+      color: $white;
+    }
+
+    .line-info {
+      width: 50px;
+      height: 25px;
+      background-image: url('../images/icon_info.svg');
+      background-repeat: no-repeat;
+      @include background-size(50px, 50px);
+      background-position: 0 0;
+      position: absolute;
+      display: inline-block;
+      right: -55px;
+      top: -1px;
+      &:hover {
+        cursor: pointer;
+        background-position: 0 -25px;
+      }
+
+    }
+
   }
 }
