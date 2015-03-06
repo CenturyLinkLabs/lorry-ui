@@ -4,14 +4,13 @@
 @import '_colors';
 @import '_variables';
 
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+html {
+  position: relative;
+  min-height: 100%;
 }
 
 body {
+  min-height: 100%;
   padding: 0;
   background-color: #2d2d2d;
   color: #C5C5C5;
@@ -51,3 +50,14 @@ header {
   }
 }
 
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+main {
+  min-height: 100%;
+  margin-bottom: 75px;
+}

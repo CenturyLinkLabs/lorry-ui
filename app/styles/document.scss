@@ -20,6 +20,7 @@
   width: 100%;
   font-family: $monospace_font_family;
   line-height: 1.5em;
+  margin-bottom: 75px;
 }
 
 #documentActionsPane {
@@ -202,8 +203,40 @@
         cursor: pointer;
         background-position: 0 -25px;
       }
-
     }
+  }
+}
 
+main footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 75px;
+  background-color: $white;
+}
+
+#documentExportPane {
+  position: relative;
+  padding: 15px;
+
+  a.footer-link {
+    display: block;
+    float: right;
+    line-height: 45px;
+    color: $dark_grey;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .button-primary {
+    float: right;
+    margin-left: 15px;
+  }
+
+  .button-secondary {
+    float: right;
+    margin-left: 15px;
   }
 }
