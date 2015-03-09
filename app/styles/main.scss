@@ -19,11 +19,35 @@ body {
 }
 
 header {
-  padding: 0 15px;
+  position: relative;
+  overflow: auto;
+  padding: 15px 15px;
   background-color: $white;
 
   h1 {
     color: $darker_grey;
+  }
+
+  #lorryLogo {
+    position: relative;
+    float: left;
+    background-image: url(../images/lorry_logo.png);
+    width: 132px;
+    height: 30px;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  #ctlLogo {
+    position: relative;
+    float: right;
+    background-image: url(../images/ctl_logo.png);
+    width: 145px;
+    height: 30px;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
 
