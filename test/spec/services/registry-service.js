@@ -1,18 +1,18 @@
 'use strict';
 
-describe('Service: docker-registry', function () {
+describe('Service: registry-service', function () {
 
   // load the service's module
-  beforeEach(module('docker-registry'));
+  beforeEach(module('lorryApp'));
 
   beforeEach(module(function($provide) {
-    $provide.constant('ENV', {'REGISTRY_API_ENDPOINT': 'https://foobar.io'});
+    $provide.constant('ENV', {'LORRY_API_ENDPOINT': 'https://foobar.io'});
   }));
 
-  // Repository factory
-  describe('Factory: Repository', function () {
+  // Image factory
+  describe('Factory: Image', function () {
 
-    var Repository, httpBackend, ENV;
+    var Image, httpBackend, ENV;
     var searchResults = {
       "results": [{
         "name": "baruser/foo",
@@ -24,33 +24,33 @@ describe('Service: docker-registry', function () {
     };
 
     // Initialize the service and a mock scope
-    beforeEach(inject(function (_Repository_, _ENV_, _$httpBackend_) {
-      Repository = _Repository_;
+    beforeEach(inject(function (_Image_, _ENV_, _$httpBackend_) {
+      Image = _Image_;
       ENV = _ENV_;
       httpBackend = _$httpBackend_;
     }));
 
     describe('search', function() {
       beforeEach(function() {
-        httpBackend.expectGET(ENV.REGISTRY_API_ENDPOINT + "/v1/search?q=foo").respond(searchResults);
+        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images?q=foo").respond(searchResults);
       });
 
-      it("should search for repositories", function () {
-        var results = Repository.query({searchTerm: 'foo'});
+      it("should search for image repositories", function () {
+        var results = Image.query({searchTerm: 'foo'});
         httpBackend.flush();
 
         expect(results[0].name).toEqual('baruser/foo');
       });
 
       it("should insert username into search results", function () {
-        var results = Repository.query({searchTerm: 'foo'});
+        var results = Image.query({searchTerm: 'foo'});
         httpBackend.flush();
 
         expect(results[0].username).toEqual('baruser');
       });
 
       it("should insert reponame into search results", function () {
-        var results = Repository.query({searchTerm: 'foo'});
+        var results = Image.query({searchTerm: 'foo'});
         httpBackend.flush();
 
         expect(results[0].reponame).toEqual('foo');
@@ -86,7 +86,7 @@ describe('Service: docker-registry', function () {
     describe('tags', function() {
 
       it("should get tags for repository", function () {
-        httpBackend.expectGET(ENV.REGISTRY_API_ENDPOINT + "/v1/repositories/baruser/foo/tags").respond(queryResults);
+        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images/tags/baruser/foo").respond(queryResults);
         var results = Tag.query({
           repoUser: 'baruser',
           repoName: 'foo'
@@ -96,19 +96,6 @@ describe('Service: docker-registry', function () {
         expect(results[0].layer).toEqual('11111111');
         expect(results[0].name).toEqual('latest');
       });
-
-      it("should check if a tag exists for repository", function () {
-        httpBackend.expectGET(ENV.REGISTRY_API_ENDPOINT + "/v1/repositories/baruser/foo/tags/latest").respond(existsResults);
-        var result = Tag.exists({
-          repoUser: 'baruser',
-          repoName: 'foo',
-          tagName: 'latest'
-        });
-        httpBackend.flush();
-
-        expect(result).toBeTruthy();
-      });
-
     });
   });
 
