@@ -6,10 +6,10 @@ describe('Controller: SearchCtrl', function () {
   beforeEach(module('lorryApp'));
 
   beforeEach(module(function($provide) {
-    $provide.constant('ENV', {'REGISTRY_API_ENDPOINT': 'https://foobar.io'});
+    $provide.constant('ENV', {'LORRY_API_ENDPOINT': 'https://foobar.io'});
   }));
 
-  var controller, scope, Repository, Tag, httpBackend, SearchCtrl;
+  var controller, scope, Image, Tag, httpBackend, SearchCtrl;
   var searchResponse = {
     "results": [{
       "name": "baruser/foo",
@@ -29,21 +29,21 @@ describe('Controller: SearchCtrl', function () {
   ];
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $rootScope, _Repository_, _Tag_, $httpBackend) {
+  beforeEach(inject(function (_$controller_, $rootScope, _Image_, _Tag_, $httpBackend) {
     scope = $rootScope.$new();
     controller = _$controller_;
     httpBackend = $httpBackend;
-    Repository = _Repository_;
+    Image = _Image_;
     Tag = _Tag_;
     SearchCtrl = controller('SearchCtrl', {
-      $scope: scope, Repository: _Repository_, Tag: _Tag_
+      $scope: scope, Image: _Image_, Tag: _Tag_
     });
 
   }));
 
   describe('performSearch: ', function () {
     it('should get results on successful search', function () {
-      httpBackend.expectGET('https://foobar.io/v1/search?q=foo').respond(searchResponse);
+      httpBackend.expectGET('https://foobar.io/images?q=foo').respond(searchResponse);
       scope.performSearch('foo');
       httpBackend.flush();
 
@@ -52,12 +52,12 @@ describe('Controller: SearchCtrl', function () {
       expect(scope.searchResults[0].reponame).toBe('foo');
     });
 
-    it('should call Repository query', function () {
-      spyOn(Repository, 'query');
+    it('should call Image query', function () {
+      spyOn(Image, 'query');
 
       scope.performSearch('foo');
 
-      expect(Repository.query).toHaveBeenCalled();
+      expect(Image.query).toHaveBeenCalled();
     });
 
     it('should get no results on empty search term', function () {
@@ -67,19 +67,19 @@ describe('Controller: SearchCtrl', function () {
       expect(scope.noResults).toBeTruthy();
     });
 
-    it('should not call Repository query with empty search term', function () {
-      spyOn(Repository, 'query');
+    it('should not call Image query with empty search term', function () {
+      spyOn(Image, 'query');
 
       scope.performSearch('');
 
-      expect(Repository.query).not.toHaveBeenCalled();
+      expect(Image.query).not.toHaveBeenCalled();
     });
   });
 
   describe('getTags: ', function () {
 
     it('should get tags on successful tag query', function () {
-      httpBackend.expectGET('https://foobar.io/v1/repositories/baruser/foo/tags').respond(tagsResponse);
+      httpBackend.expectGET('https://foobar.io/images/tags/baruser/foo').respond(tagsResponse);
       scope.getTags('baruser', 'foo');
       httpBackend.flush();
 
@@ -104,7 +104,7 @@ describe('Controller: SearchCtrl', function () {
       // simulate search was performed
       scope.searchResults = searchResponse.results;
 
-      httpBackend.expectGET('https://foobar.io/v1/repositories/baruser/foo/tags').respond(tagsResponse);
+      httpBackend.expectGET('https://foobar.io/images/tags/baruser/foo').respond(tagsResponse);
       scope.insertTags('baruser', 'foo');
       httpBackend.flush();
 

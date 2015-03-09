@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'Repository', 'Tag', function($scope, ngDialog, Repository, Tag) {
+  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'Image', 'Tag', function($scope, ngDialog, Image, Tag) {
     $scope.noResults = true;
     $scope.searchResults = [];
     $scope.tagResults = [];
@@ -37,7 +37,7 @@ angular.module('lorryApp')
     $scope.performSearch = function(qterm){
       $scope.resetSearch();
       if (qterm != '' && qterm != undefined) {
-        $scope.searchResults = Repository.query({searchTerm:qterm});
+        $scope.searchResults = Image.query({searchTerm:qterm});
         $scope.noResults = false;
       }
     };
