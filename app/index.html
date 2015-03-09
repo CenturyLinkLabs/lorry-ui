@@ -29,10 +29,12 @@
     <![endif]-->
 
     <header>
-      <h1>Lorry.io</h1>
+      <div id="lorryLogo"><h1>Lorry.io</h1></div>
+      <div id="ctlLogo">CenturyLink</div>
     </header>
-    <main>
-      <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+
+    <main ng-controller="MainCtrl">
+      <div ng-include="'views/document.html'" ng-controller="DocumentCtrl"></div>
     </main>
     <footer>
     </footer>
