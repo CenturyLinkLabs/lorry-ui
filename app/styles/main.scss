@@ -3,6 +3,7 @@
 
 @import '_colors';
 @import '_variables';
+@import '_mixins';
 
 html {
   position: relative;
@@ -30,18 +31,25 @@ header {
   #lorryLogo {
     position: relative;
     float: left;
-    background-image: url(../images/lorry_logo.png);
-    width: 132px;
-    height: 30px;
+    background-image: url(../images/logo_lorry.svg);
+    background-repeat: no-repeat;
+    @include background-size(160px, 75px);
+    background-position: -5px -13px;
+    width: 160px;
+    height: 50px;
     text-indent: 100%;
     white-space: nowrap;
     overflow: hidden;
   }
 
   #ctlLogo {
+    margin-top: 7px;
     position: relative;
     float: right;
-    background-image: url(../images/ctl_logo.png);
+    background-image: url(../images/ctl_logo_base_grey.svg);
+    background-repeat: no-repeat;
+    @include background-size(145px, 30px);
+    background-position: 0 0;
     width: 145px;
     height: 30px;
     text-indent: 100%;
