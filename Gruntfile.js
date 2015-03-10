@@ -21,29 +21,39 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
-  var env = process.env.LORRY_ENV || 'development';
-
   // Define the configuration for all the tasks
   grunt.initConfig({
 
     // Project settings
     yeoman: appConfig,
 
-    template: {
-      test: {
+    ngconstant: {
+      options: {
+        space: '  ',
+        wrap: '"use strict";\n\n {%= __ngModule %}',
+        name: 'config'
+      },
+      // Environment targets
+      development: {
         options: {
-          data: require('./config/' + env + '.json')
+          dest: '<%= yeoman.app %>/scripts/config.js'
         },
-        files: {
-          '<%= yeoman.app %>/scripts/app.js': ['<%= yeoman.app %>/scripts/app.js.tpl']
+        constants: {
+          ENV: {
+            REGISTRY_API_ENDPOINT: 'https://index.docker.io',
+            LORRY_API_ENDPOINT: 'http://localhost:9292'
+          }
         }
       },
-      dist: {
+      production: {
         options: {
-          data: require('./config/' + env + '.json')
+          dest: '<%= yeoman.dist %>/scripts/config.js'
         },
-        files: {
-          '.tmp/scripts/app.js': ['<%= yeoman.app %>/scripts/app.js.tpl']
+        constants: {
+          ENV: {
+            REGISTRY_API_ENDPOINT: 'https://index.docker.io',
+            LORRY_API_ENDPOINT: process.env.LORRY_API_ENDPOINT
+          }
         }
       }
     },
@@ -135,7 +145,8 @@ module.exports = function (grunt) {
     jshint: {
       options: {
         jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        reporter: require('jshint-stylish'),
+        ignores: ['<%= yeoman.app %>/scripts/FileSaver.js']
       },
       all: {
         src: [
@@ -159,12 +170,11 @@ module.exports = function (grunt) {
           src: [
             '.tmp',
             '<%= yeoman.dist %>/{,*/}*',
-            '!<%= yeoman.dist %>/.git{,*/}*',
-            '<%= yeoman.app %>/scripts/app.js'
+            '!<%= yeoman.dist %>/.git{,*/}*'
           ]
         }]
       },
-      server: ['.tmp', '<%= yeoman.app %>/scripts/app.js']
+      server: ['.tmp']
     },
 
     // Add vendor prefixed styles
@@ -452,7 +462,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'configure:test',
+      'ngconstant:development',
       'wiredep',
       'html2js',
       'concurrent:server',
@@ -469,7 +479,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
-    'configure:test',
+    'ngconstant:development',
     'wiredep:test',
     'concurrent:test',
     'autoprefixer',
@@ -480,7 +490,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'configure:dist',
+    'ngconstant:production',
     'wiredep',
     'html2js',
     'useminPrepare',

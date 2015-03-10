@@ -6,7 +6,7 @@ describe('Controller: SearchCtrl', function () {
   beforeEach(module('lorryApp'));
 
   beforeEach(module(function($provide) {
-    $provide.constant('appConfig', {'REGISTRY_API_ENDPOINT': 'https://foobar.io'});
+    $provide.constant('ENV', {'REGISTRY_API_ENDPOINT': 'https://foobar.io'});
   }));
 
   var $controller, httpBackend, SearchCtrl, Repository, Tag, scope;

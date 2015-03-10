@@ -3,8 +3,8 @@
 // This is the main entry point to interact with the Docker Registry API.
 
 angular.module('docker-registry', ['ngResource'])
-  .factory('Repository', ['$resource', 'appConfig', function($resource, appConfig){
-    return $resource(appConfig.REGISTRY_API_ENDPOINT + '/v1/search?q=:searchTerm', {searchTerm:'@term'}, {
+  .factory('Repository', ['$resource', 'ENV', function($resource, ENV){
+    return $resource(ENV.REGISTRY_API_ENDPOINT + '/v1/search?q=:searchTerm', {searchTerm:'@term'}, {
       'query': {
         method:'GET',
         isArray: true,
@@ -19,8 +19,8 @@ angular.module('docker-registry', ['ngResource'])
       }
     });
   }])
-  .factory('Tag', ['$resource', 'appConfig', function($resource, appConfig){
-    return $resource(appConfig.REGISTRY_API_ENDPOINT + '/v1/repositories/:repoUser/:repoName/tags', {}, {
+  .factory('Tag', ['$resource', 'ENV', function($resource, ENV){
+    return $resource(ENV.REGISTRY_API_ENDPOINT + '/v1/repositories/:repoUser/:repoName/tags', {}, {
       'query': {
         method:'GET',
         isArray: true,
@@ -30,7 +30,7 @@ angular.module('docker-registry', ['ngResource'])
         }
       },
       'exists': {
-        url: appConfig.REGISTRY_API_ENDPOINT + '/v1/repositories/:repoUser/:repoName/tags/:tagName',
+        url: ENV.REGISTRY_API_ENDPOINT + '/v1/repositories/:repoUser/:repoName/tags/:tagName',
         method: 'GET',
         transformResponse: function(data, headers){
           // data will be the image ID if successful or an error object.
