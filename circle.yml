@@ -6,15 +6,15 @@ deployment:
   hub:
     branch: master
     commands:
-      - export LORRY_ENV=qa && grunt build
+      - export LORRY_API_ENDPOINT=http://8.22.8.236:9292 && grunt build
       - docker build -t centurylink/lorry-ui:qa .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push centurylink/lorry-ui:qa
       - ./bin/deploy_qa.sh
-  Production:  
+  Production:
     branch: release
     commands:
-      - export LORRY_ENV=production && grunt build
+      - export LORRY_API_ENDPOINT=http://lorry.io:9292 && grunt build
       - docker build -t centurylink/lorry-ui:latest .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push centurylink/lorry-ui:latest
