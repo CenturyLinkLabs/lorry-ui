@@ -6,13 +6,13 @@ describe('Service: docker-registry', function () {
   beforeEach(module('docker-registry'));
 
   beforeEach(module(function($provide) {
-    $provide.constant('appConfig', {'REGISTRY_API_ENDPOINT': 'https://foobar.io'});
+    $provide.constant('ENV', {'REGISTRY_API_ENDPOINT': 'https://foobar.io'});
   }));
 
   // Repository factory
   describe('Factory: Repository', function () {
 
-    var Repository, httpBackend, appConfig;
+    var Repository, httpBackend, ENV;
     var searchResults = {
       "results": [{
         "name": "baruser/foo",
@@ -24,15 +24,15 @@ describe('Service: docker-registry', function () {
     };
 
     // Initialize the service and a mock scope
-    beforeEach(inject(function (_Repository_, _appConfig_, _$httpBackend_) {
+    beforeEach(inject(function (_Repository_, _ENV_, _$httpBackend_) {
       Repository = _Repository_;
-      appConfig = _appConfig_;
+      ENV = _ENV_;
       httpBackend = _$httpBackend_;
     }));
 
     describe('search', function() {
       beforeEach(function() {
-        httpBackend.expectGET(appConfig.REGISTRY_API_ENDPOINT + "/v1/search?q=foo").respond(searchResults);
+        httpBackend.expectGET(ENV.REGISTRY_API_ENDPOINT + "/v1/search?q=foo").respond(searchResults);
       });
 
       it("should search for repositories", function () {
@@ -62,7 +62,7 @@ describe('Service: docker-registry', function () {
   // Tag factory
   describe('Factory: Tag', function () {
 
-    var Tag, httpBackend, appConfig;
+    var Tag, httpBackend, ENV;
     var queryResults = [
       {
         "layer": "11111111",
@@ -77,16 +77,16 @@ describe('Service: docker-registry', function () {
     ];
 
     // Initialize the service and a mock scope
-    beforeEach(inject(function (_Tag_, _appConfig_, _$httpBackend_) {
+    beforeEach(inject(function (_Tag_, _ENV_, _$httpBackend_) {
       Tag = _Tag_;
-      appConfig = _appConfig_;
+      ENV = _ENV_;
       httpBackend = _$httpBackend_;
     }));
 
     describe('tags', function() {
 
       it("should get tags for repository", function () {
-        httpBackend.expectGET(appConfig.REGISTRY_API_ENDPOINT + "/v1/repositories/baruser/foo/tags").respond(queryResults);
+        httpBackend.expectGET(ENV.REGISTRY_API_ENDPOINT + "/v1/repositories/baruser/foo/tags").respond(queryResults);
         var results = Tag.query({
           repoUser: 'baruser',
           repoName: 'foo'
@@ -98,7 +98,7 @@ describe('Service: docker-registry', function () {
       });
 
       it("should check if a tag exists for repository", function () {
-        httpBackend.expectGET(appConfig.REGISTRY_API_ENDPOINT + "/v1/repositories/baruser/foo/tags/latest").respond(existsResults);
+        httpBackend.expectGET(ENV.REGISTRY_API_ENDPOINT + "/v1/repositories/baruser/foo/tags/latest").respond(existsResults);
         var result = Tag.exists({
           repoUser: 'baruser',
           repoName: 'foo',

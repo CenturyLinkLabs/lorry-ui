@@ -5,4 +5,4 @@ dist
 .sass-cache
 bower_components
 app/scripts/directives/templates.js
-app/scripts/app.js
+app/scripts/config.js
