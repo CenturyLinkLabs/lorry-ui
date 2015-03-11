@@ -4,11 +4,9 @@
       <input type='radio' ng-model="line.name" value='image' ng-checked="line.name == 'image'">Image
       <input type='radio' ng-model="line.name" value='build' ng-checked="line.name == 'build'">Build
     </div>
-    <input type='text' ng-model="line.value" value='{{line.value}}'/>
-    <span>or, <a href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></span>
-    <div ng-show="selectedImageName">
-      Selected Image: <strong>{{ selectedImageName }}</strong>
-    </div>
+    <input type='text' ng-if="selectedImageName == null" ng-model="line.value"/>
+    <input type='text' ng-if="selectedImageName != null" ng-init="line.value = selectedImageName" ng-model="line.value"/>
+    <span>Or <a href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></span>
   </div>
   <div ng-hide="isImageOrBuild()">
     <div ng-hide="hasMultipleItems()">

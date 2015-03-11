@@ -11,19 +11,34 @@ describe('Controller: SearchCtrl', function () {
 
   var controller, scope, Image, Tag, httpBackend, SearchCtrl;
   var searchResponse = {
-    "results": [{
-      "name": "baruser/foo",
-      "is_trusted": true,
-      "is_official": false,
-      "star_count": 5,
-      "description": "foo service",
-      "username": "baruser",
-      "reponame": "foo"
-    }]
+    "results": [
+      {
+        "name": "baruser/foo",
+        "is_trusted": true,
+        "is_official": false,
+        "star_count": 5,
+        "description": "foo service",
+        "username": "baruser",
+        "reponame": "foo"
+      },
+      {
+        "name": "tag/me",
+        "is_trusted": true,
+        "is_official": false,
+        "star_count": 1,
+        "description": "tag me service",
+        "username": "tag",
+        "reponame": "me"
+      }
+    ]
   };
   var tagsResponse = [
     {
       "layer": "11111111",
+      "name": "latest"
+    },
+    {
+      "layer": "22222222",
       "name": "latest"
     }
   ];
@@ -38,7 +53,6 @@ describe('Controller: SearchCtrl', function () {
     SearchCtrl = controller('SearchCtrl', {
       $scope: scope, Image: _Image_, Tag: _Tag_
     });
-
   }));
 
   describe('performSearch: ', function () {
@@ -63,8 +77,7 @@ describe('Controller: SearchCtrl', function () {
     it('should get no results on empty search term', function () {
       scope.performSearch('');
 
-      expect(Object.keys(scope.searchResults).length).toBe(0);
-      expect(scope.noResults).toBeTruthy();
+      expect(scope.searchResults).toBeUndefined();
     });
 
     it('should not call Image query with empty search term', function () {
@@ -98,18 +111,19 @@ describe('Controller: SearchCtrl', function () {
 
   });
 
-  describe('insertTags: ', function () {
+  describe('insertAllTags: ', function () {
 
-    it('should insert tags to the search results', function () {
+    it('should insert tags for all nodes in the search results', function () {
       // simulate search was performed
       scope.searchResults = searchResponse.results;
 
-      httpBackend.expectGET('https://foobar.io/images/tags/baruser/foo').respond(tagsResponse);
-      scope.insertTags('baruser', 'foo');
+      httpBackend.expectGET('https://foobar.io/images/tags/baruser/foo').respond([tagsResponse[0]]);
+      httpBackend.expectGET('https://foobar.io/images/tags/tag/me').respond([tagsResponse[1]]);
+      scope.insertAllTags();
       httpBackend.flush();
 
-      expect(scope.searchResults[0].tags[0].name).toBe(tagsResponse[0].name);
       expect(scope.searchResults[0].tags[0].layer).toBe(tagsResponse[0].layer);
+      expect(scope.searchResults[1].tags[0].layer).toBe(tagsResponse[1].layer);
 
     });
 
@@ -118,12 +132,27 @@ describe('Controller: SearchCtrl', function () {
 
       // simulate search was performed
       scope.searchResults = searchResponse.results;
-      scope.insertTags('baruser', 'foo');
+      scope.insertAllTags();
 
       expect(scope.getTags).toHaveBeenCalled();
     });
+  });
 
+  describe('insertTags: ', function () {
 
+    it('should insert tags for specified node in the search results', function () {
+      // simulate search was performed
+      scope.searchResults = searchResponse.results;
+
+      httpBackend.expectGET('https://foobar.io/images/tags/tag/me').respond([tagsResponse[1]]);
+      scope.insertTags('tag', 'me');
+      httpBackend.flush();
+
+      expect(scope.searchResults[0].tags).toBeUndefined();
+      expect(scope.searchResults[1].tags).toBeDefined();
+      expect(scope.searchResults[1].tags[0].layer).toBe(tagsResponse[1].layer);
+
+    });
   });
 
   describe('setDialogPane', function () {

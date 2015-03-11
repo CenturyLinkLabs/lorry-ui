@@ -2,56 +2,30 @@
   <form id="frmSearch" name="frmSearch" novalidate>
     <input type="text" placeholder="search term" ng-model="qterm"/>
     <button id="btnSearch" class="button-primary" ng-click="performSearch(qterm)">Search</button>
-    <!--<button type="button" ng-click="resetSearch()">Reset</button>-->
   </form>
-  <div ng-init="dummyResults=['foo', 'bar', 'blah']">
-    <div ng-if="!dummyResults"><p class="spinner"><img src='/images/icon_loading_green.gif'/> Searching for images...</p></div>
-    <div ng-repeat="result in dummyResults">
+  <div>
+    <div ng-if="searchResults.length == 0"><p class="spinner"><img src='/images/icon_loading_green.gif'/>Searching for images...</p></div>
+    <div ng-repeat="result in searchResults track by $index">
       <div class="results-container">
         <div class="result-row">
           <div class="result-badge">
-            <p>Official</p>
+            <p>{{result.is_official ? 'Official' : 'Repository'}}</p>
           </div>
           <div class="result-info">
-            <h3>Official Wordpress Image</h3><span class="star-count">125</span>
-            <p>Some description of the awesome image with other details. Some description of the awesome image with other details... <a href="">More Details</a></p>
+            <h4>{{ result.name }}</h4><span class="star-count">{{ result.star_count }}</span>
+            <p>{{ result.description }} <a href="">More Details</a></p>
           </div>
           <div class="result-tag">
             <span>Tag</span>
-            <select>
-              <option>Latest</option>
+            <select ng-model="selectedTag" ng-init="selectedTag = selectedTag || result.tags[0]" ng-click="insertTags(result.username, result.reponame)"
+                    ng-options="tag as tag.name for tag in result.tags track by tag.name">
+              <option ng-if="selectedTag" value="">Latest</option>
             </select>
           </div>
           <div class="add-image">
-            <button class="button-primary">Add Image</button>
+            <button class="button-primary" ng-click="selectImage(result.name, selectedTag.name)">Add Image</button>
           </div>
         </div>
-      </div>
-
-    </div>
-  </div>
-
-
-
-  <div ng-hide="noResults">
-    <p>Search Results for '{{qterm}}': {{searchResults.length}} hits</p>
-    <strong>Select an image:</strong>
-    <select ng-model="selectedImage.repo"
-            ng-change="getTags(selectedImage.repo.username, selectedImage.repo.reponame)"
-            ng-options="repo as repo.name for repo in (searchResults | orderBy: 'username')">
-    </select>
-    <div ng-show="selectedImage.repo.name">
-      <strong>Select a tag:</strong>
-      <select ng-model="selectedImage.tag" ng-options="tag as tag.name for tag in tagResults">
-      </select>
-      <div ng-show="selectedImage.tag.name">
-        <p><strong>Name:</strong> {{ selectedImage.repo.name }}:{{selectedImage.tag.name}}</p>
-        <p><strong>Description:</strong> {{selectedImage.repo.description}}</p>
-        <p><strong>Stars:</strong> {{selectedImage.repo.star_count}}
-          | <strong>Official:</strong> {{selectedImage.repo.is_official ? 'Yes' : 'No'}}
-          | <strong>Trusted:</strong> {{selectedImage.repo.is_trusted ? 'Yes' : 'No'}}</p>
-
-        <button ng-click="selectImage(selectedImage)">Select Image</button>
       </div>
     </div>
   </div>

@@ -1,15 +1,10 @@
 'use strict';
 
 angular.module('lorryApp')
-  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'Image', 'Tag', function($scope, ngDialog, Image, Tag) {
-    $scope.noResults = true;
-    $scope.searchResults = [];
+  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'lodash', 'Image', 'Tag', function($scope, ngDialog, lodash, Image, Tag) {
+    $scope.searchResults = undefined;
     $scope.tagResults = [];
     $scope.selectedImageName = '';
-    $scope.selectedImage = {
-      repo: {},
-      tag: {}
-    };
 
     $scope.dialogOptions = {
       dialogPane: 'search',
@@ -27,10 +22,13 @@ angular.module('lorryApp')
         showClose: false,
         scope: $scope
       });
+      $scope.dialog.closePromise.then(function (data) {
+        $scope.resetSearch();
+      });
     };
 
-    $scope.selectImage = function(selImage) {
-      $scope.$parent.$parent.selectedImageName = selImage.repo.name + ":" + selImage.tag.name;
+    $scope.selectImage = function(selImageName, selImageTag) {
+      $scope.$parent.$parent.selectedImageName = selImageName + ":" + selImageTag;
       $scope.dialog.close();
     };
 
@@ -38,13 +36,24 @@ angular.module('lorryApp')
       $scope.resetSearch();
       if (qterm != '' && qterm != undefined) {
         $scope.searchResults = Image.query({searchTerm:qterm});
-        $scope.noResults = false;
       }
     };
 
-    $scope.insertTags = function(){
+    $scope.insertAllTags = function(){
       angular.forEach($scope.searchResults, function(value, key) {
         value.tags = $scope.getTags(value.username, value.reponame);
+      });
+    };
+
+    $scope.insertTags = function(username, reponame){
+      angular.forEach($scope.searchResults, function(value, key) {
+        // get tags only the first time
+        if ('undefined' === typeof value['tags']) {
+          var name = username + '/' + reponame;
+          if (value.name == name) {
+            value.tags = $scope.getTags(value.username, value.reponame);
+          }
+        }
       });
     };
 
@@ -57,9 +66,8 @@ angular.module('lorryApp')
     };
 
     $scope.resetSearch = function(){
-      $scope.searchResults = [];
+      $scope.searchResults = undefined;
       $scope.tagResults = [];
-      $scope.noResults = true;
     };
 
   }]);
