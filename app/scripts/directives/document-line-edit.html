@@ -10,13 +10,13 @@
   </div>
   <div ng-hide="isImageOrBuild()">
     <div ng-hide="hasMultipleItems()">
-      <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
+      <div class="label">{{line.name}}</div>
       <input type='text' ng-model="line.value" value='{{line.value}}' />
     </div>
-    <div class="multi-line-edit" ng-show="hasMultipleItems()" ng-repeat="item in line.value track by $index">
-      <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
+    <div ng-show="hasMultipleItems()" ng-repeat="item in line.value track by $index">
+      <div class="label">{{line.name}}</div>
       <input type='text' ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
-      <select class="data-select" ng-if="line.name == 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
+      <select ng-if="line.name == 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
     </div>
   </div>
   <div class="line-info"></div>
