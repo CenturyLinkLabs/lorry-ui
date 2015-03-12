@@ -31,6 +31,8 @@ module.exports = function(config) {
       'bower_components/ngDialog/js/ngDialog.js',
       'bower_components/js-yaml/dist/js-yaml.js',
       'bower_components/angular-tooltips/dist/angular-tooltips.min.js',
+      'bower_components/zeroclipboard/dist/ZeroClipboard.js',
+      'bower_components/ng-clip/src/ngClip.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

@@ -10,18 +10,56 @@ describe('Controller: DocumentExportCtrl', function () {
     ENV,
     documentEndpointHandler,
     win,
-    fileSaver;
+    fileSaver,
+    $timeout;
 
-  beforeEach(inject(function ($controller, $rootScope,_$httpBackend_, _$window_, _fileSaver_, _ENV_) {
+  beforeEach(inject(function ($controller, $rootScope,_$httpBackend_, _$window_, _$timeout_, _fileSaver_, _ENV_) {
     $httpBackend = _$httpBackend_;
     win = _$window_;
     ENV = _ENV_;
     fileSaver = _fileSaver_;
+    $timeout = _$timeout_;
     scope = $rootScope.$new();
     DocumentExportCtrl = $controller('DocumentExportCtrl', {
       $scope: scope
     });
   }));
+
+  describe('copyToClipboard', function () {
+    describe('when the underlying document changes', function () {
+      it('sets the yamlized document json into scope', function () {
+        expect(scope.doc).toEqual('');
+        scope.yamlDocument = {json: {foo: 'bar'}};
+        scope.$digest();
+        expect(scope.doc).toEqual('foo: bar\n');
+      });
+
+      it('sets the copy link text back to the default', function () {
+        scope.copyText = 'Copied!';
+        scope.yamlDocument = {json: {foo: 'bar'}};
+        scope.$digest();
+        expect(scope.copyText).toEqual('Copy to Clipboard');
+      });
+    });
+
+    describe('$scope.confirmCopy', function () {
+      it('confirms the copy action', function () {
+        expect(scope.copyText).toEqual('Copy to Clipboard');
+        scope.confirmCopy();
+        expect(scope.copyText).toEqual('Copied!');
+      });
+
+      it('sets the copy link text back to the default after 3 seconds', function () {
+        scope.yamlDocument = {json: {foo: 'bar'}};
+        expect(scope.copyText).toEqual('Copy to Clipboard');
+        scope.confirmCopy();
+        expect(scope.copyText).toEqual('Copied!');
+        $timeout.flush();
+        expect(scope.copyText).toEqual('Copy to Clipboard');
+      });
+    });
+
+  });
 
   describe('$scope.saveDocument', function () {
     var blobMock;
@@ -33,7 +71,7 @@ describe('Controller: DocumentExportCtrl', function () {
       spyOn(fileSaver, 'saveFile');
     });
 
-    it('is essentially untestable', function () {
+    it('is uses the fileSaver service to push the file to the user', function () {
       scope.saveDocument();
       expect(fileSaver.saveFile).toHaveBeenCalledWith(blobMock, "compose.yml");
     });
