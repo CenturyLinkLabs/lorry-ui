@@ -69,6 +69,8 @@ angular.module('lorryApp')
           $scope.$emit('cancelEditing', $scope.sectionName);
         };
 
+        $scope.validKeys = ['image', 'build', 'command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
+
       }
     };
   });

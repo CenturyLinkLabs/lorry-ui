@@ -17,6 +17,26 @@ angular.module('lorryApp')
           return Array.isArray(scope.line.value);
         };
 
+        scope.isValidKey = function(key) {
+          return lodash.includes(scope.validKeys, key);
+        };
+
+        scope.searchLinkClasses = function(key) {
+          if (key == 'image') {
+            return 'active';
+          } else {
+            return 'not-active';
+          }
+        };
+
+        scope.keyLabelClasses = function(key) {
+          if (scope.isValidKey(key)) {
+            return 'label';
+          } else {
+            return 'label error';
+          }
+        };
+
         scope.serviceNameList = $rootScope.serviceNameList;
 
       },

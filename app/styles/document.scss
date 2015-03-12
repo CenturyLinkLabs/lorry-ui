@@ -21,6 +21,13 @@
   font-family: $monospace_font_family;
   line-height: 1.5em;
   margin-bottom: 75px;
+
+  input[type='text'],
+  input[type='radio'],
+  select {
+    font-family: $monospace_font_family;
+    font-size: 1em;
+  }
 }
 
 #documentActionsPane {
@@ -122,31 +129,51 @@
 
   .section-name {
     display: inline-block;
-    margin-left: 0px;
+    margin-left: 0;
     margin-bottom: 10px;
   }
+
+  .add-new-line {
+
+    select {
+      width: 210px;
+      height: 39px;
+      margin-left: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    input[type='text'] {
+      margin-left: 20px;
+      width: 800px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .action-area {
+    float: right;
+    margin-top: 10px;
+    margin-right: 63px;
+  }
+
 }
 
 .line-edit {
   display: inline-block;
   margin-left: 20px;
 
-  .multi-line-edit {
-    margin: 0;
-    margin-bottom: 10px;
-  }
-
   .radio-edit-group {
     display: inline-block;
     height: 14px;
-    width: 140px;
-    padding-left: 0px;
-    padding-right: 0px;
+    width: 150px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .label {
     display: inline-block;
-    width: 140px;
+    width: 150px;
   }
 
   .error {
@@ -155,17 +182,96 @@
 
   input[type='text'] {
     margin-left: 80px;
-    width: 500px;
-    margin-bottom: 10px;
+    width: 800px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  input[type='text'].build-image-text {
+    width: 614px;
   }
 
   select {
-    width: 522px;
+    width: 822px;
     height: 39px;
     margin-left: 80px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 
+  .add-link {
+    display: inline-block;
+    margin-left: 230px;
+    margin-top: 10px;
+    margin-bottom: 3px;
+
+    a {
+      color: $light_grey;
+    }
+  }
+
+  .separator {
+    border-bottom: solid 1px $dark_grey;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .search-link {
+    display: inline-block;
+    float: right;
+    text-align: center;
+    line-height: 50px;
+    margin-left: 10px;
+
+    a.active {
+      color: $ctl_light_green;
+      cursor: pointer;
+    }
+
+    a.not-active {
+      text-decoration: none;
+      color: $light_grey;
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+
+  .info {
+    display: inline-block;
+    float: right;
+    @include border-radius(5em);
+    border: solid 1px $light_grey;
+    text-align: center;
+    line-height: 22px;
+    width: 20px;
+    height: 20px;
+    color: $lighter_grey;
+    margin-top: 13px;
+    margin-left: 10px;
+    margin-right: 0px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .delete {
+    display: inline-block;
+    float: right;
+    text-align: center;
+    line-height: 20px;
+    width: 20px;
+    height: 20px;
+    color: $lighter_grey;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 14px;
+
+    &:hover {
+      color: red;
+      cursor: pointer;
+    }
+  }
 }
 
 .line {
@@ -173,9 +279,9 @@
   margin-right: 60px;
 
   .gutter {
+    display: inline-block;
     background-color: $dark_grey;
     color: $light_grey;
-    display: inline-block;
     width: 50px;
     margin-right: 5px;
     padding-right: 5px;
