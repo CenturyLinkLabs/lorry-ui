@@ -6,6 +6,8 @@ angular.module('lorryApp').factory('fileSaver', ['$window', function ($window) {
       $window._thirdParty.saveAs = $window.saveAs;
       try { delete $window.saveAs; } catch (e) {$window.saveAs = undefined;}
     }
-    var fileSaver = $window._thirdParty.saveAs;
-    return fileSaver;
+
+    return {
+      saveFile: $window._thirdParty.saveAs
+    };
   }]);
