@@ -418,6 +418,19 @@ module.exports = function (grunt) {
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
+        }, {
+          expand: true,
+          cwd: 'bower_components/zeroclipboard/dist',
+          dest: '<%= yeoman.dist %>/images',
+          src: ['ZeroClipboard.swf']
+        }]
+      },
+      serve: {
+        files: [{
+          expand: true,
+          cwd: 'bower_components/zeroclipboard/dist',
+          dest: '<%= yeoman.app %>/images',
+          src: ['ZeroClipboard.swf']
         }]
       },
       styles: {
@@ -468,6 +481,7 @@ module.exports = function (grunt) {
       'html2js',
       'concurrent:server',
       'autoprefixer',
+      'copy:serve',
       'connect:livereload',
       'watch'
     ]);
