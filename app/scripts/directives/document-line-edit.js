@@ -17,24 +17,36 @@ angular.module('lorryApp')
           return Array.isArray(scope.line.value);
         };
 
-        scope.isValidKey = function(key) {
-          return lodash.includes(scope.validKeys, key);
+        scope.isValidKey = function() {
+          return lodash.includes(scope.validKeys, scope.line.name);
         };
 
-        scope.searchLinkClasses = function(key) {
-          if (key == 'image') {
+        scope.searchLinkClasses = function() {
+          if (scope.line.name == 'image') {
             return 'active';
           } else {
             return 'not-active';
           }
         };
 
-        scope.keyLabelClasses = function(key) {
-          if (scope.isValidKey(key)) {
+        scope.keyLabelClasses = function() {
+          if (scope.isValidKey(scope.line.name)) {
             return 'label';
           } else {
             return 'label error';
           }
+        };
+
+        scope.addNewValueForLine = function () {
+          scope.$emit('addNewValueForExistingKey', scope.sectionName, scope.line.name);
+        };
+
+        scope.deleteLineFromSection = function () {
+          scope.$emit('deleteKeyFromSection', scope.sectionName, scope.line.name);
+        };
+
+        scope.deleteLineItemFromSection = function (index) {
+          scope.$emit('deleteKeyItemFromSection', scope.sectionName, scope.line.name, index);
         };
 
         scope.serviceNameList = $rootScope.serviceNameList;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('serviceDefinitionEdit', function ($log) {
+  .directive('serviceDefinitionEdit', [ 'lodash', function ($log, lodash) {
     return {
       scope: {
         sectionName: '=',
@@ -13,7 +13,7 @@ angular.module('lorryApp')
         //$log.log(scope.section);
       },
       templateUrl: '/scripts/directives/service-definition-edit.html',
-      controller: function ($scope) {
+      controller: function ($scope, lodash) {
 
         $scope.transformToJson = function () {
           $scope.editableJson = $scope.transformToEditableJson($scope.sectionJson)
@@ -69,8 +69,18 @@ angular.module('lorryApp')
           $scope.$emit('cancelEditing', $scope.sectionName);
         };
 
-        $scope.validKeys = ['image', 'build', 'command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
+        $scope.addNewKey = function (key) {
+          if (lodash.includes($scope.validKeys, key)) {
+            $scope.$emit('addNewKeyToSection', $scope.sectionName, key);
+          }
+        };
+
+        $scope.buildValidKeyList = function () {
+          return lodash.difference($scope.validKeys, lodash.keys($scope.sectionJson));
+        };
+
+        $scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
 
       }
     };
-  });
+  }]);
