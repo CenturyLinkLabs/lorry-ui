@@ -28,7 +28,7 @@ angular.module('lorryApp')
     };
 
     $scope.selectImage = function(selImageName, selImageTag) {
-      $scope.$parent.$parent.selectedImageName = selImageName + ":" + selImageTag;
+      $scope.$parent.selectedImageName = selImageName + ":" + selImageTag;
       $scope.dialog.close();
     };
 

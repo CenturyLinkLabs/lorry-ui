@@ -162,4 +162,12 @@ describe('Controller: SearchCtrl', function () {
     });
   });
 
+  describe('selectImage', function () {
+    it ('sets the $scope.$parent.selectedImageName with the selected image name', function () {
+      scope.dialog = jasmine.createSpyObj('dialog', ['close']);
+      scope.selectImage('foo/bar', 'latest');
+      expect(scope.$parent.selectedImageName).toBe('foo/bar:latest');
+    });
+  });
+
 });
