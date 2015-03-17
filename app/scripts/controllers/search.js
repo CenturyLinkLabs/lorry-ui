@@ -11,10 +11,6 @@ angular.module('lorryApp')
       title: 'Search the Docker Hub'
     };
 
-    $scope.setDialogPane = function (pane) {
-      $scope.dialogOptions.dialogPane = pane;
-    };
-
     $scope.searchDialog = function () {
       $scope.dialog = ngDialog.open({
         template: '/views/search-dialog.html',
@@ -34,15 +30,9 @@ angular.module('lorryApp')
 
     $scope.performSearch = function(qterm){
       $scope.resetSearch();
-      if (qterm != '' && qterm != undefined) {
+      if (qterm) {
         $scope.searchResults = Image.query({searchTerm:qterm});
       }
-    };
-
-    $scope.insertAllTags = function(){
-      angular.forEach($scope.searchResults, function(value, key) {
-        value.tags = $scope.getTags(value.username, value.reponame);
-      });
     };
 
     $scope.insertTags = function(username, reponame){

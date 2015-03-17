@@ -111,33 +111,6 @@ describe('Controller: SearchCtrl', function () {
 
   });
 
-  describe('insertAllTags: ', function () {
-
-    it('should insert tags for all nodes in the search results', function () {
-      // simulate search was performed
-      scope.searchResults = searchResponse.results;
-
-      httpBackend.expectGET('https://foobar.io/images/tags/baruser/foo').respond([tagsResponse[0]]);
-      httpBackend.expectGET('https://foobar.io/images/tags/tag/me').respond([tagsResponse[1]]);
-      scope.insertAllTags();
-      httpBackend.flush();
-
-      expect(scope.searchResults[0].tags[0].layer).toBe(tagsResponse[0].layer);
-      expect(scope.searchResults[1].tags[0].layer).toBe(tagsResponse[1].layer);
-
-    });
-
-    it('should call getTags for inserting tags', function () {
-      spyOn(scope, 'getTags');
-
-      // simulate search was performed
-      scope.searchResults = searchResponse.results;
-      scope.insertAllTags();
-
-      expect(scope.getTags).toHaveBeenCalled();
-    });
-  });
-
   describe('insertTags: ', function () {
 
     it('should insert tags for specified node in the search results', function () {
@@ -152,13 +125,6 @@ describe('Controller: SearchCtrl', function () {
       expect(scope.searchResults[1].tags).toBeDefined();
       expect(scope.searchResults[1].tags[0].layer).toBe(tagsResponse[1].layer);
 
-    });
-  });
-
-  describe('setDialogPane', function () {
-    it ('sets the $scope.dialogOptions.dialogPane to the argument passed', function () {
-      scope.setDialogPane('foo');
-      expect(scope.dialogOptions.dialogPane).toBe('foo');
     });
   });
 

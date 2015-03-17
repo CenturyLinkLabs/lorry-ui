@@ -341,11 +341,11 @@ describe('Controller: DocumentCtrl', function () {
     });
   });
 
-  describe('$scope.createNewEmptyValueForKey', function () {
+  describe('#createNewEmptyValueForKey', function () {
     ['command', 'image', 'build'].forEach(function (key) {
       describe('when the key (' + key + ') represents a string value', function () {
         it('returns an empty string', function () {
-          var result = scope.createNewEmptyValueForKey(key);
+          var result = DocumentCtrl.createNewEmptyValueForKey(key);
           expect(result).toBe('');
         });
       });
@@ -354,7 +354,7 @@ describe('Controller: DocumentCtrl', function () {
     ['links', 'external_links', 'ports', 'volumes', 'environment'].forEach(function (key) {
       describe('when the key (' + key + ') represents a string value', function () {
         it('returns an empty array', function () {
-          var result = scope.createNewEmptyValueForKey(key);
+          var result = DocumentCtrl.createNewEmptyValueForKey(key);
           expect(result).toEqual(['']);
         });
       });

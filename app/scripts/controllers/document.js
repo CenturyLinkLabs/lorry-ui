@@ -130,7 +130,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       self.validateJson();
     });
 
-    $scope.createNewEmptyValueForKey = function(key) {
+    this.createNewEmptyValueForKey = function(key) {
       var keyValue;
 
       switch (key) {
@@ -153,21 +153,21 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     };
 
     $scope.$on('addNewKeyToSection', function (e, serviceName, key) {
-      var keyValue = $scope.createNewEmptyValueForKey(key);
       var json = $scope.yamlDocument.json;
 
       if (json.hasOwnProperty(serviceName)) {
+        var keyValue = self.createNewEmptyValueForKey(key);
         json[serviceName][key] = keyValue;
         self.validateJson();
       }
     });
 
     $scope.$on('addNewValueForExistingKey', function (e, serviceName, key) {
-      var keyValue = $scope.createNewEmptyValueForKey(key);
       var json = $scope.yamlDocument.json;
 
       if (json.hasOwnProperty(serviceName)) {
         if (json[serviceName].hasOwnProperty(key)) {
+          var keyValue = self.createNewEmptyValueForKey(key);
           if (Array.isArray(keyValue)) {
             json[serviceName][key].push(keyValue[0]);
             self.validateJson();

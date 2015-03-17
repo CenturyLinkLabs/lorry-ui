@@ -40,7 +40,6 @@ module.exports = function (grunt) {
         },
         constants: {
           ENV: {
-            REGISTRY_API_ENDPOINT: 'https://index.docker.io',
             LORRY_API_ENDPOINT: 'http://localhost:9292'
           }
         }
@@ -51,7 +50,6 @@ module.exports = function (grunt) {
         },
         constants: {
           ENV: {
-            REGISTRY_API_ENDPOINT: 'https://index.docker.io',
             LORRY_API_ENDPOINT: process.env.LORRY_API_ENDPOINT
           }
         }

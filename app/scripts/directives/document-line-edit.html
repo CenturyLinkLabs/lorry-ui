@@ -1,11 +1,11 @@
 <div class="line-edit">
   <div ng-show="isImageOrBuild()">
     <div class="radio-edit-group">
-      <input type='radio' ng-model="line.name" value='image' ng-checked="line.name == 'image'">Image
-      <input type='radio' ng-model="line.name" value='build' ng-checked="line.name == 'build'">Build
+      <input type='radio' ng-model="line.name" value='image' ng-checked="line.name === 'image'">Image
+      <input type='radio' ng-model="line.name" value='build' ng-checked="line.name === 'build'">Build
     </div>
     <input type='text' class="build-image-text" ng-if="selectedImageName == null" ng-model="line.value"/>
-    <input type='text' class="build-image-text" ng-if="selectedImageName != null" ng-init="line.value = (line.name == 'image') ? selectedImageName: line.value" ng-model="line.value"/>
+    <input type='text' class="build-image-text" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
     <div class="info">i</div>
     <div class="search-link">Or <a ng-class="searchLinkClasses()" href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></div>
   </div>

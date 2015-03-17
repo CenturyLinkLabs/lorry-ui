@@ -10,7 +10,7 @@ angular.module('lorryApp')
         scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
 
         scope.isImageOrBuild = function () {
-          return (scope.line.name == 'image' || scope.line.name == 'build');
+          return (scope.line.name === 'image' || scope.line.name === 'build');
         };
 
         scope.hasMultipleItems = function () {
@@ -22,19 +22,11 @@ angular.module('lorryApp')
         };
 
         scope.searchLinkClasses = function() {
-          if (scope.line.name == 'image') {
-            return 'active';
-          } else {
-            return 'not-active';
-          }
+          return scope.line.name === 'image' ? 'active' : 'not-active';
         };
 
         scope.keyLabelClasses = function() {
-          if (scope.isValidKey(scope.line.name)) {
-            return 'label';
-          } else {
-            return 'label error';
-          }
+          return scope.isValidKey(scope.line.name) ? 'label' : 'label error';
         };
 
         scope.addNewValueForLine = function () {
