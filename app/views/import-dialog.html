@@ -15,7 +15,7 @@
   <div class="dialog-content">
     <div ng-show="dialogOptions.dialogPane === 'upload'">
       <p>Select your local compose.yml</p>
-      <input type="file" file-input/>
+      <input type="file" file-input accept=".yaml,.yml,text/yaml,text/x-yaml,application/yaml,application/x-yaml"/>
     </div>
     <div ng-show="dialogOptions.dialogPane === 'paste'">
       <p>Paste your compose.yml contents below</p>
