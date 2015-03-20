@@ -19,6 +19,7 @@ describe('Controller: DocumentCtrl', function () {
     });
     yamlValidator = _yamlValidator_;
     jsyaml = _jsyaml_;
+    $rootScope.markAsDeletedTracker = {};
   }));
 
   describe('$scope.hasErrors', function () {
@@ -283,7 +284,7 @@ describe('Controller: DocumentCtrl', function () {
 
   describe('$scope.editService', function () {
 
-    describe('when the yamlDocument.json has a service without the build or image key', function () {
+    describe('when the edited section has a service without the build or image key', function () {
       beforeEach(function () {
         scope.yamlDocument.json = {
           "service1": {
@@ -293,12 +294,12 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should add an image key to the service', function () {
-        expect(scope.yamlDocument.json).hasOwnProperty('image');
+        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('image');
       });
 
     });
 
-    describe('when the yamlDocument.json has a service matching the serviceName', function () {
+    describe('when the edited section has a service matching the serviceName', function () {
       beforeEach(function () {
         scope.yamlDocument.json = {
           "service1": {
@@ -308,36 +309,31 @@ describe('Controller: DocumentCtrl', function () {
         scope.editService('service1');
       });
 
-      it('should keep an original copy of the yamlDocument.json', function () {
-        // delete the edit mode property, just to test equality
-        delete scope.yamlDocument.json['service1']['editMode'];
-        expect(scope.yamlDocument.json).toEqual(scope.yamlDocumentJsonBeforeEdit);
+      it('should make a copy of the original service json for editing', function () {
+        // remove the editMode for testing equality
+        delete scope.yamlDocument.json['service1'].editMode;
+        expect(scope.yamlDocument.json['service1']).toEqual(scope.editedServiceYamlDocumentJson);
       });
 
-      it('should add an editMode property to the yamlDocument.json service', function () {
+      it('should flag the service to be in editMode', function () {
         expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
-      });
-
-      it('should set the yamlDocument.json service to edit mode', function () {
         expect(scope.yamlDocument.json['service1'].editMode).toEqual(true);
       });
-
     });
 
-    describe('when the yamlDocument.json does not have a service matching the serviceName', function () {
+    describe('when the edited section does not have a service matching the serviceName', function () {
       beforeEach(function () {
         scope.yamlDocument.json = { someOtherService: [] };
         scope.editService('someService');
       });
 
-      it('should not make a copy of the yamlDocument.json', function () {
-        expect(scope.yamlDocumentJsonBeforeEdit).toEqual({});
+      it('should not make a copy of the original service json for editing', function () {
+        expect(scope.editedServiceYamlDocumentJson).toEqual({});
       });
 
-      it('should not add an editMode property to the yamlDocument.json service', function () {
+      it('should not flag the service to be in editMode', function () {
         !expect(scope.yamlDocument.json['someService']).hasOwnProperty('editMode');
       });
-
     });
   });
 
@@ -357,6 +353,108 @@ describe('Controller: DocumentCtrl', function () {
           var result = DocumentCtrl.createNewEmptyValueForKey(key);
           expect(result).toEqual(['']);
         });
+      });
+    });
+
+  });
+
+  describe('#deleteItemsMarkedForDeletion', function () {
+    describe('when some keys and items in a key are deleted', function () {
+      beforeEach(function () {
+        DocumentCtrl.markItemForDeletion('build', null);
+        DocumentCtrl.markItemForDeletion('ports', 0);
+      });
+
+      it('should delete the items marked for deletion', function () {
+        var sectionData = {
+          "build": "foo",
+          "ports": ["1111:2222", "3333:4444"]
+        };
+        var result = DocumentCtrl.deleteItemsMarkedForDeletion(sectionData);
+
+        expect(result).not.hasOwnProperty('build');
+        expect(result['ports'].length).toBe(1);
+      });
+
+      it('should reset the delete tracker', function () {
+        var sectionData = {
+          "build": "foo",
+          "ports": ["1111:2222", "3333:4444"]
+        };
+        DocumentCtrl.deleteItemsMarkedForDeletion(sectionData);
+
+        expect(scope.markAsDeletedTracker).toEqual({});
+      });
+    });
+
+    describe('when all the items in a key are deleted', function () {
+      beforeEach(function () {
+        DocumentCtrl.markItemForDeletion('build', null);
+        DocumentCtrl.markItemForDeletion('ports', 0);
+        DocumentCtrl.markItemForDeletion('ports', 1);
+      });
+
+      it('should delete the whole key', function () {
+        var sectionData = {
+          "build": "foo",
+          "ports": ["1111:2222", "3333:4444"]
+        };
+        var result = DocumentCtrl.deleteItemsMarkedForDeletion(sectionData);
+
+        expect(result).not.hasOwnProperty('build');
+        expect(result).not.hasOwnProperty('ports');
+      });
+    });
+  });
+
+  describe('#markItemForDeletion', function () {
+
+    describe('when a key is deleted', function () {
+      beforeEach(function () {
+        DocumentCtrl.markItemForDeletion('key1', null);
+      });
+
+      it('should add the key name to delete tracker', function () {
+        expect(scope.markAsDeletedTracker).hasOwnProperty('key1');
+        expect(scope.markAsDeletedTracker['key1']).toEqual(['delete me']);
+      });
+    });
+
+    describe('when a key is un-deleted', function () {
+      beforeEach(function () {
+        DocumentCtrl.markItemForDeletion('key1', null);
+      });
+
+      it('should remove the key name from the delete tracker', function () {
+        // undelete key
+        DocumentCtrl.markItemForDeletion('key1', null);
+        expect(scope.markAsDeletedTracker).not.hasOwnProperty('key1');
+      });
+    });
+
+    describe('when key items are deleted', function () {
+      beforeEach(function () {
+        DocumentCtrl.markItemForDeletion('key2', 0);
+        DocumentCtrl.markItemForDeletion('key2', 1);
+      });
+
+      it('should add the key item indexes to the delete tracker', function () {
+        expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
+        expect(scope.markAsDeletedTracker['key2']).toEqual([0,1]);
+      });
+    });
+
+    describe('when a key item is un-deleted', function () {
+      beforeEach(function () {
+        DocumentCtrl.markItemForDeletion('key2', 0);
+        DocumentCtrl.markItemForDeletion('key2', 1);
+      });
+
+      it('should remove the key item index from the delete tracker', function () {
+        // undelete only one item
+        DocumentCtrl.markItemForDeletion('key2', 1);
+        expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
+        expect(scope.markAsDeletedTracker['key2']).toEqual([0]);
       });
     });
 
@@ -387,7 +485,7 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should unset the edit mode for the yamlDocument.json service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
+        expect(scope.yamlDocument.json['service1']).not.hasOwnProperty('editMode');
       });
 
       it('should call validateJson', function () {
@@ -454,21 +552,23 @@ describe('Controller: DocumentCtrl', function () {
           "build": "fooUpdated",
           "command": "new key added"
         }};
+      //
+      //origYamlDocumentJson = {
+      //  "service1": {
+      //    "build": "foo",
+      //    "ports": ["1111:2222", "3333:4444"]
+      //  }};
 
-      origYamlDocumentJson = {
-        "service1": {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
-        }};
-
-      // simulate the edit operation, where the original copy is saved
-      scope.yamlDocumentJsonBeforeEdit = origYamlDocumentJson;
-
-      spyOn(DocumentCtrl, 'validateJson');
+      // simulate edit mode turned on
+      scope.yamlDocument.json['service1'].editMode = true;
     });
 
     describe('when editing is cancelled', function () {
       beforeEach(function () {
+        // simulate some deletes
+        DocumentCtrl.markItemForDeletion('build', null);
+        DocumentCtrl.markItemForDeletion('ports', 0);
+        // call cancel
         scope.$emit('cancelEditing', 'service1');
       });
 
@@ -476,13 +576,12 @@ describe('Controller: DocumentCtrl', function () {
         !expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
       });
 
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
-      });
-
-      it('should revert back to the original service state', function () {
-        expect(scope.yamlDocument.json).toEqual(origYamlDocumentJson);
-        expect(scope.yamlDocumentJsonBeforeEdit).toEqual({});
+      //it('should revert back to the original service state', function () {
+      //  expect(scope.yamlDocument.json).toEqual(origYamlDocumentJson);
+      //  expect(scope.yamlDocumentJsonBeforeEdit).toEqual({});
+      //});
+      it('should reset the delete tracker', function () {
+        expect(scope.markAsDeletedTracker).toEqual({});
       });
     });
 
@@ -490,56 +589,31 @@ describe('Controller: DocumentCtrl', function () {
 
   describe('$scope.$on addNewKeyToSection', function () {
     beforeEach(function () {
-      scope.yamlDocument.json = {
-        "service1": {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
-        }};
-
-      spyOn(DocumentCtrl, 'validateJson');
+      scope.editedServiceYamlDocumentJson = {
+        "build": "foo",
+        "ports": ["1111:2222", "3333:4444"]
+      };
     });
 
-    describe('when a string key is added to an existing service', function () {
+    describe('when a string key is added', function () {
       beforeEach(function () {
-        scope.$emit('addNewKeyToSection', 'service1', 'command');
+        scope.$emit('addNewKeyToSection', 'command');
       });
 
       it('should add a new key to the service with empty value', function () {
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('command');
-        expect(scope.yamlDocument.json['service1']['command']).toBe('');
-      });
-
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
+        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('command');
+        expect(scope.editedServiceYamlDocumentJson['command']).toBe('');
       });
     });
 
-    describe('when a sequence key is added to an existing service', function () {
+    describe('when a sequence key is added', function () {
       beforeEach(function () {
-        scope.$emit('addNewKeyToSection', 'service1', 'volumes');
+        scope.$emit('addNewKeyToSection', 'volumes');
       });
 
-      it('should add a new key to the service with empty sequence', function () {
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('volumes');
-        expect(scope.yamlDocument.json['service1']['volumes']).toEqual(['']);
-      });
-
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
-      });
-    });
-
-    describe('when a key is added to a non-existent service', function () {
-      beforeEach(function () {
-        scope.$emit('addNewKeyToSection', 'invalidservice', 'command');
-      });
-
-      it('should not add a new key to the service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('command');
-      });
-
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
+      it('should add a new key with empty sequence', function () {
+        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('volumes');
+        expect(scope.editedServiceYamlDocumentJson['volumes']).toEqual(['']);
       });
     });
 
@@ -547,213 +621,123 @@ describe('Controller: DocumentCtrl', function () {
 
   describe('$scope.$on addNewValueForExistingKey', function () {
     beforeEach(function () {
-      scope.yamlDocument.json = {
-        "service1": {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
-        }};
-
-      spyOn(DocumentCtrl, 'validateJson');
+      scope.editedServiceYamlDocumentJson = {
+        "build": "foo",
+        "ports": ["1111:2222", "3333:4444"]
+      };
     });
 
-    describe('when a string key value is added to an existing service', function () {
+    describe('when a string key value is added', function () {
       beforeEach(function () {
-        scope.$emit('addNewValueForExistingKey', 'service1', 'command');
+        scope.$emit('addNewValueForExistingKey', 'command');
       });
 
-      it('should not add a new key value to the section', function () {
-        expect(scope.yamlDocument.json['service1']).not.hasOwnProperty('command');
-      });
-
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
+      it('should not add a new key value', function () {
+        expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('command');
       });
     });
 
-    describe('when a sequence key value is added to an existing service', function () {
+    describe('when a sequence key value is added', function () {
       beforeEach(function () {
-        scope.$emit('addNewValueForExistingKey', 'service1', 'ports');
+        scope.$emit('addNewValueForExistingKey', 'ports');
       });
 
       it('should add a new key value to the section with empty sequence', function () {
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('ports');
-        expect(scope.yamlDocument.json['service1']['ports']).toEqual(["1111:2222", "3333:4444", ""]);
-      });
-
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
-      });
-    });
-
-    describe('when a key value is added to a non-existent service', function () {
-      beforeEach(function () {
-        scope.$emit('addNewValueForExistingKey', 'invalidservice', 'volumes');
-      });
-
-      it('should not add a new key value to the service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('volumes');
-      });
-
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
+        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('ports');
+        expect(scope.editedServiceYamlDocumentJson['ports']).toEqual(["1111:2222", "3333:4444", ""]);
       });
     });
 
     describe('when a key value is added to a non-existent key', function () {
       beforeEach(function () {
-        scope.$emit('addNewValueForExistingKey', 'service1', 'invalid');
+        scope.$emit('addNewValueForExistingKey', 'invalid');
       });
 
-      it('should not add a new key value to the service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('invalid');
-      });
-
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
+      it('should not add a new key value', function () {
+        !expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('invalid');
       });
     });
 
   });
 
-  describe('$scope.$on deleteKeyFromSection', function () {
+  describe('$scope.$on markKeyForDeletion', function () {
     beforeEach(function () {
-      scope.yamlDocument.json = {
-        "service1": {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
-        }};
-
-      spyOn(DocumentCtrl, 'validateJson');
+      scope.editedServiceYamlDocumentJson = {
+        "build": "foo",
+        "ports": ["1111:2222", "3333:4444"]
+      };
     });
 
-    describe('when a string key is deleted from an existing service', function () {
+    describe('when a string key is deleted', function () {
       beforeEach(function () {
-        scope.$emit('deleteKeyFromSection', 'service1', 'build');
+        scope.$emit('markKeyForDeletion', 'build');
       });
 
-      it('should delete the key from the service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('build');
-      });
-
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
+      it('should mark the key for deletion', function () {
+        expect(scope.markAsDeletedTracker).hasOwnProperty('build');
       });
     });
 
-    describe('when a sequence key is deleted from an existing service', function () {
+    describe('when a sequence key is deleted', function () {
       beforeEach(function () {
-        scope.$emit('deleteKeyFromSection', 'service1', 'ports');
+        scope.$emit('markKeyForDeletion', 'ports');
       });
 
-      it('should delete the key from the service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('ports');
-      });
-
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
+      it('should mark the key for deletion', function () {
+        expect(scope.markAsDeletedTracker).hasOwnProperty('ports');
       });
     });
 
-    describe('when a key is deleted from a non-existent service', function () {
+    describe('when a non-existent key is deleted', function () {
       beforeEach(function () {
-        scope.$emit('deleteKeyFromSection', 'invalidservice', 'build');
+        scope.$emit('markKeyForDeletion', 'invalid');
+        spyOn(DocumentCtrl, 'markItemForDeletion');
       });
 
-      it('should not delete the key from the service', function () {
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('build');
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('ports');
+      it('should not mark the key for deletion', function () {
+        expect(scope.markAsDeletedTracker).toEqual({});
       });
 
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('when a key is deleted from a non-existent key', function () {
-      beforeEach(function () {
-        scope.$emit('deleteKeyFromSection', 'service1', 'invalid');
-      });
-
-      it('should not delete the key from the service', function () {
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('build');
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('ports');
-      });
-
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
+      it('should not call markItemsForDeletion', function () {
+        expect(DocumentCtrl.markItemForDeletion).not.toHaveBeenCalled();
       });
     });
 
   });
 
-  describe('$scope.$on deleteKeyItemFromSection', function () {
+  describe('$scope.$on markKeyItemForDeletion', function () {
     beforeEach(function () {
-      scope.yamlDocument.json = {
-        "service1": {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
-        }};
-
-      spyOn(DocumentCtrl, 'validateJson');
+      scope.editedServiceYamlDocumentJson = {
+        "build": "foo",
+        "ports": ["1111:2222", "3333:4444"]
+      };
     });
 
-    describe('when an existing key item is deleted from an existing service', function () {
+    describe('when an existing key item is deleted', function () {
       beforeEach(function () {
-        scope.$emit('deleteKeyItemFromSection', 'service1', 'ports', 0);
+        scope.$emit('markKeyItemForDeletion', 'ports', 0);
       });
 
-      it('should delete the key item from the service', function () {
-        expect(scope.yamlDocument.json['service1']['ports'].length).toBe(1);
-      });
-
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
+      it('should mark the key item for deletion', function () {
+        expect(scope.markAsDeletedTracker).hasOwnProperty('ports');
+        expect(scope.markAsDeletedTracker['ports']).toEqual([0]);
       });
     });
 
-    describe('when the last key item is deleted from an existing service', function () {
+    describe('when a non-existent key is deleted', function () {
       beforeEach(function () {
-        scope.$emit('deleteKeyItemFromSection', 'service1', 'ports', 0);
-        scope.$emit('deleteKeyItemFromSection', 'service1', 'ports', 1);
-      });
-
-      it('should delete the whole key from the service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('ports');
-      });
-
-      it('should call validateJson', function () {
-        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
-      });
-    });
-
-    describe('when a key is deleted from a non-existent service', function () {
-      beforeEach(function () {
-        scope.$emit('deleteKeyItemFromSection', 'invalidservice', 'build');
+        scope.$emit('markKeyItemForDeletion', 'invalid');
+        spyOn(DocumentCtrl, 'markItemForDeletion');
       });
 
       it('should not delete the key item from the service', function () {
-        expect(scope.yamlDocument.json['service1']['ports'].length).toBe(2);
+        expect(scope.editedServiceYamlDocumentJson['ports'].length).toBe(2);
       });
 
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('when a key is deleted from a non-existent key', function () {
-      beforeEach(function () {
-        scope.$emit('deleteKeyItemFromSection', 'service1', 'invalid');
-      });
-
-      it('should not delete the key item from the service', function () {
-        expect(scope.yamlDocument.json['service1']['ports'].length).toBe(2);
-      });
-
-      it('should not call validateJson', function () {
-        expect(DocumentCtrl.validateJson).not.toHaveBeenCalled();
+      it('should not call markItemsForDeletion', function () {
+        expect(DocumentCtrl.markItemForDeletion).not.toHaveBeenCalled();
       });
     });
-
   });
 
   describe('$scope.serviceNames', function () {

@@ -16,6 +16,7 @@ describe('Directive: serviceDefinitionEdit', function () {
     rootScope.serviceNames = function() {
       return ['foo', 'bar'];
     };
+    rootScope.markAsDeletedTracker = {};
     lodash = _lodash_;
     compile = $compile;
   }));
@@ -102,6 +103,10 @@ describe('Directive: serviceDefinitionEdit', function () {
             "build": "foo",
             "ports": ["1111:2222", "3333:4444"]
           }};
+        scope.$parent.editedServiceYamlDocumentJson = {
+          "command": "foo",
+          "ports": ["1111:2222", "3333:4444"]
+        };
 
         element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
         scope.$digest();
@@ -115,9 +120,9 @@ describe('Directive: serviceDefinitionEdit', function () {
         expect(element.isolateScope().$emit).toHaveBeenCalled();
       });
 
-      it('emits saveService passing the old section name, new section name and new section data', function () {
+      it('emits saveService passing the old section name, new section name and edited section data', function () {
         element.isolateScope().saveServiceDefinition();
-        expect(element.isolateScope().$emit).toHaveBeenCalledWith('saveService', scope.sectionName, scope.sectionName, scope.fullJson[scope.sectionName]);
+        expect(element.isolateScope().$emit).toHaveBeenCalledWith('saveService', scope.sectionName, scope.sectionName, scope.$parent.editedServiceYamlDocumentJson);
       });
     });
 
@@ -174,13 +179,13 @@ describe('Directive: serviceDefinitionEdit', function () {
       it('emits addNewKeyToSection when section name and a new valid key is passed', function () {
         var newValidKey = 'command';
         element.isolateScope().addNewKey(newValidKey);
-        expect(element.isolateScope().$emit).toHaveBeenCalledWith('addNewKeyToSection', scope.sectionName, newValidKey);
+        expect(element.isolateScope().$emit).toHaveBeenCalledWith('addNewKeyToSection', newValidKey);
       });
 
       it('does not emit addNewKeyToSection when section name and an invalid key is passed', function () {
         var newInvalidKey = 'blah';
         element.isolateScope().addNewKey(newInvalidKey);
-        expect(element.isolateScope().$emit).not.toHaveBeenCalledWith('addNewKeyToSection', scope.sectionName, newInvalidKey);
+        expect(element.isolateScope().$emit).not.toHaveBeenCalledWith('addNewKeyToSection', newInvalidKey);
       });
     });
 
@@ -193,6 +198,10 @@ describe('Directive: serviceDefinitionEdit', function () {
             "command": "foo",
             "ports": ["1111:2222", "3333:4444"]
           }};
+        scope.$parent.editedServiceYamlDocumentJson = {
+          "command": "foo",
+          "ports": ["1111:2222", "3333:4444"]
+        };
 
         element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
         scope.$digest();

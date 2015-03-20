@@ -126,6 +126,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     });
 
     $scope.$on('cancelEditing', function (e, serviceName) {
+      // reset the delete tracker
+      $rootScope.markAsDeletedTracker = {};
+
       // turn off edit mode
       delete $scope.yamlDocument.json[serviceName].editMode;
     });
@@ -176,14 +179,33 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     this.markItemForDeletion = function(key, index) {
       var tracker = $rootScope.markAsDeletedTracker;
 
-      if (!tracker.hasOwnProperty(key)) {
-        tracker[key] = [];
-      }
-
-      if (index != null) {
-        tracker[key].push(index);
+      // toggle add/remove items from the delete marker
+      if (tracker.hasOwnProperty(key)) {
+        if (index != null) {
+          if (lodash.includes(tracker[key], index)) {
+            // remove the item from tracker
+            lodash.remove(tracker[key], function (v) {
+              return v == index;
+            });
+            // if no items in tracker, delete the key
+            if (lodash.size(tracker[key]) == 0) {
+              delete tracker[key];
+            }
+          } else {
+            // add the item to the tracker
+            tracker[key].push(index);
+          }
+        } else {
+          delete tracker[key];
+        }
       } else {
-        tracker[key].push('delete me');
+        // add key/index to tracker
+        tracker[key] = [];
+        if (index != null) {
+          tracker[key].push(index);
+        } else {
+          tracker[key].push('delete me');
+        }
       }
     };
 

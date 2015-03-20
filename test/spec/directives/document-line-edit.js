@@ -13,6 +13,7 @@ describe('Directive: documentLineEdit', function () {
     scope = $rootScope.$new();
     rootScope = $rootScope;
     compile = $compile;
+    rootScope.markAsDeletedTracker = {};
   }));
 
   describe('Link: documentLineEdit', function () {
@@ -178,7 +179,6 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.addNewValueForLine', function () {
       beforeEach(function () {
         scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
-        scope.sectionName = 'someSection';
         element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
         scope.$digest();
 
@@ -191,16 +191,15 @@ describe('Directive: documentLineEdit', function () {
         expect(scope.$emit).toHaveBeenCalled();
       });
 
-      it('emits addNewValueForExistingKey with the section name and line item to be added', function () {
+      it('emits addNewValueForExistingKey with line item to be added', function () {
         scope.addNewValueForLine();
-        expect(scope.$emit).toHaveBeenCalledWith('addNewValueForExistingKey', 'someSection', scope.line.name);
+        expect(scope.$emit).toHaveBeenCalledWith('addNewValueForExistingKey', scope.line.name);
       });
     });
 
-    describe('scope.deleteLineFromSection', function () {
+    describe('scope.markLineForDeletion', function () {
       beforeEach(function () {
         scope.line = { name: 'command', value: 'blah' };
-        scope.sectionName = 'someSection';
         element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
         scope.$digest();
 
@@ -213,17 +212,20 @@ describe('Directive: documentLineEdit', function () {
         expect(scope.$emit).toHaveBeenCalled();
       });
 
-      it('emits deleteKeyFromSection with the section name and line item to be deleted', function () {
-        scope.deleteLineFromSection();
-        expect(scope.$emit).toHaveBeenCalledWith('deleteKeyFromSection', 'someSection', scope.line.name);
+      it('emits markKeyForDeletion with line item to be deleted', function () {
+        scope.markLineForDeletion();
+        expect(scope.$emit).toHaveBeenCalledWith('markKeyForDeletion', scope.line.name);
       });
 
+      it('should mark the line for deletion', function () {
+        scope.markLineForDeletion();
+        expect(rootScope.markAsDeletedTracker).hasOwnProperty('command');
+      });
     });
 
-    describe('scope.deleteLineItemFromSection', function () {
+    describe('scope.markLineItemForDeletion', function () {
       beforeEach(function () {
         scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
-        scope.sectionName = 'someSection';
         element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
         scope.$digest();
 
@@ -236,14 +238,14 @@ describe('Directive: documentLineEdit', function () {
         expect(scope.$emit).toHaveBeenCalled();
       });
 
-      it('emits deleteKeyItemFromSection with the section name and line item to be deleted', function () {
-        scope.deleteLineItemFromSection(0);
-        expect(scope.$emit).toHaveBeenCalledWith('deleteKeyItemFromSection', 'someSection', scope.line.name, 0);
+      it('emits markKeyItemForDeletion with line item to be deleted', function () {
+        scope.markLineItemForDeletion(0);
+        expect(scope.$emit).toHaveBeenCalledWith('markKeyItemForDeletion', scope.line.name, 0);
       });
 
-      it('deletes the first item for the line', function () {
-        scope.deleteLineItemFromSection(0);
-        expect(scope.line.ports).not.toContain('1000:1000');
+      it('should mark the line item for deletion', function () {
+        scope.markLineItemForDeletion(0);
+        expect(rootScope.markAsDeletedTracker).hasOwnProperty('ports');
       });
 
     });
