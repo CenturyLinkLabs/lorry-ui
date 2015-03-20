@@ -180,6 +180,11 @@
     color: red;
   }
 
+  .mark-for-deletion {
+    color: $light_grey;
+    background-color: $lighter_grey;
+  }
+
   input[type='text'] {
     margin-left: 80px;
     width: 800px;

@@ -12,16 +12,16 @@
   <div ng-hide="isImageOrBuild()">
     <div ng-hide="hasMultipleItems()">
       <div ng-class="keyLabelClasses()">{{line.name}}</div>
-      <input type='text' ng-model="line.value" value='{{line.value}}' />
-      <div class="delete" ng-click="deleteLineFromSection()">x</div>
+      <input type='text' ng-class="markForDeletionClasses(null)" ng-model="line.value" value='{{line.value}}' />
+      <div class="delete" ng-click="markLineForDeletion()">x</div>
       <div class="info">i</div>
     </div>
     <div ng-show="hasMultipleItems()">
       <div ng-repeat="item in line.value track by $index">
         <div ng-class="keyLabelClasses()"><div ng-show="$index == 0">{{line.name}}</div></div>
-        <input type='text' ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
-        <select ng-if="line.name == 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
-        <div class="delete" ng-click="deleteLineItemFromSection($index)">x</div>
+        <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
+        <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
+        <div class="delete" ng-click="markLineItemForDeletion($index)">x</div>
         <div class="info">i</div>
       </div>
       <div class="add-link" ng-if="isValidKey()">+ <a href="" ng-click="addNewValueForLine()">Add {{line.name}}</a></div>

@@ -8,8 +8,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     $scope.yamlDocument = {};
     $scope.resettable = false;
     $scope.importable = true;
-    $scope.yamlDocumentJsonBeforeEdit = {};
+    $scope.editedServiceYamlDocumentJson = {};
     $rootScope.serviceNameList = [];
+    $rootScope.markAsDeletedTracker = {};
 
     $scope.hasErrors = function () {
       return lodash.any($scope.yamlDocument.errors);
@@ -96,38 +97,37 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
     $scope.editService = function (serviceName) {
       if ($scope.yamlDocument.json.hasOwnProperty(serviceName)) {
-        // stash the original yamlDocument.json, so that it can be reverted if editing is cancelled
-        $scope.yamlDocumentJsonBeforeEdit = lodash.cloneDeep($scope.yamlDocument.json);
+        // copy the service json for editing purposes
+        $scope.editedServiceYamlDocumentJson = lodash.cloneDeep($scope.yamlDocument.json[serviceName]);
+
         // turn on edit mode
         $scope.yamlDocument.json[serviceName].editMode = true;
 
         // since image/build section is mandatory, add it to the json if not present
-        if (!lodash.has($scope.yamlDocument.json[serviceName], 'image') &&
-            !lodash.has($scope.yamlDocument.json[serviceName], 'build')) {
-          $scope.yamlDocument.json[serviceName]['image'] = 'image or build is required';
+        if (!lodash.has($scope.editedServiceYamlDocumentJson, 'image') &&
+            !lodash.has($scope.editedServiceYamlDocumentJson, 'build')) {
+          $scope.editedServiceYamlDocumentJson['image'] = 'image or build is required';
         }
       }
     };
 
     $scope.$on('saveService', function (e, oldServiceName, newServiceName, updatedSectionData) {
+      // Delete the markedForDeletion items
+      updatedSectionData = self.deleteItemsMarkedForDeletion(updatedSectionData);
+
       // Update the json for the service name
       if (oldServiceName != newServiceName) {
         delete $scope.yamlDocument.json[oldServiceName];
       }
       $scope.yamlDocument.json[newServiceName] = updatedSectionData;
       delete $scope.yamlDocument.json[newServiceName].editMode;
+
       self.validateJson();
     });
 
     $scope.$on('cancelEditing', function (e, serviceName) {
       // turn off edit mode
       delete $scope.yamlDocument.json[serviceName].editMode;
-      // revert to the original yamlDocument.json for the service, only if edits have been performed
-      if ($scope.yamlDocumentJsonBeforeEdit != {}) {
-        $scope.yamlDocument.json = $scope.yamlDocumentJsonBeforeEdit;
-        $scope.yamlDocumentJsonBeforeEdit = {};
-      }
-      self.validateJson();
     });
 
     this.createNewEmptyValueForKey = function(key) {
@@ -152,51 +152,67 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       return keyValue;
     };
 
-    $scope.$on('addNewKeyToSection', function (e, serviceName, key) {
-      var json = $scope.yamlDocument.json;
+    this.deleteItemsMarkedForDeletion = function(data) {
+      var tracker = $rootScope.markAsDeletedTracker;
 
-      if (json.hasOwnProperty(serviceName)) {
+      angular.forEach(tracker, function(v, k) {
+        if (v[0] === 'delete me') {
+          delete data[k];
+        } else {
+          lodash.pullAt(data[k], v);
+          // delete key if no items are left
+          if (lodash.size(data[k]) == 0) {
+            delete data[k];
+          }
+        }
+      });
+
+      // reset the tracker
+      $rootScope.markAsDeletedTracker = {};
+
+      return data;
+    };
+
+    this.markItemForDeletion = function(key, index) {
+      var tracker = $rootScope.markAsDeletedTracker;
+
+      if (!tracker.hasOwnProperty(key)) {
+        tracker[key] = [];
+      }
+
+      if (index != null) {
+        tracker[key].push(index);
+      } else {
+        tracker[key].push('delete me');
+      }
+    };
+
+    $scope.$on('addNewKeyToSection', function (e, key) {
+      var keyValue = self.createNewEmptyValueForKey(key);
+      $scope.editedServiceYamlDocumentJson[key] = keyValue;
+    });
+
+    $scope.$on('addNewValueForExistingKey', function (e, key) {
+      var json = $scope.editedServiceYamlDocumentJson;
+      if (json.hasOwnProperty(key)) {
         var keyValue = self.createNewEmptyValueForKey(key);
-        json[serviceName][key] = keyValue;
-        self.validateJson();
-      }
-    });
-
-    $scope.$on('addNewValueForExistingKey', function (e, serviceName, key) {
-      var json = $scope.yamlDocument.json;
-
-      if (json.hasOwnProperty(serviceName)) {
-        if (json[serviceName].hasOwnProperty(key)) {
-          var keyValue = self.createNewEmptyValueForKey(key);
-          if (Array.isArray(keyValue)) {
-            json[serviceName][key].push(keyValue[0]);
-            self.validateJson();
-          }
+        if (Array.isArray(keyValue)) {
+          json[key].push(keyValue[0]);
         }
       }
     });
 
-    $scope.$on('deleteKeyFromSection', function (e, serviceName, key) {
-      var json = $scope.yamlDocument.json;
-      if (json.hasOwnProperty(serviceName)) {
-        if (json[serviceName].hasOwnProperty(key)) {
-          delete json[serviceName][key];
-          self.validateJson();
-        }
+    $scope.$on('markKeyForDeletion', function (e, key) {
+      var json = $scope.editedServiceYamlDocumentJson;
+      if (json.hasOwnProperty(key)) {
+        self.markItemForDeletion(key, null);
       }
     });
 
-    $scope.$on('deleteKeyItemFromSection', function (e, serviceName, key, index) {
-      var json = $scope.yamlDocument.json;
-      if (json.hasOwnProperty(serviceName)) {
-        if (json[serviceName].hasOwnProperty(key)) {
-          if (lodash.size(json[serviceName][key]) == 1) {
-            delete json[serviceName][key];
-          } else {
-            lodash.pullAt(json[serviceName][key], index);
-          }
-          self.validateJson();
-        }
+    $scope.$on('markKeyItemForDeletion', function (e, key, index) {
+      var json = $scope.editedServiceYamlDocumentJson;
+      if (json.hasOwnProperty(key)) {
+        self.markItemForDeletion(key, index);
       }
     });
 

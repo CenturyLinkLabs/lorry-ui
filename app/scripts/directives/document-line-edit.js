@@ -29,16 +29,29 @@ angular.module('lorryApp')
           return scope.isValidKey(scope.line.name) ? 'label' : 'label error';
         };
 
+        scope.markForDeletionClasses = function(index) {
+          var tracker = $rootScope.markAsDeletedTracker;
+          var key = scope.line.name;
+
+          if (index == null) {
+            return (tracker.hasOwnProperty(key)) ? 'mark-for-deletion' : '';
+          } else {
+            if (tracker.hasOwnProperty(key)) {
+              return lodash.includes(tracker[key], index) ? 'mark-for-deletion' : '';
+            }
+          }
+        };
+
         scope.addNewValueForLine = function () {
-          scope.$emit('addNewValueForExistingKey', scope.sectionName, scope.line.name);
+          scope.$emit('addNewValueForExistingKey', scope.line.name);
         };
 
-        scope.deleteLineFromSection = function () {
-          scope.$emit('deleteKeyFromSection', scope.sectionName, scope.line.name);
+        scope.markLineForDeletion = function () {
+          scope.$emit('markKeyForDeletion', scope.line.name);
         };
 
-        scope.deleteLineItemFromSection = function (index) {
-          scope.$emit('deleteKeyItemFromSection', scope.sectionName, scope.line.name, index);
+        scope.markLineItemForDeletion = function (index) {
+          scope.$emit('markKeyItemForDeletion', scope.line.name, index);
         };
 
         scope.serviceNameList = $rootScope.serviceNameList;
