@@ -32,7 +32,7 @@ describe('Directive: actionMenu', function () {
 
     it('is triggered when the delete icon is clicked', function () {
       spyOn(scope, 'deleteServiceDefinition');
-      var deleteIcon = element.find('.icon-x-large')[0];
+      var deleteIcon = element.find('.icon-x')[0];
       angular.element(deleteIcon).triggerHandler('click');
       expect(scope.deleteServiceDefinition).toHaveBeenCalled();
     });
@@ -49,7 +49,7 @@ describe('Directive: actionMenu', function () {
 
     it('is triggered when the edit icon is clicked', function () {
       spyOn(scope, 'editServiceDefinition');
-      var editIcon = element.find('.icon-pencil-large')[0];
+      var editIcon = element.find('.icon-pencil')[0];
       angular.element(editIcon).triggerHandler('click');
       expect(scope.editServiceDefinition).toHaveBeenCalled();
     });
