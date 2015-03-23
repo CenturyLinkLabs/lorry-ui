@@ -9,7 +9,7 @@ describe('Controller: SearchCtrl', function () {
     $provide.constant('ENV', {'LORRY_API_ENDPOINT': 'https://foobar.io'});
   }));
 
-  var controller, scope, Image, Tag, httpBackend, SearchCtrl;
+  var controller, scope, Image, httpBackend, SearchCtrl;
   var searchResponse = {
     "results": [
       {
@@ -44,14 +44,13 @@ describe('Controller: SearchCtrl', function () {
   ];
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $rootScope, _Image_, _Tag_, $httpBackend) {
+  beforeEach(inject(function (_$controller_, $rootScope, _Image_, $httpBackend) {
     scope = $rootScope.$new();
     controller = _$controller_;
     httpBackend = $httpBackend;
     Image = _Image_;
-    Tag = _Tag_;
     SearchCtrl = controller('SearchCtrl', {
-      $scope: scope, Image: _Image_, Tag: _Tag_
+      $scope: scope, Image: _Image_
     });
   }));
 
@@ -101,12 +100,12 @@ describe('Controller: SearchCtrl', function () {
 
     });
 
-    it('should call Tag query', function () {
-      spyOn(Tag, 'query');
+    it('should call Image tags', function () {
+      spyOn(Image, 'tags');
 
       scope.getTags('baruser', 'foo');
 
-      expect(Tag.query).toHaveBeenCalled();
+      expect(Image.tags).toHaveBeenCalled();
     });
 
   });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'lodash', 'Image', 'Tag', function($scope, ngDialog, lodash, Image, Tag) {
+  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'lodash', 'Image', function($scope, ngDialog, lodash, Image) {
     $scope.searchResults = undefined;
     $scope.tagResults = [];
     $scope.selectedImageName = '';
@@ -48,7 +48,7 @@ angular.module('lorryApp')
     };
 
     $scope.getTags = function(username, reponame) {
-      $scope.tagResults = Tag.query({
+      $scope.tagResults = Image.tags({
         repoUser: username,
         repoName: reponame
       });

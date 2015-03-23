@@ -57,37 +57,18 @@ describe('Service: registry-service', function () {
       });
 
     });
-  });
-
-  // Tag factory
-  describe('Factory: Tag', function () {
-
-    var Tag, httpBackend, ENV;
-    var queryResults = [
-      {
-        "layer": "11111111",
-        "name": 'latest'
-      }
-    ];
-    var existsResults = [
-      {
-        "pk": 11223344,
-        "id": "11111111"
-      }
-    ];
-
-    // Initialize the service and a mock scope
-    beforeEach(inject(function (_Tag_, _ENV_, _$httpBackend_) {
-      Tag = _Tag_;
-      ENV = _ENV_;
-      httpBackend = _$httpBackend_;
-    }));
 
     describe('tags', function() {
+      var tagsResults = [
+        {
+          "layer": "11111111",
+          "name": 'latest'
+        }
+      ];
 
       it("should get tags for repository", function () {
-        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images/tags/baruser/foo").respond(queryResults);
-        var results = Tag.query({
+        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images/tags/baruser/foo").respond(tagsResults);
+        var results = Image.tags({
           repoUser: 'baruser',
           repoName: 'foo'
         });
@@ -97,6 +78,7 @@ describe('Service: registry-service', function () {
         expect(results[0].name).toEqual('latest');
       });
     });
+
   });
 
 });

@@ -14,12 +14,9 @@ angular.module('lorryApp')
           });
           return res;
         }
-      }
-    });
-  }])
-  .factory('Tag', ['$resource', 'ENV', function($resource, ENV){
-    return $resource(ENV.LORRY_API_ENDPOINT + '/images/tags/:repoUser/:repoName', {}, {
-      'query': {
+      },
+      'tags': {
+        url: ENV.LORRY_API_ENDPOINT + '/images/tags/:repoUser/:repoName',
         method:'GET',
         isArray: true,
         transformResponse: function(data, headers){
