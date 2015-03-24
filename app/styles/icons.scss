@@ -75,6 +75,10 @@ $icons: (
   background-image: url('../images/icon_sprite_white.svg');
 }
 
+@mixin icon-red {
+  background-image: url('../images/icon_sprite_red.svg');
+}
+
 @each $icon, $position in $icons {
   .icon-#{$icon} {
     @include icon-base;

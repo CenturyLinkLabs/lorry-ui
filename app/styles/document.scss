@@ -114,54 +114,59 @@
   position: relative;
   float: left;
   width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  border-bottom: 1px solid $darkest_grey;
 
   .gutter {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    display: inline-block;
     background-color: $dark_grey;
     color: $light_grey;
-    display: inline-block;
-    width: 20px;
-    margin-right: 15px;
-    padding-right: 15px;
+    width: 50px;
+    padding-right: 5px;
     text-align: right
   }
 
-  .section-name {
+  .section {
     display: inline-block;
-    margin-left: 0;
     margin-bottom: 10px;
-  }
+    margin-left: 70px;
 
-  .add-new-line {
-
-    select {
-      width: 210px;
-      height: 39px;
-      margin-left: 20px;
+    .section-name {
       margin-top: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
-    input[type='text'] {
-      margin-left: 20px;
-      width: 800px;
-      margin-top: 5px;
-      margin-bottom: 5px;
+    .add-new-line {
+
+      select {
+        width: 210px;
+        height: 39px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      input[type='text'] {
+        margin-left: 20px;
+        width: 800px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    }
+
+    .action-area {
+      float: right;
+      margin-top: 10px;
+      margin-right: 90px;
     }
   }
 
-  .action-area {
-    float: right;
-    margin-top: 10px;
-    margin-right: 63px;
-  }
 
 }
 
 .line-edit {
   display: inline-block;
-  margin-left: 20px;
 
   .radio-edit-group {
     display: inline-block;
@@ -211,7 +216,7 @@
     margin-bottom: 3px;
 
     a {
-      color: $light_grey;
+      color: $lighter_grey;
     }
   }
 
@@ -229,7 +234,7 @@
     margin-left: 10px;
 
     a.active {
-      color: $ctl_light_green;
+      color: $lighter_grey;
       cursor: pointer;
     }
 
@@ -244,16 +249,16 @@
   .info {
     display: inline-block;
     float: right;
-    @include border-radius(5em);
-    border: solid 1px $light_grey;
-    text-align: center;
-    line-height: 22px;
-    width: 20px;
-    height: 20px;
+    background-image: url('../images/icon_info.svg');
+    background-repeat: no-repeat;
+    @include background-size(60px, 60px);
+    background-position: 0 0;
+    width: 50px;
+    height: 30px;
     color: $lighter_grey;
-    margin-top: 13px;
-    margin-left: 10px;
-    margin-right: 0px;
+    margin-top: 12px;
+    margin-left: 2px;
+    margin-right: 5px;
 
     &:hover {
       cursor: pointer;
@@ -263,20 +268,29 @@
   .delete {
     display: inline-block;
     float: right;
-    text-align: center;
-    line-height: 20px;
+    @extend .icon-x-medium;
     width: 20px;
     height: 20px;
-    color: $lighter_grey;
-    margin-left: 5px;
+    margin-left: 2px;
     margin-right: 5px;
-    margin-top: 14px;
+    margin-top: 20px;
+    cursor: pointer;
 
     &:hover {
-      color: red;
-      cursor: pointer;
+      @include icon-red;
     }
   }
+
+  .spacer {
+    display: inline-block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 20px;
+  }
+
 }
 
 .line {
