@@ -17,9 +17,8 @@
           </div>
           <div class="result-tag">
             <span>Tag</span>
-            <select ng-model="selectedTag" ng-init="selectedTag = selectedTag || result.tags[0]" ng-click="insertTags(result.username, result.reponame)"
+            <select ng-model="selectedTag" ng-init="selectedTag = result.tags[0]" ng-mouseover="insertTags(result.username, result.reponame)"
                     ng-options="tag as tag.name for tag in result.tags track by tag.name">
-              <option ng-if="selectedTag" value="">Latest</option>
             </select>
           </div>
           <div class="add-image">

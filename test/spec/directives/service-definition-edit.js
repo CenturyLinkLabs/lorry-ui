@@ -31,11 +31,11 @@ describe('Directive: serviceDefinitionEdit', function () {
           scope.fullJson = {
             "foo": {}
           };
-          element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
         });
         it ('returns empty editable json', function () {
-          var result = element.isolateScope().transformToEditableJson(scope.sectionJson);
+          var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
           expect(result).toEqual([]);
         });
       });
@@ -54,7 +54,7 @@ describe('Directive: serviceDefinitionEdit', function () {
               "command": "bar",
               "ports": ["1111:2222", "3333:4444"]
             }};
-          element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
         });
 
@@ -82,7 +82,7 @@ describe('Directive: serviceDefinitionEdit', function () {
               "command": "bar",
               "ports": ["1111:2222", "3333:4444"]
             }};
-          element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
         });
 
@@ -108,7 +108,7 @@ describe('Directive: serviceDefinitionEdit', function () {
           "ports": ["1111:2222", "3333:4444"]
         };
 
-        element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
         spyOn(element.isolateScope(), '$emit');
@@ -135,7 +135,7 @@ describe('Directive: serviceDefinitionEdit', function () {
             "command": "bar",
             "ports": ["1111:2222", "3333:4444"]
           }};
-        element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
         spyOn(element.isolateScope(), '$emit');
@@ -163,7 +163,7 @@ describe('Directive: serviceDefinitionEdit', function () {
             "ports": ["1111:2222", "3333:4444"]
           }};
 
-        element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
         spyOn(element.isolateScope(), '$emit');
@@ -203,7 +203,7 @@ describe('Directive: serviceDefinitionEdit', function () {
           "ports": ["1111:2222", "3333:4444"]
         };
 
-        element = compile('<service-definition-edit section-name="sectionName" section-json="fullJson[sectionName]"></service-definition-edit>')(scope);
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
       });

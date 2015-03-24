@@ -1,17 +1,13 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('serviceDefinitionEdit', [ 'lodash', function ($log, lodash) {
+  .directive('serviceDefinitionEdit', [ '$log', 'lodash', function ($log, lodash) {
     return {
       scope: {
-        sectionName: '=',
-        sectionJson: '='
+        sectionName: '='
       },
       restrict: 'E',
       replace: 'true',
-      link: function postLink(scope, element, attrs) {
-        //$log.log(scope.section);
-      },
       templateUrl: '/scripts/directives/service-definition-edit.html',
       controller: function ($scope, lodash) {
 

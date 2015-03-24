@@ -29,6 +29,7 @@ angular.module('lorryApp')
     };
 
     $scope.performSearch = function(qterm){
+      $scope.$parent.selectedImageName = null;
       $scope.resetSearch();
       if (qterm) {
         $scope.searchResults = Image.query({searchTerm:qterm});

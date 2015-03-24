@@ -8,8 +8,7 @@ describe('Controller: DocumentCtrl', function () {
   var DocumentCtrl,
     scope,
     yamlValidator,
-    jsyaml,
-    origYamlDocumentJson;
+    jsyaml;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_) {
@@ -552,12 +551,6 @@ describe('Controller: DocumentCtrl', function () {
           "build": "fooUpdated",
           "command": "new key added"
         }};
-      //
-      //origYamlDocumentJson = {
-      //  "service1": {
-      //    "build": "foo",
-      //    "ports": ["1111:2222", "3333:4444"]
-      //  }};
 
       // simulate edit mode turned on
       scope.yamlDocument.json['service1'].editMode = true;
@@ -576,10 +569,6 @@ describe('Controller: DocumentCtrl', function () {
         !expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
       });
 
-      //it('should revert back to the original service state', function () {
-      //  expect(scope.yamlDocument.json).toEqual(origYamlDocumentJson);
-      //  expect(scope.yamlDocumentJsonBeforeEdit).toEqual({});
-      //});
       it('should reset the delete tracker', function () {
         expect(scope.markAsDeletedTracker).toEqual({});
       });
