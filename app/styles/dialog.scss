@@ -78,6 +78,26 @@
       }
     }
 
+    .dialog-tabs {
+      padding: 20px 20px 0 20px;
+      border-bottom: 1px solid $lighter_grey;
+
+      .button-tab-selected {
+        @extend .button-primary;
+        background-color: $white;
+        color: #333;
+        border-top: 1px solid $lighter_grey;
+        border-right: 1px solid $lighter_grey;
+        border-left: 1px solid $lighter_grey;
+        margin-right: 15px;
+
+        &:hover {
+          @include box-shadow(0, 0, 0, rgba( $white, 0.0 ));
+          background-color: $white;
+        }
+      }
+    }
+
     .dialog-content,
     .dialog-instructions {
       color: $light_grey;
