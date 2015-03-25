@@ -8,7 +8,8 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog
       title: 'Import compose.yml'
     };
 
-    $scope.showImportDialog = function () {
+    $scope.showImportDialog = function (tab) {
+      $scope.dialogOptions.dialogTab = tab;
       $scope.dialog = ngDialog.open({
         template: '/views/import-dialog.html',
         className: 'ngdialog-theme-lorry',

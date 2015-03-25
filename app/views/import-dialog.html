@@ -1,33 +1,34 @@
-<form name="yamlValidator">
-  <div class="dialog-header">
-    <div class="dialog-title">
-      {{dialogOptions.title}}
-      <div class="ngdialog-close"></div>
-    </div>
-    <div class="dialog-instructions">
-      <p>
-        If you have an existing yml you'd like to import, you can <a href="" ng-click="setDialogPane('paste')">copy
-        &amp; paste your file</a>, <a href="" ng-click="setDialogPane('upload')">browse your local compose.yml
-        files</a>, or <a href="" ng-click="setDialogPane('remote')">provide a url to a compose.yml</a>
-      </p>
-    </div>
+<div class="dialog-header">
+  <div class="dialog-title">
+    Import
+    <div class="ngdialog-close"></div>
   </div>
-  <div class="dialog-content">
-    <div ng-show="dialogOptions.dialogPane === 'upload'">
-      <p>Select your local compose.yml</p>
-      <input type="file" file-input accept=".yaml,.yml,text/yaml,text/x-yaml,application/yaml,application/x-yaml"/>
-    </div>
-    <div ng-show="dialogOptions.dialogPane === 'paste'">
-      <p>Paste your compose.yml contents below</p>
-      <textarea placeholder="Paste or write your YAML here" ng-model="docImport.raw"></textarea>
-    </div>
-    <div ng-show="dialogOptions.dialogPane === 'remote'">
-      <p>Paste the full URI of your remote compose.yml</p>
-      <input type="text" ng-model="docImport.remote">
-    </div>
+  <div class="dialog-tabs">
+    <a class="button-tab-selected">Import Compose.yml</a>
   </div>
-  <div class="dialog-footer">
-    <button class="button-primary" ng-click="importYaml(docImport)">Import</button>
-    <button class="button-secondary" ng-click="closeThisDialog()">Cancel</button>
+  <div class="dialog-instructions" ng-show="dialogOptions.dialogTab === 'compose'">
+    <p>
+      If you have an existing yml you'd like to import, you can <a href="" ng-click="setDialogPane('paste')">copy
+      &amp; paste your file</a>, <a href="" ng-click="setDialogPane('upload')">browse your local compose.yml
+      files</a>, or <a href="" ng-click="setDialogPane('remote')">provide a url to a compose.yml.</a>
+    </p>
   </div>
-</form>
+</div>
+<div class="dialog-content" ng-show="dialogOptions.dialogTab === 'compose'">
+  <div ng-show="dialogOptions.dialogPane === 'upload'">
+    <p>Select your local compose.yml</p>
+    <input type="file" file-input accept=".yaml,.yml,text/yaml,text/x-yaml,application/yaml,application/x-yaml"/>
+  </div>
+  <div ng-show="dialogOptions.dialogPane === 'paste'">
+    <p>Paste your compose.yml contents below</p>
+    <textarea placeholder="Paste or write your YAML here" ng-model="docImport.raw"></textarea>
+  </div>
+  <div ng-show="dialogOptions.dialogPane === 'remote'">
+    <p>Paste the full URI of your remote compose.yml</p>
+    <input type="text" ng-model="docImport.remote">
+  </div>
+</div>
+<div class="dialog-footer">
+  <button class="button-primary" ng-click="importYaml(docImport)">Import</button>
+  <button class="button-secondary" ng-click="closeThisDialog()">Cancel</button>
+</div>

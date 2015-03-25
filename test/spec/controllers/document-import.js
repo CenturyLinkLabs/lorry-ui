@@ -18,6 +18,13 @@ describe('Controller: DocumentImportCtrl', function () {
     });
   }));
 
+  describe('$scope.showImportDialog', function () {
+    it ('sets the active dialogTab to the argument passed', function () {
+      scope.showImportDialog('compose');
+      expect(scope.dialogOptions.dialogTab).toBe('compose');
+    });
+  });
+
   describe('$scope.setDialogPane', function () {
     it ('sets the $scope.dialogOptions.dialogPane to the argument passed', function () {
       scope.setDialogPane('foo');
