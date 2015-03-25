@@ -96,6 +96,22 @@
           background-color: $white;
         }
       }
+
+      .button-tab-deselected {
+        @extend .button-primary;
+        color: #666;
+        background-color: $lighter_grey;
+        border-top: 1px solid $lighter_grey;
+        border-right: 1px solid $lighter_grey;
+        border-left: 1px solid $lighter_grey;
+        margin-right: 15px;
+
+        &:hover {
+          @include box-shadow(0, 0, 5px, rgba( $lighter_grey, 0.6 ));
+          color: #333;
+          background-color: darken( $lighter_grey, 5% );
+        }
+      }
     }
 
     .dialog-content,
