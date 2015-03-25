@@ -1,22 +1,18 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('serviceDefinitionEdit', function ($log) {
+  .directive('serviceDefinitionEdit', [ '$log', 'lodash', function ($log, lodash) {
     return {
       scope: {
-        sectionName: '=',
-        sectionJson: '='
+        sectionName: '='
       },
       restrict: 'E',
       replace: 'true',
-      link: function postLink(scope, element, attrs) {
-        //$log.log(scope.section);
-      },
       templateUrl: '/scripts/directives/service-definition-edit.html',
-      controller: function ($scope) {
+      controller: function ($scope, lodash) {
 
         $scope.transformToJson = function () {
-          $scope.editableJson = $scope.transformToEditableJson($scope.sectionJson)
+          $scope.editableJson = $scope.transformToEditableJson($scope.$parent.editedServiceYamlDocumentJson);
         };
 
         $scope.transformToEditableJson = function (json) {
@@ -61,14 +57,27 @@ angular.module('lorryApp')
         };
 
         $scope.saveServiceDefinition = function () {
-          $scope.sectionJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
-          $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.sectionJson);
+          $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
+          $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.$parent.editedServiceYamlDocumentJson);
         };
 
         $scope.cancelEditing = function () {
           $scope.$emit('cancelEditing', $scope.sectionName);
         };
 
+        $scope.addNewKey = function (key) {
+          if (lodash.includes($scope.validKeys, key)) {
+            $scope.$emit('addNewKeyToSection', key);
+            $scope.transformToJson();
+          }
+        };
+
+        $scope.buildValidKeyList = function () {
+          return lodash.difference($scope.validKeys, lodash.keys($scope.$parent.editedServiceYamlDocumentJson));
+        };
+
+        $scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
+
       }
     };
-  });
+  }]);

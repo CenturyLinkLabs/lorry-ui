@@ -1,45 +1,64 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name lorryApp.controller:SearchCtrl
- * @description
- * # SearchCtrl
- * Controller of the lorryApp
- */
 angular.module('lorryApp')
-  .controller('SearchCtrl', ['$scope' , 'Repository', 'Tag', function($scope, Repository, Tag) {
-    $scope.noResults = true;
-    $scope.searchResults = [];
+  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'lodash', 'Image', function($scope, ngDialog, lodash, Image) {
+    $scope.searchResults = undefined;
+    $scope.tagResults = [];
+    $scope.selectedImageName = '';
 
-    $scope.doSearch = function(qterm){
-      if (qterm === '' || qterm === undefined) {
-        $scope.searchResults = {};
-        $scope.noResults = true;
-      }
-      else {
-        $scope.searchResults = Repository.query({searchTerm:qterm});
-        $scope.noResults = false;
-      }
-
+    $scope.dialogOptions = {
+      dialogPane: 'search',
+      title: 'Search the Docker Hub'
     };
 
-    $scope.insertTags = function(){
+    $scope.searchDialog = function () {
+      $scope.dialog = ngDialog.open({
+        template: '/views/search-dialog.html',
+        className: 'ngdialog-theme-lorry',
+        showClose: false,
+        scope: $scope
+      });
+      $scope.dialog.closePromise.then(function (data) {
+        $scope.resetSearch();
+      });
+    };
+
+    $scope.selectImage = function(selImageName, selImageTag) {
+      $scope.$parent.selectedImageName = selImageName + ":" + selImageTag;
+      $scope.dialog.close();
+    };
+
+    $scope.performSearch = function(qterm){
+      $scope.$parent.selectedImageName = null;
+      $scope.resetSearch();
+      if (qterm) {
+        $scope.searchResults = Image.query({searchTerm:qterm});
+      }
+    };
+
+    $scope.insertTags = function(username, reponame){
       angular.forEach($scope.searchResults, function(value, key) {
-        value.tags = $scope.getTags(value.username, value.reponame);
+        // get tags only the first time
+        if ('undefined' === typeof value['tags']) {
+          var name = username + '/' + reponame;
+          if (value.name == name) {
+            value.tags = $scope.getTags(value.username, value.reponame);
+          }
+        }
       });
     };
 
     $scope.getTags = function(username, reponame) {
-      return Tag.query({
+      $scope.tagResults = Image.tags({
         repoUser: username,
         repoName: reponame
       });
+      return $scope.tagResults;
     };
 
-    $scope.doCancel = function(){
-      $scope.noResults = true;
-      $scope.searchResults = [];
+    $scope.resetSearch = function(){
+      $scope.searchResults = undefined;
+      $scope.tagResults = [];
     };
 
   }]);

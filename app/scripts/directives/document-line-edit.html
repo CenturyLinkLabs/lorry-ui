@@ -1,22 +1,32 @@
 <div class="line-edit">
   <div ng-show="isImageOrBuild()">
     <div class="radio-edit-group">
-      <input type='radio' ng-model="line.name" value='image' ng-checked="line.name == 'image'">Image
-      <input type='radio' ng-model="line.name" value='build' ng-checked="line.name == 'build'">Build
+      <input type='radio' ng-model="line.name" value='image' ng-checked="line.name === 'image'">Image
+      <input type='radio' ng-model="line.name" value='build' ng-checked="line.name === 'build'">Build
     </div>
-    <input type='text' ng-model="line.value" value='{{line.value}}'/>
+    <input type='text' class="build-image-text" ng-if="selectedImageName == null" ng-model="line.value"/>
+    <input type='text' class="build-image-text" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
+    <div class="spacer"></div>
+    <div class="info"></div>
+    <div class="search-link">Or <a ng-class="searchLinkClasses()" href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></div>
   </div>
   <div ng-hide="isImageOrBuild()">
     <div ng-hide="hasMultipleItems()">
-      <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
-      <input type='text' ng-model="line.value" value='{{line.value}}' />
+      <div ng-class="keyLabelClasses()">{{line.name}}</div>
+      <input type='text' ng-class="markForDeletionClasses(null)" ng-model="line.value" value='{{line.value}}' />
+      <div class="delete" ng-click="markLineForDeletion()"></div>
+      <div class="info"></div>
     </div>
-    <div class="multi-line-edit" ng-show="hasMultipleItems()" ng-repeat="item in line.value track by $index">
-      <select ng-model="line.name" ng-options="cmd as cmd for cmd in validKeys"></select>
-      <input type='text' ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
-      <select class="data-select" ng-if="line.name == 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
+    <div ng-show="hasMultipleItems()">
+      <div ng-repeat="item in line.value track by $index">
+        <div ng-class="keyLabelClasses()"><div ng-show="$index == 0">{{line.name}}</div></div>
+        <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
+        <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
+        <div class="delete" ng-click="markLineItemForDeletion($index)"></div>
+        <div class="info"></div>
+      </div>
+      <div class="add-link" ng-if="isValidKey()">+ <a href="" ng-click="addNewValueForLine()">Add {{line.name}}</a></div>
     </div>
   </div>
-  <div class="line-info"></div>
-  <div class="line-delete"></div>
+  <div class="separator"></div>
 </div>

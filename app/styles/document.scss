@@ -21,6 +21,13 @@
   font-family: $monospace_font_family;
   line-height: 1.5em;
   margin-bottom: 75px;
+
+  input[type='text'],
+  input[type='radio'],
+  select {
+    font-family: $monospace_font_family;
+    font-size: 1em;
+  }
 }
 
 #documentActionsPane {
@@ -107,55 +114,181 @@
   position: relative;
   float: left;
   width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  border-bottom: 1px solid $darkest_grey;
 
   .gutter {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    display: inline-block;
     background-color: $dark_grey;
     color: $light_grey;
-    display: inline-block;
-    width: 20px;
-    margin-right: 15px;
-    padding-right: 15px;
+    width: 50px;
+    padding-right: 5px;
     text-align: right
   }
 
-  .section-name {
+  .section {
     display: inline-block;
-    margin-left: 0px;
     margin-bottom: 10px;
+    margin-left: 70px;
+
+    .section-name {
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    .add-new-line {
+
+      select {
+        width: 210px;
+        height: 39px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      input[type='text'] {
+        margin-left: 20px;
+        width: 800px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    }
+
+    .action-area {
+      float: right;
+      margin-top: 10px;
+      margin-right: 90px;
+    }
   }
+
+
 }
 
 .line-edit {
   display: inline-block;
-  margin-left: 20px;
-  margin-bottom: 10px;
-
-  .multi-line-edit {
-    margin: 0px;
-    margin-bottom: 10px;
-  }
 
   .radio-edit-group {
     display: inline-block;
     height: 14px;
-    padding: 16px;
-    padding-left: 0px;
+    width: 150px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .label {
+    display: inline-block;
+    width: 150px;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .mark-for-deletion {
+    color: $light_grey;
+    background-color: $lighter_grey;
   }
 
   input[type='text'] {
-    width: 500px;
+    margin-left: 80px;
+    width: 800px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  input[type='text'].build-image-text {
+    width: 614px;
   }
 
   select {
-    width: 150px;
+    width: 822px;
     height: 39px;
+    margin-left: 80px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 
-  .data-select {
-    width: 522px;
-    height: 39px;
+  .add-link {
+    display: inline-block;
+    margin-left: 240px;
+    margin-top: 10px;
+    margin-bottom: 3px;
+
+    a {
+      color: $lighter_grey;
+    }
+  }
+
+  .separator {
+    border-bottom: solid 1px $dark_grey;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .search-link {
+    display: inline-block;
+    float: right;
+    text-align: center;
+    line-height: 50px;
+    margin-left: 10px;
+
+    a.active {
+      color: $lighter_grey;
+      cursor: pointer;
+    }
+
+    a.not-active {
+      text-decoration: none;
+      color: $light_grey;
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+
+  .info {
+    display: inline-block;
+    float: right;
+    background-image: url('../images/icon_info.svg');
+    background-repeat: no-repeat;
+    @include background-size(60px, 60px);
+    background-position: 0 0;
+    width: 50px;
+    height: 30px;
+    color: $lighter_grey;
+    margin-top: 12px;
+    margin-left: 2px;
+    margin-right: 5px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .delete {
+    display: inline-block;
+    float: right;
+    @extend .icon-x-medium;
+    width: 20px;
+    height: 20px;
+    margin-left: 2px;
+    margin-right: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+
+    &:hover {
+      @include icon-red;
+    }
+  }
+
+  .spacer {
+    display: inline-block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 20px;
   }
 
 }
@@ -165,9 +298,9 @@
   margin-right: 60px;
 
   .gutter {
+    display: inline-block;
     background-color: $dark_grey;
     color: $light_grey;
-    display: inline-block;
     width: 50px;
     margin-right: 5px;
     padding-right: 5px;

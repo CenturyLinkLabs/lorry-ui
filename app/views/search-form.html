@@ -1,0 +1,31 @@
+<div>
+  <form id="frmSearch" name="frmSearch" novalidate>
+    <input type="text" placeholder="search term" ng-model="qterm"/>
+    <button id="btnSearch" class="button-primary" ng-click="performSearch(qterm)">Search</button>
+  </form>
+  <div>
+    <div ng-if="searchResults.length == 0"><p class="spinner"><img src='/images/icon_loading_green.gif'/>Searching for images...</p></div>
+    <div ng-repeat="result in searchResults track by $index">
+      <div class="results-container">
+        <div class="result-row">
+          <div class="result-badge">
+            <p>{{result.is_official ? 'Official' : 'Repository'}}</p>
+          </div>
+          <div class="result-info">
+            <h4>{{ result.name }}</h4><span class="star-count">{{ result.star_count }}</span>
+            <p>{{ result.description }} <a href="">More Details</a></p>
+          </div>
+          <div class="result-tag">
+            <span>Tag</span>
+            <select ng-model="selectedTag" ng-init="selectedTag = result.tags[0]" ng-mouseover="insertTags(result.username, result.reponame)"
+                    ng-options="tag as tag.name for tag in result.tags track by tag.name">
+            </select>
+          </div>
+          <div class="add-image">
+            <button class="button-primary" ng-click="selectImage(result.name, selectedTag.name)">Add Image</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

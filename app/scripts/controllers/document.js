@@ -8,7 +8,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     $scope.yamlDocument = {};
     $scope.resettable = false;
     $scope.importable = true;
+    $scope.editedServiceYamlDocumentJson = {};
     $rootScope.serviceNameList = [];
+    $rootScope.markAsDeletedTracker = {};
 
     $scope.hasErrors = function () {
       return lodash.any($scope.yamlDocument.errors);
@@ -95,22 +97,145 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
     $scope.editService = function (serviceName) {
       if ($scope.yamlDocument.json.hasOwnProperty(serviceName)) {
+        // copy the service json for editing purposes
+        $scope.editedServiceYamlDocumentJson = lodash.cloneDeep($scope.yamlDocument.json[serviceName]);
+
+        // turn on edit mode
         $scope.yamlDocument.json[serviceName].editMode = true;
+
+        // since image/build section is mandatory, add it to the json if not present
+        if (!lodash.has($scope.editedServiceYamlDocumentJson, 'image') &&
+            !lodash.has($scope.editedServiceYamlDocumentJson, 'build')) {
+          $scope.editedServiceYamlDocumentJson['image'] = 'image or build is required';
+        }
       }
     };
 
     $scope.$on('saveService', function (e, oldServiceName, newServiceName, updatedSectionData) {
+      // Delete the markedForDeletion items
+      updatedSectionData = self.deleteItemsMarkedForDeletion(updatedSectionData);
+
       // Update the json for the service name
       if (oldServiceName != newServiceName) {
         delete $scope.yamlDocument.json[oldServiceName];
       }
       $scope.yamlDocument.json[newServiceName] = updatedSectionData;
       delete $scope.yamlDocument.json[newServiceName].editMode;
+
       self.validateJson();
     });
 
     $scope.$on('cancelEditing', function (e, serviceName) {
+      // reset the delete tracker
+      $rootScope.markAsDeletedTracker = {};
+
+      // turn off edit mode
       delete $scope.yamlDocument.json[serviceName].editMode;
+    });
+
+    this.createNewEmptyValueForKey = function(key) {
+      var keyValue;
+
+      switch (key) {
+        case 'links':
+        case 'external_links':
+        case 'ports':
+        case 'volumes':
+        case 'environment':
+          keyValue = [''];
+          break;
+        case 'command':
+        case 'image':
+        case 'build':
+          keyValue = '';
+          break;
+        default:
+          keyValue = '';
+      }
+      return keyValue;
+    };
+
+    this.deleteItemsMarkedForDeletion = function(data) {
+      var tracker = $rootScope.markAsDeletedTracker;
+
+      angular.forEach(tracker, function(v, k) {
+        if (v[0] === 'delete me') {
+          delete data[k];
+        } else {
+          lodash.pullAt(data[k], v);
+          // delete key if no items are left
+          if (lodash.size(data[k]) == 0) {
+            delete data[k];
+          }
+        }
+      });
+
+      // reset the tracker
+      $rootScope.markAsDeletedTracker = {};
+
+      return data;
+    };
+
+    this.markItemForDeletion = function(key, index) {
+      var tracker = $rootScope.markAsDeletedTracker;
+
+      // toggle add/remove items from the delete marker
+      if (tracker.hasOwnProperty(key)) {
+        if (index != null) {
+          if (lodash.includes(tracker[key], index)) {
+            // remove the item from tracker
+            lodash.remove(tracker[key], function (v) {
+              return v == index;
+            });
+            // if no items in tracker, delete the key
+            if (lodash.size(tracker[key]) == 0) {
+              delete tracker[key];
+            }
+          } else {
+            // add the item to the tracker
+            tracker[key].push(index);
+          }
+        } else {
+          delete tracker[key];
+        }
+      } else {
+        // add key/index to tracker
+        tracker[key] = [];
+        if (index != null) {
+          tracker[key].push(index);
+        } else {
+          tracker[key].push('delete me');
+        }
+      }
+    };
+
+    $scope.$on('addNewKeyToSection', function (e, key) {
+      var keyValue = self.createNewEmptyValueForKey(key);
+      $scope.editedServiceYamlDocumentJson[key] = keyValue;
+    });
+
+    $scope.$on('addNewValueForExistingKey', function (e, key) {
+      var json = $scope.editedServiceYamlDocumentJson;
+      if (json.hasOwnProperty(key)) {
+        var keyValue = self.createNewEmptyValueForKey(key);
+        if (Array.isArray(keyValue)) {
+          json[key].push(keyValue[0]);
+        }
+      }
+    });
+
+    $scope.$on('markKeyForDeletion', function (e, key) {
+      var json = $scope.editedServiceYamlDocumentJson;
+      if (json.hasOwnProperty(key)) {
+        self.markItemForDeletion(key, null);
+      }
+    });
+
+    $scope.$on('markKeyItemForDeletion', function (e, key, index) {
+      var json = $scope.editedServiceYamlDocumentJson;
+      if (json.hasOwnProperty(key)) {
+        self.markItemForDeletion(key, index);
+      }
     });
 
     $scope.serviceNames = function () {

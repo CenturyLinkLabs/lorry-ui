@@ -1,13 +1,19 @@
 <div class="section-edit" ng-init="transformToJson()">
-  <div class="gutter"></div>
-  <div class="section-name">
-    <input ng-model="newSectionName" type="text" placeholder="section name" ng-init="newSectionName = sectionName" />
+  <div class="gutter">&nbsp;</div>
+  <div class="section">
+    <input class="section-name" ng-model="newSectionName" type="text" placeholder="section name" ng-init="newSectionName = sectionName" />
     <div ng-repeat="line in editableJson">
       <document-line-edit ng-model="line"></document-line-edit>
     </div>
-    <a class="button-primary" href="" ng-click="">+ Add a Row</a>
-    <a class="button-secondary" href="" ng-click="cancelEditing()">Cancel</a>
-    <a class="button-primary" href="" ng-click="saveServiceDefinition()">Save Changes</a>
+    <div class="add-new-line">
+      <select ng-model="newline.name" ng-change="addNewKey(newline.name)" ng-options="cmd as cmd for cmd in buildValidKeyList()">
+        <option value="">Add a Key</option>
+      </select>
+    </div>
+    <div class="action-area">
+      <button class="button-secondary" href="" ng-click="cancelEditing()">Cancel</button>
+      <button class="button-primary" href="" ng-click="saveServiceDefinition()">Save Changes</button>
+    </div>
   </div>
 </div>
 
