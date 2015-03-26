@@ -15,19 +15,38 @@ describe('Directive: documentLine', function () {
   }));
 
   describe('displays line information', function () {
-    beforeEach(function () {
-      scope.lineObj = { text: 'blah', lineNumber: 1, errors: []};
-      element = angular.element('<document-line line="lineObj"></document-line>');
-      element = compile(element)(scope);
-      scope.$digest();
+    describe('when the line is not indented', function () {
+      beforeEach(function () {
+        scope.lineObj = { text: 'blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line line="lineObj"></document-line>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
+
+      it('adds the line number to the gutter div', function () {
+        expect(element.find('.gutter').text()).toEqual('1');
+      });
+
+      it('adds the text to the line-text div', function () {
+        expect(element.find('.line-text').text()).toEqual('blah');
+      });
+
+      it('does not add more padding to the line-text div', function () {
+        expect(element.find('.line-text').css('padding-left')).toEqual('20px');
+      });
     });
 
-    it('adds the line number to the gutter div', function () {
-      expect(element.find('.gutter').text()).toEqual('1');
-    });
+    describe('when the line is indented', function () {
+      beforeEach(function () {
+        scope.lineObj = { text: '    blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line line="lineObj"></document-line>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
 
-    it('adds the text to the line-text div', function () {
-      expect(element.find('.line-text').text()).toEqual('blah');
+      it('adds more padding to the line-text div (20px + 10px for every whitespace element)', function () {
+        expect(element.find('.line-text').css('padding-left')).toEqual('60px');
+      });
     });
   });
 
