@@ -19,6 +19,7 @@ describe('Directive: actionMenu', function () {
     parentScope.$digest();
     spyOn(serviceDefDisplay.isolateScope(), 'serviceName').and.returnValue('someService');
     spyOn(serviceDefDisplay.isolateScope(), 'hasLines').and.returnValue(true);
+    spyOn(serviceDefDisplay.isolateScope(), 'classes');
 
     element = angular.element('<action-menu enabled="true"></action-menu>');
     serviceDefDisplay.append(element);
@@ -37,12 +38,25 @@ describe('Directive: actionMenu', function () {
       expect(scope.deleteServiceDefinition).toHaveBeenCalled();
     });
 
-    it('calls deleteService on the parent with the name of the service definition to be deleted', function () {
-      var p = jasmine.createSpyObj('$parent',['deleteService']);
-      scope.$parent = p;
-      scope.deleteServiceDefinition();
-      expect(p.deleteService).toHaveBeenCalledWith('someService');
+    describe('when any of the services are not in edit mode', function () {
+      it('calls deleteService on the parent with the name of the service definition to be deleted', function () {
+        var p = jasmine.createSpyObj('$parent', ['deleteService', 'inEditMode']);
+        scope.$parent = p;
+        scope.deleteServiceDefinition();
+        expect(p.deleteService).toHaveBeenCalledWith('someService');
+      });
     });
+
+    describe('when any of the services are in edit mode', function () {
+      it('does not call deleteService on parent', function () {
+        var p = jasmine.createSpyObj('$parent', ['deleteService']);
+        p.inEditMode = function () { return true };
+        scope.$parent = p;
+        scope.deleteServiceDefinition();
+        expect(p.deleteService).not.toHaveBeenCalled();
+      });
+    });
+
   });
 
   describe('scope.editServiceDefinition', function () {
@@ -54,12 +68,25 @@ describe('Directive: actionMenu', function () {
       expect(scope.editServiceDefinition).toHaveBeenCalled();
     });
 
-    it('calls editService on the parent with the name of the service definition to be edited', function () {
-      var p = jasmine.createSpyObj('$parent',['editService']);
-      scope.$parent = p;
-      scope.editServiceDefinition();
-      expect(p.editService).toHaveBeenCalledWith('someService');
+    describe('when any of the services are not in edit mode', function () {
+      it('calls editService on the parent with the name of the service definition to be edited', function () {
+        var p = jasmine.createSpyObj('$parent', ['editService', 'inEditMode']);
+        scope.$parent = p;
+        scope.editServiceDefinition();
+        expect(p.editService).toHaveBeenCalledWith('someService');
+      });
     });
+
+    describe('when any of the services are in edit mode', function () {
+      it('does not call editService on the parent', function () {
+        var p = jasmine.createSpyObj('$parent', ['editService']);
+        p.inEditMode = function () { return true };
+        scope.$parent = p;
+        scope.editServiceDefinition();
+        expect(p.editService).not.toHaveBeenCalled();
+      });
+    });
+
   });
 
 });

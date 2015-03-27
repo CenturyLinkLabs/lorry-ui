@@ -749,4 +749,35 @@ describe('Controller: DocumentCtrl', function () {
 
   });
 
+  describe('$scope.inEditMode', function () {
+    beforeEach(function () {
+      scope.yamlDocument.json = {
+        "service1": {
+          "build": "foo",
+          "ports": ["1111:2222", "3333:4444"]
+        },
+        "service2": {
+          "command": "bar"
+        }
+      };
+    });
+
+    describe('when any of the services are being edited', function () {
+      beforeEach(function () {
+        scope.editService('service1');
+      });
+
+      it('should return true', function () {
+        expect(scope.inEditMode()).toBeTruthy();
+      });
+    });
+
+    describe('when no services are being edited', function () {
+      it('should return false', function () {
+        expect(scope.inEditMode()).toBeFalsy();
+      });
+    });
+
+  });
+
 });

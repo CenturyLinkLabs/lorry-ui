@@ -20,7 +20,7 @@ angular.module('lorryApp')
         };
 
         $scope.classes = function () {
-          if ($scope.hasLines()) return 'highlightable';
+          return $scope.hasLines() && !$scope.$parent.inEditMode() ? 'highlightable' : 'disabled';
         };
 
         $scope.serviceName = function () {

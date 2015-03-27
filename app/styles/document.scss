@@ -82,6 +82,18 @@
     margin: 10px auto;
   }
 
+  &.disabled {
+
+    &:hover {
+      cursor: not-allowed;
+
+      div[class^="icon-"] {
+        @include icon-light-grey;
+        pointer-events: none; // http://caniuse.com/#search=pointer-events
+      }
+    }
+  }
+
   &.highlightable {
 
     &:hover {

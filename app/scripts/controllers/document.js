@@ -242,4 +242,8 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       return lodash.keys($scope.yamlDocument.json);
     };
 
+    $scope.inEditMode = function () {
+      return lodash.some($scope.yamlDocument.json, 'editMode', true);
+    };
+
   }]);
