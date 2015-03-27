@@ -30,34 +30,30 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '
     };
 
     $scope.importYaml = function(docImport) {
-      switch ($scope.dialogOptions.dialogPane) {
-        case 'remote':
-          if (docImport && !lodash.isEmpty(docImport.remote)) {
-            self.fetchRemoteContent(docImport.remote);
-          }
-          break;
-        case 'paste':
-          if (docImport && !lodash.isEmpty(docImport.raw)) {
-            $scope.yamlDocument.raw = docImport.raw;
-          }
-          break;
-        case 'pmx-paste':
-          $scope.yamlDocument.raw = PMXConverter.convert(docImport.raw);
-          break;
-        default:
-          if ($scope.files) {
-            $scope.upload();
-          }
+      if (lodash.endsWith($scope.dialogOptions.dialogPane, 'remote')) {
+        if (docImport && !lodash.isEmpty(docImport.remote)) {
+          self.fetchRemoteContent(docImport.remote);
+        }
+      } else if (lodash.endsWith($scope.dialogOptions.dialogPane, 'paste')) {
+        if (docImport && !lodash.isEmpty(docImport.raw)) {
+          self.importPastedContent(docImport.raw);
+        }
+      } else {
+        if ($scope.files) {
+          $scope.upload();
+        }
       }
       $scope.dialog.close();
     };
 
     this.fetchRemoteContent = function (uri) {
-      $log.debug('fetching ' + uri);
-
       $http.get(uri)
         .then(function (response) {
-          $scope.yamlDocument.raw = response.data;
+          if ($scope.dialogOptions.dialogTab === 'pmx') {
+            $scope.yamlDocument.raw = PMXConverter.convert(response.data);
+          } else {
+            $scope.yamlDocument.raw = response.data;
+          }
         })
         .catch(function (response) {
           $log.error(response);
@@ -65,6 +61,14 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '
           $scope.yamlDocument.errors = [{error: {message: 'The remote document could not be retrieved.'}}];
           $scope.yamlDocument.loadFailure = true;
         });
+    };
+
+    this.importPastedContent = function (content) {
+      if ($scope.dialogOptions.dialogTab === 'pmx') {
+        $scope.yamlDocument.raw = PMXConverter.convert(content);
+      } else {
+        $scope.yamlDocument.raw = content;
+      }
     };
 
     $scope.upload = function() {

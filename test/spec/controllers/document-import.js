@@ -84,12 +84,13 @@ describe('Controller: DocumentImportCtrl', function () {
     beforeEach(function () {
       scope.dialog = jasmine.createSpyObj('dialog', ['close']);
       spyOn(DocumentImportCtrl, 'fetchRemoteContent');
+      spyOn(DocumentImportCtrl, 'importPastedContent');
       spyOn(scope, 'validateYaml');
       spyOn(scope, 'upload');
     });
 
-    describe("when the dialogPane is 'remote'", function () {
-      it('triggers the function to fetch from the remote address', function () {
+    describe("when the dialogPane ends with 'remote'", function () {
+      it('triggers DocumentImportCtrl.fetchRemoteContent to fetch from the remote address', function () {
         var docImport = { remote: 'http://www.example.com' };
         scope.dialogOptions.dialogPane = 'remote';
         scope.importYaml(docImport);
@@ -97,26 +98,17 @@ describe('Controller: DocumentImportCtrl', function () {
       });
     });
 
-    describe("when the dialogPane is 'paste'", function () {
-      it('sets the value pasted into $scope.yamlDocument.raw', function () {
+    describe("when the dialogPane ends with 'paste'", function () {
+      it('triggers DocumentImportCtrl.importPastedContent', function () {
         var docImport = {raw: 'asdf'};
         scope.dialogOptions.dialogPane = 'paste';
         scope.importYaml(docImport);
-        expect(scope.yamlDocument.raw).toEqual(docImport.raw);
+        expect(DocumentImportCtrl.importPastedContent).toHaveBeenCalledWith(docImport.raw);
       });
     });
 
-    describe("when the dialogPane is 'pmx-paste'", function () {
-      it('sets the PMXConverter converted value pasted into $scope.yamlDocument.raw', function () {
-        var docImport = {raw: "---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n"};
-        scope.dialogOptions.dialogPane = 'pmx-paste';
-        scope.importYaml(docImport);
-        expect(scope.yamlDocument.raw).toEqual(PMXConverter.convert(docImport.raw));
-      });
-    });
-
-    describe("when the dialogPane is 'upload'", function () {
-      it('triggers $scope.validateYaml', function () {
+    describe("when the dialogPane ends with 'upload'", function () {
+      it('triggers $scope.upload', function () {
         scope.dialogOptions.dialogPane = 'upload';
         scope.files = {};
         scope.importYaml();
@@ -127,6 +119,26 @@ describe('Controller: DocumentImportCtrl', function () {
     it('triggers the closing of the import dialog', function(){
       scope.importYaml();
       expect(scope.dialog.close).toHaveBeenCalled();
+    });
+  });
+
+  describe('importPastedContent', function () {
+    describe('when the import compose tab is displayed', function  () {
+      it('sets the value pasted into $scope.yamlDocument.raw', function () {
+        var docImport = {raw: 'asdf'};
+        scope.dialogOptions.dialogTab = 'compose';
+        DocumentImportCtrl.importPastedContent(docImport.raw);
+        expect(scope.yamlDocument.raw).toEqual(docImport.raw);
+      });
+    });
+
+    describe('when the import pmx template tab is displayed', function () {
+      it('sets the PMXConverter converted value pasted into $scope.yamlDocument.raw', function () {
+        var docImport = {raw: "---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n"};
+        scope.dialogOptions.dialogTab = 'pmx';
+        DocumentImportCtrl.importPastedContent(docImport.raw);
+        expect(scope.yamlDocument.raw).toEqual(PMXConverter.convert(docImport.raw));
+      });
     });
   });
 
