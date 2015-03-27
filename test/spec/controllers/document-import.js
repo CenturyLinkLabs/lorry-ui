@@ -6,14 +6,16 @@ describe('Controller: DocumentImportCtrl', function () {
   beforeEach(module('lorryApp'));
 
   var DocumentImportCtrl,
+    PMXConverter,
     $httpBackend,
     scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_) {
+  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _PMXConverter_) {
     $rootScope.validateYaml = function(){}; // mock the parent scope validateYaml()
     $rootScope.yamlDocument = {}; // mock the parent scope yamlDocument
     scope = $rootScope.$new();
+    PMXConverter = _PMXConverter_;
     $httpBackend = _$httpBackend_;
     DocumentImportCtrl = $controller('DocumentImportCtrl', {
       $scope: scope
@@ -96,11 +98,20 @@ describe('Controller: DocumentImportCtrl', function () {
     });
 
     describe("when the dialogPane is 'paste'", function () {
-      it('it sets the value pasted into $scope.yamlDocument.raw', function () {
+      it('sets the value pasted into $scope.yamlDocument.raw', function () {
         var docImport = {raw: 'asdf'};
         scope.dialogOptions.dialogPane = 'paste';
         scope.importYaml(docImport);
         expect(scope.yamlDocument.raw).toEqual(docImport.raw);
+      });
+    });
+
+    describe("when the dialogPane is 'pmx-paste'", function () {
+      it('sets the PMXConverter converted value pasted into $scope.yamlDocument.raw', function () {
+        var docImport = {raw: "---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n"};
+        scope.dialogOptions.dialogPane = 'pmx-paste';
+        scope.importYaml(docImport);
+        expect(scope.yamlDocument.raw).toEqual(PMXConverter.convert(docImport.raw));
       });
     });
 

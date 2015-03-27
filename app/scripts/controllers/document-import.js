@@ -41,6 +41,9 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '
             $scope.yamlDocument.raw = docImport.raw;
           }
           break;
+        case 'pmx-paste':
+          $scope.yamlDocument.raw = PMXConverter.convert(docImport.raw);
+          break;
         default:
           if ($scope.files) {
             $scope.upload();
