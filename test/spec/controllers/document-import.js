@@ -19,10 +19,54 @@ describe('Controller: DocumentImportCtrl', function () {
   }));
 
   describe('$scope.showImportDialog', function () {
-    it ('sets the active dialogTab to the argument passed', function () {
-      scope.showImportDialog('compose');
-      expect(scope.dialogOptions.dialogTab).toBe('compose');
+    beforeEach(function () {
+      spyOn(scope, 'setDialogTab');
     });
+    it('calls setDialogTab with the passed in arg', function () {
+      scope.showImportDialog('compose');
+      expect(scope.setDialogTab).toHaveBeenCalledWith('compose');
+    });
+  });
+
+  describe('$scope.tabStyleClasses', function () {
+    beforeEach(function () {
+      scope.dialogOptions['dialogTab'] = 'compose';
+    });
+
+    it ('returns the selected button when the tab argument matches the current dialogTab', function () {
+      expect(scope.tabStyleClasses('compose')).toBe('button-tab-selected');
+    });
+
+    it ('returns the de-selected button when the tab argument matches the current dialogTab', function () {
+      expect(scope.tabStyleClasses('pmx')).toBe('button-tab-deselected');
+    });
+  });
+
+  describe('$scope.setDialogTab', function () {
+    describe('when the "compose" argument is passed', function () {
+      it ('sets the active dialogPane to the "upload" pane for the tab', function () {
+        scope.setDialogTab('compose');
+        expect(scope.dialogOptions.dialogPane).toBe('upload');
+      });
+
+      it ('sets the active dialogTab to "compose"', function () {
+        scope.setDialogTab('compose');
+        expect(scope.dialogOptions.dialogTab).toBe('compose');
+      });
+    });
+
+    describe('when the "pmx" argument is passed', function () {
+      it ('sets the active dialogPane to the "pmx-upload" pane for the tab', function () {
+        scope.setDialogTab('pmx');
+        expect(scope.dialogOptions.dialogPane).toBe('pmx-upload');
+      });
+
+      it ('sets the active dialogTab to "pmx"', function () {
+        scope.setDialogTab('pmx');
+        expect(scope.dialogOptions.dialogTab).toBe('pmx');
+      });
+    });
+
   });
 
   describe('$scope.setDialogPane', function () {

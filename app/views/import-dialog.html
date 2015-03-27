@@ -4,13 +4,22 @@
     <div class="ngdialog-close"></div>
   </div>
   <div class="dialog-tabs">
-    <a class="button-tab-selected">Import Compose.yml</a>
+    <a ng-class="tabStyleClasses('compose')" ng-click="setDialogTab('compose')">Import Compose.yml</a>
+    <a ng-class="tabStyleClasses('pmx')" ng-click="setDialogTab('pmx')">Import PMX Template</a>
   </div>
   <div class="dialog-instructions" ng-show="dialogOptions.dialogTab === 'compose'">
     <p>
       If you have an existing yml you'd like to import, you can <a href="" ng-click="setDialogPane('paste')">copy
       &amp; paste your file</a>, <a href="" ng-click="setDialogPane('upload')">browse your local compose.yml
       files</a>, or <a href="" ng-click="setDialogPane('remote')">provide a url to a compose.yml.</a>
+    </p>
+  </div>
+  <div class="dialog-instructions" ng-show="dialogOptions.dialogTab === 'pmx'">
+    <p>
+      If you have an existing Panamax template you'd like to import, you can
+      <a href="" ng-click="setDialogPane('pmx-paste')">copy &amp; paste your file</a>,
+      <a href="" ng-click="setDialogPane('pmx-upload')">browse your local Panamax template (.pmx) files</a>, or
+      <a href="" ng-click="setDialogPane('pmx-remote')">provide a url to a Panamax template.</a>
     </p>
   </div>
 </div>
@@ -28,7 +37,28 @@
     <input type="text" ng-model="docImport.remote">
   </div>
 </div>
+<div class="dialog-content" ng-show="dialogOptions.dialogTab === 'pmx'">
+  <div ng-show="dialogOptions.dialogPane === 'pmx-upload'">
+    <p>Select your local Panamax template</p>
+    <input type="file" file-input accept=".pmx"/>
+  </div>
+  <div ng-show="dialogOptions.dialogPane === 'pmx-paste'">
+    <p>Paste your Panamax template contents below</p>
+    <textarea placeholder="Paste or write your Panamax template here" ng-model="docImport.raw"></textarea>
+  </div>
+  <div ng-show="dialogOptions.dialogPane === 'pmx-remote'">
+    <p>Paste the full URI of your remote Panamax template</p>
+    <input type="text" ng-model="docImport.remote">
+  </div>
+</div>
 <div class="dialog-footer">
-  <button class="button-primary" ng-click="importYaml(docImport)">Import</button>
-  <button class="button-secondary" ng-click="closeThisDialog()">Cancel</button>
+  <button class="button-primary" ng-click="importYaml(docImport)" ng-show="dialogOptions.dialogTab === 'compose'">
+    Import Compose.yml
+  </button>
+  <button class="button-primary" ng-show="dialogOptions.dialogTab === 'pmx'">
+    Import PMX Template
+  </button>
+  <button class="button-secondary" ng-click="closeThisDialog()">
+    Cancel
+  </button>
 </div>

@@ -3,19 +3,25 @@
 angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog',
   function ($scope, ngDialog) {
 
-    $scope.dialogOptions = {
-      dialogPane: 'upload',
-      title: 'Import compose.yml'
-    };
+    $scope.dialogOptions = {};
 
     $scope.showImportDialog = function (tab) {
-      $scope.dialogOptions.dialogTab = tab;
+      $scope.setDialogTab(tab);
       $scope.dialog = ngDialog.open({
         template: '/views/import-dialog.html',
         className: 'ngdialog-theme-lorry',
         showClose: false,
         scope: $scope
       });
+    };
+
+    $scope.tabStyleClasses = function (tab) {
+      return $scope.dialogOptions.dialogTab === tab ? 'button-tab-selected' : 'button-tab-deselected';
+    };
+
+    $scope.setDialogTab = function (tab) {
+      $scope.dialogOptions.dialogTab = tab;
+      $scope.setDialogPane(tab === 'compose' ? 'upload' : 'pmx-upload');
     };
 
     $scope.setDialogPane = function (pane) {
