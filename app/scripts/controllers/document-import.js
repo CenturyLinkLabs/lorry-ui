@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog',
-  function ($scope, ngDialog) {
+angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '$http', 'lodash', 'ngDialog',
+  function ($log, $scope, $http, lodash, ngDialog) {
+    var self = this;
 
     $scope.dialogOptions = {};
 
@@ -31,14 +32,36 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$scope', 'ngDialog
     $scope.importYaml = function(docImport) {
       switch ($scope.dialogOptions.dialogPane) {
         case 'remote':
+          if (docImport && !lodash.isEmpty(docImport.remote)) {
+            self.fetchRemoteContent(docImport.remote);
+          }
           break;
         case 'paste':
-          $scope.yamlDocument.raw = docImport.raw;
+          if (docImport && !lodash.isEmpty(docImport.raw)) {
+            $scope.yamlDocument.raw = docImport.raw;
+          }
           break;
         default:
-          $scope.upload();
+          if ($scope.files) {
+            $scope.upload();
+          }
       }
       $scope.dialog.close();
+    };
+
+    this.fetchRemoteContent = function (uri) {
+      $log.debug('fetching ' + uri);
+
+      $http.get(uri)
+        .then(function (response) {
+          $scope.yamlDocument.raw = response.data;
+        })
+        .catch(function (response) {
+          $log.error(response);
+          $scope.yamlDocument.raw = '';
+          $scope.yamlDocument.errors = [{error: {message: 'The remote document could not be retrieved.'}}];
+          $scope.yamlDocument.loadFailure = true;
+        });
     };
 
     $scope.upload = function() {
