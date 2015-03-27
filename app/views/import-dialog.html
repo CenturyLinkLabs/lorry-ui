@@ -55,7 +55,7 @@
   <button class="button-primary" ng-click="importYaml(docImport)" ng-show="dialogOptions.dialogTab === 'compose'">
     Import Compose.yml
   </button>
-  <button class="button-primary" ng-show="dialogOptions.dialogTab === 'pmx'">
+  <button class="button-primary" ng-click="importYaml(docImport)" ng-show="dialogOptions.dialogTab === 'pmx'">
     Import PMX Template
   </button>
   <button class="button-secondary" ng-click="closeThisDialog()">

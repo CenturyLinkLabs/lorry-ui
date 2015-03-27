@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '$http', 'lodash', 'ngDialog',
-  function ($log, $scope, $http, lodash, ngDialog) {
+angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '$http', 'lodash', 'ngDialog', 'PMXConverter',
+  function ($log, $scope, $http, lodash, ngDialog, PMXConverter) {
     var self = this;
 
     $scope.dialogOptions = {};
@@ -68,7 +68,11 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '
       var fr = new FileReader();
       fr.addEventListener('load', function(e) {
         $scope.$apply(function(){
-          $scope.yamlDocument.raw = e.target.result;
+          if ($scope.dialogOptions.dialogTab === 'pmx') {
+            $scope.yamlDocument.raw = PMXConverter.convert(e.target.result);
+          } else {
+            $scope.yamlDocument.raw = e.target.result;
+          }
         });
       });
       fr.readAsText($scope.files[0]);
