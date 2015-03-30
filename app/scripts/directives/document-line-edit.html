@@ -14,7 +14,7 @@
     <div ng-hide="hasMultipleItems()">
       <div ng-class="keyLabelClasses()">{{line.name}}</div>
       <input type='text' ng-class="markForDeletionClasses(null)" ng-model="line.value" value='{{line.value}}' />
-      <div class="delete" ng-click="markLineForDeletion()"></div>
+      <div class="delete" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
       <div class="info"></div>
     </div>
     <div ng-show="hasMultipleItems()">
@@ -22,7 +22,7 @@
         <div ng-class="keyLabelClasses()"><div ng-show="$index == 0">{{line.name}}</div></div>
         <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
         <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
-        <div class="delete" ng-click="markLineItemForDeletion($index)"></div>
+        <div class="delete" ng-class="deleteIconClasses($index)" ng-click="markLineItemForDeletion($index)"></div>
         <div class="info"></div>
       </div>
       <div class="add-link" ng-if="isValidKey()">+ <a href="" ng-click="addNewValueForLine()">Add {{line.name}}</a></div>

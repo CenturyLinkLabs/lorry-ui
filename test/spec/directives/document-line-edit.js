@@ -176,6 +176,65 @@ describe('Directive: documentLineEdit', function () {
       });
     });
 
+    describe('scope.markForDeletionClasses', function () {
+      describe('when line is marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'command', value: 'bar' };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker['command'] = 'delete me';
+        });
+
+        it('returns classes that includes mark-for-deletion', function () {
+          expect(scope.markForDeletionClasses(null)).toContain('mark-for-deletion');
+        });
+      });
+
+      describe('when line is not marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'command', value: 'bar' };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker = {};
+        });
+
+        it('returns classes that does not include mark-for-deletion', function () {
+          expect(scope.markForDeletionClasses(null)).not.toContain('mark-for-deletion');
+        });
+      });
+
+      describe('when line item is marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker['ports'] = [0];
+        });
+
+        it('returns classes that includes mark-for-deletion', function () {
+          expect(scope.markForDeletionClasses(null)).toContain('mark-for-deletion');
+        });
+      });
+
+      describe('when line item is not marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker = {};
+        });
+
+        it('returns classes that does not include mark-for-deletion', function () {
+          expect(scope.markForDeletionClasses(null)).not.toContain('mark-for-deletion');
+        });
+      });
+
+    });
+
     describe('scope.addNewValueForLine', function () {
       beforeEach(function () {
         scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
@@ -246,6 +305,65 @@ describe('Directive: documentLineEdit', function () {
       it('should mark the line item for deletion', function () {
         scope.markLineItemForDeletion(0);
         expect(rootScope.markAsDeletedTracker).hasOwnProperty('ports');
+      });
+
+    });
+
+    describe('scope.deleteIconClasses', function () {
+      describe('when line is marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'command', value: 'bar' };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker['command'] = 'delete me';
+        });
+
+        it('returns classes that includes marked', function () {
+          expect(scope.deleteIconClasses(null)).toContain('marked');
+        });
+      });
+
+      describe('when line is not marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'command', value: 'bar' };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker = {};
+        });
+
+        it('returns classes that does not include marked', function () {
+          expect(scope.deleteIconClasses(null)).not.toContain('marked');
+        });
+      });
+
+      describe('when line item is marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker['ports'] = [0];
+        });
+
+        it('returns classes that includes marked', function () {
+          expect(scope.deleteIconClasses(null)).toContain('marked');
+        });
+      });
+
+      describe('when line item is not marked for deletion', function () {
+        beforeEach(function () {
+          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          scope.markAsDeletedTracker = {};
+        });
+
+        it('returns classes that does not include marked', function () {
+          expect(scope.deleteIconClasses(null)).not.toContain('marked');
+        });
       });
 
     });

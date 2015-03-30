@@ -33,7 +33,7 @@ angular.module('lorryApp')
           var tracker = $rootScope.markAsDeletedTracker;
           var key = scope.line.name;
 
-          if (index == null) {
+          if (index === null) {
             return (tracker.hasOwnProperty(key)) ? 'mark-for-deletion' : '';
           } else {
             if (tracker.hasOwnProperty(key)) {
@@ -52,6 +52,19 @@ angular.module('lorryApp')
 
         scope.markLineItemForDeletion = function (index) {
           scope.$emit('markKeyItemForDeletion', scope.line.name, index);
+        };
+
+        scope.deleteIconClasses = function(index) {
+          var tracker = $rootScope.markAsDeletedTracker;
+          var key = scope.line.name;
+
+          if (index === null) {
+            return (tracker.hasOwnProperty(key)) ? 'marked' : '';
+          } else {
+            if (tracker.hasOwnProperty(key)) {
+              return lodash.includes(tracker[key], index) ? 'marked' : '';
+            }
+          }
         };
 
         scope.serviceNameList = $rootScope.serviceNameList;

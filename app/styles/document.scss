@@ -296,6 +296,10 @@
     &:hover {
       @include icon-red;
     }
+
+    &.marked {
+      @include icon-white;
+    }
   }
 
   .spacer {
