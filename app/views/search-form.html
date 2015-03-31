@@ -19,10 +19,11 @@
             <span>Tag</span>
             <select ng-model="selectedTag" ng-init="selectedTag = result.tags[0]" ng-mouseover="insertTags(result.username, result.reponame)"
                     ng-options="tag as tag.name for tag in result.tags track by tag.name">
+              <option value="" ng-if="!result.hasOwnProperty('tags')">latest</option>
             </select>
           </div>
           <div class="add-image">
-            <button class="button-primary" ng-click="selectImage(result.name, selectedTag.name)">Add Image</button>
+            <button class="button-primary" ng-click="selectImage(result.name, selectedTag.name || 'latest')">Add Image</button>
           </div>
         </div>
       </div>
