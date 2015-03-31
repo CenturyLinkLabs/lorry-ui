@@ -9,10 +9,25 @@ angular.module('lorryApp')
         transformResponse: function(data, headers){
           var res = angular.fromJson(data).results;
           angular.forEach(res, function(value, key) {
-            value.username = ''+value.name.split('/')[0];
-            value.reponame = ''+value.name.split('/')[1];
+            // check for images without usernames i.e. busybox
+            if (value.name.split('/').length === 1) {
+              value.username = '';
+              value.reponame = ''+value.name.split('/')[0];
+            } else {
+              value.username = '' + value.name.split('/')[0];
+              value.reponame = '' + value.name.split('/')[1];
+            }
           });
           return res;
+        }
+      },
+      'tagsWithoutUsername': {
+        url: ENV.LORRY_API_ENDPOINT + '/images/tags/:repoName',
+        method:'GET',
+        isArray: true,
+        transformResponse: function(data, headers){
+          var resp = angular.fromJson(data);
+          return resp;
         }
       },
       'tags': {

@@ -32,6 +32,7 @@ describe('Controller: SearchCtrl', function () {
       }
     ]
   };
+
   var tagsResponse = [
     {
       "layer": "11111111",
@@ -90,41 +91,122 @@ describe('Controller: SearchCtrl', function () {
 
   describe('getTags: ', function () {
 
-    it('should get tags on successful tag query', function () {
-      httpBackend.expectGET('https://foobar.io/images/tags/baruser/foo').respond(tagsResponse);
-      scope.getTags('baruser', 'foo');
-      httpBackend.flush();
+    describe('with username ', function () {
+      it('should get tags on successful tag query', function () {
+        httpBackend.expectGET('https://foobar.io/images/tags/baruser/foo').respond(tagsResponse);
+        scope.getTags('baruser', 'foo');
+        httpBackend.flush();
 
-      expect(tagsResponse[0].name).toBe('latest');
-      expect(tagsResponse[0].layer).toBe('11111111');
-
+        expect(tagsResponse[0].name).toBe('latest');
+        expect(tagsResponse[0].layer).toBe('11111111');
     });
 
-    it('should call Image tags', function () {
-      spyOn(Image, 'tags');
+      it('should call Image tags', function () {
+        spyOn(Image, 'tags');
 
-      scope.getTags('baruser', 'foo');
+        scope.getTags('baruser', 'foo');
 
-      expect(Image.tags).toHaveBeenCalled();
+        expect(Image.tags).toHaveBeenCalledWith({repoUser: 'baruser', repoName: 'foo'});
+      });
+    });
+
+    describe('without username ', function () {
+      it('should get tags on successful tag query', function () {
+        httpBackend.expectGET('https://foobar.io/images/tags/foo').respond(tagsResponse);
+        scope.getTags('', 'foo');
+        httpBackend.flush();
+
+        expect(tagsResponse[0].name).toBe('latest');
+        expect(tagsResponse[0].layer).toBe('11111111');
+      });
+
+      it('should call Image tagsWithoutUsername', function () {
+        spyOn(Image, 'tagsWithoutUsername');
+
+        scope.getTags('', 'foo');
+
+        expect(Image.tagsWithoutUsername).toHaveBeenCalledWith({repoName: 'foo'});
+      });
     });
 
   });
 
   describe('insertTags: ', function () {
 
-    it('should insert tags for specified node in the search results', function () {
-      // simulate search was performed
-      scope.searchResults = searchResponse.results;
+    describe('with username: ', function () {
+      it('should call getTags', function () {
+        spyOn(scope, 'getTags');
 
-      httpBackend.expectGET('https://foobar.io/images/tags/tag/me').respond([tagsResponse[1]]);
-      scope.insertTags('tag', 'me');
-      httpBackend.flush();
+        // simulate search was performed
+        scope.searchResults = searchResponse.results;
+        scope.insertTags('tag', 'me');
 
-      expect(scope.searchResults[0].tags).toBeUndefined();
-      expect(scope.searchResults[1].tags).toBeDefined();
-      expect(scope.searchResults[1].tags[0].layer).toBe(tagsResponse[1].layer);
+        expect(scope.getTags).toHaveBeenCalledWith('tag', 'me');
+      });
+
+      it('should insert tags for specified node in the search results', function () {
+        // simulate search was performed
+        scope.searchResults = searchResponse.results;
+
+        httpBackend.expectGET('https://foobar.io/images/tags/tag/me').respond([tagsResponse[1]]);
+        scope.insertTags('tag', 'me');
+        httpBackend.flush();
+
+        expect(scope.searchResults[0].tags).toBeUndefined();
+        expect(scope.searchResults[1].tags).toBeDefined();
+        expect(scope.searchResults[1].tags[0].layer).toBe(tagsResponse[1].layer);
+      });
+    });
+
+    describe('without username: ', function () {
+      var searchResponseWithoutUsername = {
+        "results": [
+          {
+            "name": "foo",
+            "is_trusted": true,
+            "is_official": false,
+            "star_count": 5,
+            "description": "foo service",
+            "username": "",
+            "reponame": "foo"
+          },
+          {
+            "name": "me",
+            "is_trusted": true,
+            "is_official": false,
+            "star_count": 1,
+            "description": "tag me service",
+            "username": "",
+            "reponame": "me"
+          }
+        ]
+      };
+
+      it('should call getTags', function () {
+        spyOn(scope, 'getTags');
+
+        // simulate search was performed
+        scope.searchResults = searchResponseWithoutUsername.results;
+        scope.insertTags('', 'me');
+
+        expect(scope.getTags).toHaveBeenCalledWith('', 'me');
+      });
+
+      it('should insert tags for specified node in the search results', function () {
+        // simulate search was performed
+        scope.searchResults = searchResponseWithoutUsername.results;
+
+        httpBackend.expectGET('https://foobar.io/images/tags/me').respond([tagsResponse[1]]);
+        scope.insertTags('', 'me');
+        httpBackend.flush();
+
+        expect(scope.searchResults[0].tags).toBeUndefined();
+        expect(scope.searchResults[1].tags).toBeDefined();
+        expect(scope.searchResults[1].tags[0].layer).toBe(tagsResponse[1].layer);
+      });
 
     });
+
   });
 
   describe('selectImage', function () {

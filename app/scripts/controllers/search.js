@@ -39,20 +39,26 @@ angular.module('lorryApp')
     $scope.insertTags = function(username, reponame){
       angular.forEach($scope.searchResults, function(value, key) {
         // get tags only the first time
-        if ('undefined' === typeof value['tags']) {
-          var name = username + '/' + reponame;
-          if (value.name == name) {
-            value.tags = $scope.getTags(value.username, value.reponame);
+        if (lodash.isUndefined(value['tags'])) {
+          var name = (username === '') ? reponame : username + '/' + reponame;
+          if (value.name === name) {
+            value.tags = $scope.getTags(username, reponame);
           }
         }
       });
     };
 
     $scope.getTags = function(username, reponame) {
-      $scope.tagResults = Image.tags({
-        repoUser: username,
-        repoName: reponame
-      });
+      if (username === '') {
+        $scope.tagResults = Image.tagsWithoutUsername({
+          repoName: reponame
+        });
+      } else {
+        $scope.tagResults = Image.tags({
+          repoUser: username,
+          repoName: reponame
+        });
+      }
       return $scope.tagResults;
     };
 
