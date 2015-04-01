@@ -47,6 +47,10 @@ describe('Controller: DocumentCtrl', function () {
       it('sets loadFailure to true on the yamlDocument', function () {
         expect(scope.yamlDocument.loadFailure).toBe(true);
       });
+
+      it('sets parseErrors to false on the yamlDocument', function () {
+        expect(scope.yamlDocument.parseErrors).toBe(false);
+      });
     });
 
     describe('when jsyaml loads the document without exception', function () {
@@ -118,8 +122,11 @@ describe('Controller: DocumentCtrl', function () {
           expect(scope.serviceDefinitions).toEqual([]);
         });
 
-        it ('sets the parseErrors flag for message display true', function () {
+        it ('sets the loadFailure flag for message display true', function () {
           expect(scope.yamlDocument.loadFailure).toBe(true);
+        });
+        it ('sets the parseErrors flag for message display false', function () {
+          expect(scope.yamlDocument.parseErrors).toBe(false);
         });
       });
 
@@ -134,8 +141,12 @@ describe('Controller: DocumentCtrl', function () {
           expect(scope.yamlDocument.errors).toEqual([{error: {message: 'An internal server error has occurred'}}]);
         });
 
-        it ('sets the parseErrors flag for message display true', function () {
+        it ('sets the loadFailure flag for message display true', function () {
           expect(scope.yamlDocument.loadFailure).toBe(true);
+        });
+
+        it ('sets the parseErrors flag for message display false', function () {
+          expect(scope.yamlDocument.parseErrors).toBe(false);
         });
 
       });

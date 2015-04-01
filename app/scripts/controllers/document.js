@@ -56,6 +56,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       } catch(YamlException) {
         // if jsyaml can't load the document, don't bother calling the server
         $scope.yamlDocument.errors = [{error: {message: YamlException.message}}];
+        $scope.yamlDocument.parseErrors = false;
         $scope.yamlDocument.loadFailure = true;
       }
     };
@@ -69,6 +70,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
           $scope.yamlDocument.errors = response.data.errors;
           if (lodash.any(response.data.errors)) {
             $scope.yamlDocument.parseErrors = true;
+            $scope.yamlDocument.loadFailure = false;
           }
         })
         .catch(function (response) {
@@ -78,6 +80,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
           } else {
             $scope.yamlDocument.errors = [{error: {message: 'An internal server error has occurred'}}];
           }
+          $scope.yamlDocument.parseErrors = false;
           $scope.yamlDocument.loadFailure = true;
         })
         .finally(function () {
