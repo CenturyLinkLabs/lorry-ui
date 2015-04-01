@@ -1,19 +1,23 @@
-<div class="section-edit" ng-init="transformToJson()">
-  <div class="gutter">&nbsp;</div>
-  <div class="section">
-    <input class="section-name" ng-model="newSectionName" type="text" placeholder="section name" ng-init="newSectionName = sectionName" />
-    <div ng-repeat="line in editableJson">
-      <document-line-edit ng-model="line"></document-line-edit>
-    </div>
-    <div class="add-new-line">
-      <select ng-model="newline.name" ng-change="addNewKey(newline.name)" ng-options="cmd as cmd for cmd in buildValidKeyList()">
-        <option value="">Add a Key</option>
-      </select>
-    </div>
-    <div class="action-area">
-      <button class="button-secondary" href="" ng-click="cancelEditing()">Cancel</button>
-      <button class="button-primary" href="" ng-click="saveServiceDefinition()">Save Changes</button>
+<form name="editForm">
+  <div class="section-edit" ng-init="transformToJson()">
+    <div class="gutter">&nbsp;</div>
+    <div class="section">
+      <input name="sectionname" class="section-name" ng-model="newSectionName" type="text" placeholder="sectionname" required ng-pattern="/^[a-zA-Z0-9-_]*$/" ng-trim="false"/>
+      <div ng-show="editForm.sectionname.$dirty && editForm.sectionname.$invalid">Error:
+        <span ng-show="editForm.sectionname.$error.pattern">Invalid section name.</span>
+      </div>
+      <div ng-repeat="line in editableJson">
+        <document-line-edit ng-model="line"></document-line-edit>
+      </div>
+      <div class="add-new-line">
+        <select ng-model="newline.name" ng-change="addNewKey(newline.name)" ng-options="cmd as cmd for cmd in buildValidKeyList()">
+          <option value="">Add a Key</option>
+        </select>
+      </div>
+      <div class="action-area">
+        <button class="button-secondary" href="" ng-click="cancelEditing()">Cancel</button>
+        <button class="button-primary" href="" ng-click="saveServiceDefinition()">Save Changes</button>
+      </div>
     </div>
   </div>
-</div>
-
+</form>

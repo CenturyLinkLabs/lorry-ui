@@ -12,6 +12,7 @@ angular.module('lorryApp')
       controller: function ($scope, lodash) {
 
         $scope.transformToJson = function () {
+          $scope.newSectionName = $scope.sectionName;
           $scope.editableJson = $scope.transformToEditableJson($scope.$parent.editedServiceYamlDocumentJson);
         };
 
