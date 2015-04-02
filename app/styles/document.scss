@@ -157,6 +157,10 @@
       margin-bottom: 15px;
     }
 
+    .error {
+      color: red;
+    }
+
     .add-new-line {
 
       select {
@@ -178,6 +182,11 @@
       float: right;
       margin-top: 10px;
       margin-right: 90px;
+
+      .button-primary, .button-secondary {
+        font-family: $base_font_family;
+      }
+
     }
   }
 }
