@@ -8,16 +8,18 @@ describe('Controller: DocumentCtrl', function () {
   var DocumentCtrl,
     scope,
     yamlValidator,
-    jsyaml;
+    jsyaml,
+    ngDialog;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_) {
+  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_, _ngDialog_) {
     scope = $rootScope.$new();
     DocumentCtrl = $controller('DocumentCtrl', {
       $scope: scope
     });
     yamlValidator = _yamlValidator_;
     jsyaml = _jsyaml_;
+    ngDialog = _ngDialog_;
     $rootScope.markAsDeletedTracker = {};
   }));
 
@@ -154,12 +156,49 @@ describe('Controller: DocumentCtrl', function () {
 
   });
 
-  describe('$scope.resetWorkspace', function () {
+  describe('DocumentCtrl.reset', function () {
+    beforeEach(function () {
+      spyOn(DocumentCtrl, 'buildServiceDefinitions');
+    });
+
     it('resets the $scope.yamlDocument to an empty object', function () {
       scope.yamlDocument = { foo: 'bar' };
       expect(scope.yamlDocument).toEqual({ foo: 'bar' });
-      scope.resetWorkspace();
+      DocumentCtrl.reset();
       expect(scope.yamlDocument).toEqual({});
+    });
+
+    it('rebuilds the service definitions', function () {
+      DocumentCtrl.reset();
+      expect(DocumentCtrl.buildServiceDefinitions).toHaveBeenCalled();
+    });
+  });
+
+  describe('$scope.resetWorkspace', function () {
+    var deferredSuccess;
+
+    beforeEach(inject(function($q) {
+      spyOn(DocumentCtrl, 'reset');
+      deferredSuccess = $q.defer();
+      spyOn(ngDialog, 'openConfirm').and.returnValue(deferredSuccess.promise);
+    }));
+
+    describe('when the user confirms the action', function () {
+      it('resets the document workspace', function () {
+        scope.resetWorkspace();
+        deferredSuccess.resolve();
+        scope.$digest();
+        expect(DocumentCtrl.reset).toHaveBeenCalled();
+      });
+    });
+
+    describe('when the user cancels the action', function () {
+      it('does not reset the document workspace', function () {
+        scope.resetWorkspace();
+        deferredSuccess.reject();
+        scope.$digest();
+        expect(DocumentCtrl.reset).not.toHaveBeenCalled();
+      });
     });
   });
 

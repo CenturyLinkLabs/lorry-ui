@@ -2,6 +2,39 @@
 @import 'variables';
 @import 'buttons';
 
+.ngconfirm-theme-lorry {
+  padding-bottom: 160px;
+  padding-top: 160px;
+
+  .ngdialog-overlay {
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .ngdialog-content {
+    background: transparent;
+    margin: 0 auto;
+    max-width: 100%;
+    position: relative;
+    width: 780px;
+    text-align: center;
+
+    .dialog-content {
+      margin-bottom: 20px;
+      color: $white;
+    }
+
+    .dialog-footer {
+      a {
+        margin-left: 20px;
+      }
+
+      .footer-link {
+        color: $white;
+      }
+    }
+  }
+}
+
 .ngdialog-theme-lorry {
   padding-bottom: 160px;
   padding-top: 160px;
@@ -55,26 +88,6 @@
       h2 {
         font-size: 1.2em;
         font-weight: 600;
-      }
-    }
-
-    .dialog-tabs {
-      padding: 20px 20px 0 20px;
-      border-bottom: 1px solid $lighter_grey;
-
-      .button-tab-selected {
-        @extend .button-primary;
-        background-color: $white;
-        color: #333;
-        border-top: 1px solid $lighter_grey;
-        border-right: 1px solid $lighter_grey;
-        border-left: 1px solid $lighter_grey;
-        margin-right: 15px;
-
-        &:hover {
-          @include box-shadow(0, 0, 0, rgba( $white, 0.0 ));
-          background-color: $white;
-        }
       }
     }
 

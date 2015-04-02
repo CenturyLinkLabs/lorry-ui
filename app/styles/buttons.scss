@@ -68,4 +68,13 @@ a.button-primary {
   }
 }
 
+.button-negative {
+  @extend .button-primary;
+  background-color: $dark_red;
 
+  &:hover {
+    @extend .button-primary;
+    @include box-shadow(0, 0, 5px, rgba( $dark_red, 0.6 ));
+    background-color: darken( $dark_red, 10% );
+  }
+}

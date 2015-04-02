@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'yamlValidator', 'serviceDefTransformer',
-  function ($rootScope, $scope, $log, lodash, jsyaml, yamlValidator, serviceDefTransformer) {
+angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer',
+  function ($rootScope, $scope, $log, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer) {
 
     var self = this;
 
@@ -17,7 +17,18 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     };
 
     $scope.resetWorkspace = function () {
-      self.reset();
+
+      $scope.confirmMessage = 'Are you sure you want to clear the workspace?';
+      ngDialog.openConfirm(
+        {
+          template: '/views/confirm-dialog.html',
+          className: 'ngconfirm-theme-lorry',
+          showClose: false,
+          scope: $scope
+        }
+      ).then(function () {
+          self.reset();
+        });
     };
 
     $scope.deleteService = function (serviceName) {

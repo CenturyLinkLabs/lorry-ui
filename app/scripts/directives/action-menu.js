@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('actionMenu', function () {
+  .directive('actionMenu', ['ngDialog', function (ngDialog) {
     return {
       restrict: 'E',
       replace: true,
@@ -10,7 +10,18 @@ angular.module('lorryApp')
         scope.deleteServiceDefinition = function () {
           if (!scope.$parent.inEditMode()) {
             var serviceName = scope.serviceName();
-            scope.$parent.deleteService(serviceName);
+
+            scope.confirmMessage = 'Are you sure you want to delete this block?';
+            ngDialog.openConfirm(
+              {
+                template: '/views/confirm-dialog.html',
+                className: 'ngconfirm-theme-lorry',
+                showClose: false,
+                scope: scope
+              }
+            ).then(function () {
+                scope.$parent.deleteService(serviceName);
+              });
           }
         };
 
@@ -24,4 +35,4 @@ angular.module('lorryApp')
       },
       templateUrl: '/scripts/directives/action-menu.html'
     };
-  });
+  }]);
