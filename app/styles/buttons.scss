@@ -56,6 +56,16 @@ a.button-primary {
     @include box-shadow(0, 0, 5px, rgba( $dark_grey, 0.6 ));
     background-color: darken( $medium_grey, 15% );
   }
+
+  &[disabled] {
+    background-color: $light_grey;
+    color: $medium_grey;
+
+    &:hover {
+      @include box-shadow(0, 0, 5px, rgba( $ctl_light_green, 0.0 ));
+      cursor: not-allowed;
+    }
+  }
 }
 
 

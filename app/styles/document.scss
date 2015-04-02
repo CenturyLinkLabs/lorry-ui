@@ -396,6 +396,13 @@ main footer {
     &:hover {
       text-decoration: none;
     }
+
+    &[disabled=disabled] {
+      &:hover {
+        text-decoration: underline;
+        cursor: not-allowed !important;
+      }
+    }
   }
 
   .button-primary {
