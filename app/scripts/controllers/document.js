@@ -147,28 +147,6 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       delete $scope.yamlDocument.json[serviceName].editMode;
     });
 
-    this.createNewEmptyValueForKey = function(key) {
-      var keyValue;
-
-      switch (key) {
-        case 'links':
-        case 'external_links':
-        case 'ports':
-        case 'volumes':
-        case 'environment':
-          keyValue = [''];
-          break;
-        case 'command':
-        case 'image':
-        case 'build':
-          keyValue = '';
-          break;
-        default:
-          keyValue = '';
-      }
-      return keyValue;
-    };
-
     this.deleteItemsMarkedForDeletion = function(data) {
       var tracker = $rootScope.markAsDeletedTracker;
 
@@ -189,68 +167,6 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
       return data;
     };
-
-    this.markItemForDeletion = function(key, index) {
-      var tracker = $rootScope.markAsDeletedTracker;
-
-      // toggle add/remove items from the delete marker
-      if (tracker.hasOwnProperty(key)) {
-        if (index != null) {
-          if (lodash.includes(tracker[key], index)) {
-            // remove the item from tracker
-            lodash.remove(tracker[key], function (v) {
-              return v == index;
-            });
-            // if no items in tracker, delete the key
-            if (lodash.size(tracker[key]) == 0) {
-              delete tracker[key];
-            }
-          } else {
-            // add the item to the tracker
-            tracker[key].push(index);
-          }
-        } else {
-          delete tracker[key];
-        }
-      } else {
-        // add key/index to tracker
-        tracker[key] = [];
-        if (index != null) {
-          tracker[key].push(index);
-        } else {
-          tracker[key].push('delete me');
-        }
-      }
-    };
-
-    $scope.$on('addNewKeyToSection', function (e, key) {
-      var keyValue = self.createNewEmptyValueForKey(key);
-      $scope.editedServiceYamlDocumentJson[key] = keyValue;
-    });
-
-    $scope.$on('addNewValueForExistingKey', function (e, key) {
-      var json = $scope.editedServiceYamlDocumentJson;
-      if (json.hasOwnProperty(key)) {
-        var keyValue = self.createNewEmptyValueForKey(key);
-        if (Array.isArray(keyValue)) {
-          json[key].push(keyValue[0]);
-        }
-      }
-    });
-
-    $scope.$on('markKeyForDeletion', function (e, key) {
-      var json = $scope.editedServiceYamlDocumentJson;
-      if (json.hasOwnProperty(key)) {
-        self.markItemForDeletion(key, null);
-      }
-    });
-
-    $scope.$on('markKeyItemForDeletion', function (e, key, index) {
-      var json = $scope.editedServiceYamlDocumentJson;
-      if (json.hasOwnProperty(key)) {
-        self.markItemForDeletion(key, index);
-      }
-    });
 
     $scope.serviceNames = function () {
       return lodash.keys($scope.yamlDocument.json);

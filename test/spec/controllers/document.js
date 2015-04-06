@@ -386,32 +386,12 @@ describe('Controller: DocumentCtrl', function () {
     });
   });
 
-  describe('#createNewEmptyValueForKey', function () {
-    ['command', 'image', 'build'].forEach(function (key) {
-      describe('when the key (' + key + ') represents a string value', function () {
-        it('returns an empty string', function () {
-          var result = DocumentCtrl.createNewEmptyValueForKey(key);
-          expect(result).toBe('');
-        });
-      });
-    });
-
-    ['links', 'external_links', 'ports', 'volumes', 'environment'].forEach(function (key) {
-      describe('when the key (' + key + ') represents a string value', function () {
-        it('returns an empty array', function () {
-          var result = DocumentCtrl.createNewEmptyValueForKey(key);
-          expect(result).toEqual(['']);
-        });
-      });
-    });
-
-  });
-
   describe('#deleteItemsMarkedForDeletion', function () {
     describe('when some keys and items in a key are deleted', function () {
       beforeEach(function () {
-        DocumentCtrl.markItemForDeletion('build', null);
-        DocumentCtrl.markItemForDeletion('ports', 0);
+        // simulate deletes as marked
+        scope.markAsDeletedTracker['build'] = ['delete me'];
+        scope.markAsDeletedTracker['ports'] = ['0'];
       });
 
       it('should delete the items marked for deletion', function () {
@@ -438,9 +418,10 @@ describe('Controller: DocumentCtrl', function () {
 
     describe('when all the items in a key are deleted', function () {
       beforeEach(function () {
-        DocumentCtrl.markItemForDeletion('build', null);
-        DocumentCtrl.markItemForDeletion('ports', 0);
-        DocumentCtrl.markItemForDeletion('ports', 1);
+        // simulate deletes as marked
+        scope.markAsDeletedTracker['build'] = ['delete me'];
+        scope.markAsDeletedTracker['ports'] = ['0'];
+        scope.markAsDeletedTracker['ports'] = ['1'];
       });
 
       it('should delete the whole key', function () {
@@ -454,59 +435,6 @@ describe('Controller: DocumentCtrl', function () {
         expect(result).not.hasOwnProperty('ports');
       });
     });
-  });
-
-  describe('#markItemForDeletion', function () {
-
-    describe('when a key is deleted', function () {
-      beforeEach(function () {
-        DocumentCtrl.markItemForDeletion('key1', null);
-      });
-
-      it('should add the key name to delete tracker', function () {
-        expect(scope.markAsDeletedTracker).hasOwnProperty('key1');
-        expect(scope.markAsDeletedTracker['key1']).toEqual(['delete me']);
-      });
-    });
-
-    describe('when a key is un-deleted', function () {
-      beforeEach(function () {
-        DocumentCtrl.markItemForDeletion('key1', null);
-      });
-
-      it('should remove the key name from the delete tracker', function () {
-        // undelete key
-        DocumentCtrl.markItemForDeletion('key1', null);
-        expect(scope.markAsDeletedTracker).not.hasOwnProperty('key1');
-      });
-    });
-
-    describe('when key items are deleted', function () {
-      beforeEach(function () {
-        DocumentCtrl.markItemForDeletion('key2', 0);
-        DocumentCtrl.markItemForDeletion('key2', 1);
-      });
-
-      it('should add the key item indexes to the delete tracker', function () {
-        expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
-        expect(scope.markAsDeletedTracker['key2']).toEqual([0,1]);
-      });
-    });
-
-    describe('when a key item is un-deleted', function () {
-      beforeEach(function () {
-        DocumentCtrl.markItemForDeletion('key2', 0);
-        DocumentCtrl.markItemForDeletion('key2', 1);
-      });
-
-      it('should remove the key item index from the delete tracker', function () {
-        // undelete only one item
-        DocumentCtrl.markItemForDeletion('key2', 1);
-        expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
-        expect(scope.markAsDeletedTracker['key2']).toEqual([0]);
-      });
-    });
-
   });
 
   describe('$scope.$on saveService', function () {
@@ -609,8 +537,9 @@ describe('Controller: DocumentCtrl', function () {
     describe('when editing is cancelled', function () {
       beforeEach(function () {
         // simulate some deletes
-        DocumentCtrl.markItemForDeletion('build', null);
-        DocumentCtrl.markItemForDeletion('ports', 0);
+        scope.markAsDeletedTracker['build'] = ['delete me'];
+        scope.markAsDeletedTracker['ports'] = ['0'];
+
         // call cancel
         scope.$emit('cancelEditing', 'service1');
       });
@@ -624,159 +553,6 @@ describe('Controller: DocumentCtrl', function () {
       });
     });
 
-  });
-
-  describe('$scope.$on addNewKeyToSection', function () {
-    beforeEach(function () {
-      scope.editedServiceYamlDocumentJson = {
-        "build": "foo",
-        "ports": ["1111:2222", "3333:4444"]
-      };
-    });
-
-    describe('when a string key is added', function () {
-      beforeEach(function () {
-        scope.$emit('addNewKeyToSection', 'command');
-      });
-
-      it('should add a new key to the service with empty value', function () {
-        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('command');
-        expect(scope.editedServiceYamlDocumentJson['command']).toBe('');
-      });
-    });
-
-    describe('when a sequence key is added', function () {
-      beforeEach(function () {
-        scope.$emit('addNewKeyToSection', 'volumes');
-      });
-
-      it('should add a new key with empty sequence', function () {
-        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('volumes');
-        expect(scope.editedServiceYamlDocumentJson['volumes']).toEqual(['']);
-      });
-    });
-
-  });
-
-  describe('$scope.$on addNewValueForExistingKey', function () {
-    beforeEach(function () {
-      scope.editedServiceYamlDocumentJson = {
-        "build": "foo",
-        "ports": ["1111:2222", "3333:4444"]
-      };
-    });
-
-    describe('when a string key value is added', function () {
-      beforeEach(function () {
-        scope.$emit('addNewValueForExistingKey', 'command');
-      });
-
-      it('should not add a new key value', function () {
-        expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('command');
-      });
-    });
-
-    describe('when a sequence key value is added', function () {
-      beforeEach(function () {
-        scope.$emit('addNewValueForExistingKey', 'ports');
-      });
-
-      it('should add a new key value to the section with empty sequence', function () {
-        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('ports');
-        expect(scope.editedServiceYamlDocumentJson['ports']).toEqual(["1111:2222", "3333:4444", ""]);
-      });
-    });
-
-    describe('when a key value is added to a non-existent key', function () {
-      beforeEach(function () {
-        scope.$emit('addNewValueForExistingKey', 'invalid');
-      });
-
-      it('should not add a new key value', function () {
-        !expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('invalid');
-      });
-    });
-
-  });
-
-  describe('$scope.$on markKeyForDeletion', function () {
-    beforeEach(function () {
-      scope.editedServiceYamlDocumentJson = {
-        "build": "foo",
-        "ports": ["1111:2222", "3333:4444"]
-      };
-    });
-
-    describe('when a string key is deleted', function () {
-      beforeEach(function () {
-        scope.$emit('markKeyForDeletion', 'build');
-      });
-
-      it('should mark the key for deletion', function () {
-        expect(scope.markAsDeletedTracker).hasOwnProperty('build');
-      });
-    });
-
-    describe('when a sequence key is deleted', function () {
-      beforeEach(function () {
-        scope.$emit('markKeyForDeletion', 'ports');
-      });
-
-      it('should mark the key for deletion', function () {
-        expect(scope.markAsDeletedTracker).hasOwnProperty('ports');
-      });
-    });
-
-    describe('when a non-existent key is deleted', function () {
-      beforeEach(function () {
-        scope.$emit('markKeyForDeletion', 'invalid');
-        spyOn(DocumentCtrl, 'markItemForDeletion');
-      });
-
-      it('should not mark the key for deletion', function () {
-        expect(scope.markAsDeletedTracker).toEqual({});
-      });
-
-      it('should not call markItemsForDeletion', function () {
-        expect(DocumentCtrl.markItemForDeletion).not.toHaveBeenCalled();
-      });
-    });
-
-  });
-
-  describe('$scope.$on markKeyItemForDeletion', function () {
-    beforeEach(function () {
-      scope.editedServiceYamlDocumentJson = {
-        "build": "foo",
-        "ports": ["1111:2222", "3333:4444"]
-      };
-    });
-
-    describe('when an existing key item is deleted', function () {
-      beforeEach(function () {
-        scope.$emit('markKeyItemForDeletion', 'ports', 0);
-      });
-
-      it('should mark the key item for deletion', function () {
-        expect(scope.markAsDeletedTracker).hasOwnProperty('ports');
-        expect(scope.markAsDeletedTracker['ports']).toEqual([0]);
-      });
-    });
-
-    describe('when a non-existent key is deleted', function () {
-      beforeEach(function () {
-        scope.$emit('markKeyItemForDeletion', 'invalid');
-        spyOn(DocumentCtrl, 'markItemForDeletion');
-      });
-
-      it('should not delete the key item from the service', function () {
-        expect(scope.editedServiceYamlDocumentJson['ports'].length).toBe(2);
-      });
-
-      it('should not call markItemsForDeletion', function () {
-        expect(DocumentCtrl.markItemForDeletion).not.toHaveBeenCalled();
-      });
-    });
   });
 
   describe('$scope.serviceNames', function () {

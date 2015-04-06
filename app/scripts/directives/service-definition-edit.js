@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('serviceDefinitionEdit', [ '$log', 'lodash', function ($log, lodash) {
+  .directive('serviceDefinitionEdit', [ '$rootScope', '$log', 'lodash', function ($rootScope, $log, lodash) {
     return {
       scope: {
         sectionName: '='
@@ -12,8 +12,14 @@ angular.module('lorryApp')
       controller: function ($scope, lodash) {
 
         $scope.transformToJson = function () {
-          $scope.newSectionName = $scope.sectionName;
-          $scope.editableJson = $scope.transformToEditableJson($scope.$parent.editedServiceYamlDocumentJson);
+          if (!$scope.newSectionName) {
+            $scope.newSectionName = $scope.sectionName;
+          }
+          if ($scope.editableJson) {
+            $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
+          } else {
+            $scope.editableJson = $scope.transformToEditableJson($scope.$parent.editedServiceYamlDocumentJson);
+          }
         };
 
         $scope.transformToEditableJson = function (json) {
@@ -68,13 +74,94 @@ angular.module('lorryApp')
 
         $scope.addNewKey = function (key) {
           if (lodash.includes($scope.validKeys, key)) {
-            $scope.$emit('addNewKeyToSection', key);
+            var keyValue = $scope.createNewEmptyValueForKey(key);
+            $scope.editableJson.push({name: key, value: keyValue});
             $scope.transformToJson();
           }
         };
 
+        $scope.$on('addNewValueForExistingKey', function (e, key) {
+          var node = lodash.findWhere($scope.editableJson, {name: key});
+          if (node) {
+            var keyValue = $scope.createNewEmptyValueForKey(key);
+            if (Array.isArray(keyValue)) {
+              node.value.push(keyValue[0]);
+              $scope.transformToJson();
+            }
+          }
+        });
+
+        $scope.$on('markKeyForDeletion', function (e, key) {
+          var node = lodash.findWhere($scope.editableJson, {name: key});
+          if (node) {
+            $scope.markItemForDeletion(key, null);
+          }
+        });
+
+        $scope.$on('markKeyItemForDeletion', function (e, key, index) {
+          var node = lodash.findWhere($scope.editableJson, {name: key});
+          if (node) {
+            $scope.markItemForDeletion(key, index);
+          }
+        });
+
         $scope.buildValidKeyList = function () {
           return lodash.difference($scope.validKeys, lodash.keys($scope.$parent.editedServiceYamlDocumentJson));
+        };
+
+        $scope.createNewEmptyValueForKey = function(key) {
+          var keyValue;
+
+          switch (key) {
+            case 'links':
+            case 'external_links':
+            case 'ports':
+            case 'volumes':
+            case 'environment':
+              keyValue = [''];
+              break;
+            case 'command':
+            case 'image':
+            case 'build':
+              keyValue = '';
+              break;
+            default:
+              keyValue = '';
+          }
+          return keyValue;
+        };
+
+        $scope.markItemForDeletion = function(key, index) {
+          var tracker = $rootScope.markAsDeletedTracker;
+
+          // toggle add/remove items from the delete marker
+          if (tracker.hasOwnProperty(key)) {
+            if (index != null) {
+              if (lodash.includes(tracker[key], index)) {
+                // remove the item from tracker
+                lodash.remove(tracker[key], function (v) {
+                  return v == index;
+                });
+                // if no items in tracker, delete the key
+                if (lodash.size(tracker[key]) == 0) {
+                  delete tracker[key];
+                }
+              } else {
+                // add the item to the tracker
+                tracker[key].push(index);
+              }
+            } else {
+              delete tracker[key];
+            }
+          } else {
+            // add key/index to tracker
+            tracker[key] = [];
+            if (index != null) {
+              tracker[key].push(index);
+            } else {
+              tracker[key].push('delete me');
+            }
+          }
         };
 
         $scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
