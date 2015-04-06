@@ -368,6 +368,170 @@ describe('Directive: documentLineEdit', function () {
 
     });
 
+    describe('scope.updateLinkValue', function () {
+      describe('when line is of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'links', value: ['foo:bar', 'fooz:baaz']};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          spyOn(scope, 'updateLinkValue');
+        });
+
+        it('is triggered on blur of link alias text box', function () {
+          var aliasTxt = element.find('.link-alias-text')[0];
+          angular.element(aliasTxt).triggerHandler('blur');
+          expect(scope.updateLinkValue).toHaveBeenCalled();
+        });
+        it('is triggered on blur of link name select box', function () {
+          var nameSelect = element.find('select')[0];
+          angular.element(nameSelect).triggerHandler('blur');
+          expect(scope.updateLinkValue).toHaveBeenCalled();
+        });
+
+        describe('when both link name and alias is updated', function () {
+          beforeEach(function () {
+            scope.line = {name: 'links', value: ['foo:bar', 'fooz:baaz']};
+            element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+            scope.$digest();
+          });
+          it('updates the line with correct values', function () {
+            scope.updateLinkValue(1, 'fuud', 'buud');
+            expect(scope.line.value).toEqual(['foo:bar', 'fuud:buud']);
+          });
+        });
+        describe('when only link name is updated', function () {
+          beforeEach(function () {
+            scope.line = {name: 'links', value: ['foo:bar', 'fooz:baaz']};
+            element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+            scope.$digest();
+          });
+          it('updates the line with correct values', function () {
+            scope.updateLinkValue(1, 'fuuz', 'baaz');
+            expect(scope.line.value).toEqual(['foo:bar', 'fuuz:baaz']);
+          });
+        });
+        describe('when only link alias is updated', function () {
+          beforeEach(function () {
+            scope.line = {name: 'links', value: ['foo:bar', 'fooz:baaz']};
+            element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+            scope.$digest();
+          });
+          it('updates the line with correct values', function () {
+            scope.updateLinkValue(1, 'fooz', 'buud');
+            expect(scope.line.value).toEqual(['foo:bar', 'fooz:buud']);
+          });
+        });
+        describe('when only link name is left blank', function () {
+          beforeEach(function () {
+            scope.line = {name: 'links', value: ['foo:bar', 'fooz:baaz']};
+            element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+            scope.$digest();
+          });
+          it('updates the line with only alias prefixed with :', function () {
+            scope.updateLinkValue(1, '', 'baaz');
+            expect(scope.line.value).toEqual(['foo:bar', ':baaz']);
+          });
+        });
+        describe('when only link alias is left blank', function () {
+          beforeEach(function () {
+            scope.line = {name: 'links', value: ['foo:bar', 'fooz:baaz']};
+            element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+            scope.$digest();
+          });
+          it('updates the line with only name without :', function () {
+            scope.updateLinkValue(1, 'fooz', '');
+            expect(scope.line.value).toEqual(['foo:bar', 'fooz']);
+          });
+        });
+
+      });
+
+      describe('when line is not of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'foo'};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+          spyOn(scope, 'updateLinkValue');
+        });
+
+        it('is not triggered', function () {
+          var aliasTxt = element.find('.link-alias-text')[0];
+          angular.element(aliasTxt).triggerHandler('blur');
+          expect(scope.updateLinkValue).not.toHaveBeenCalled();
+        });
+      });
+
+    });
+
+    describe('scope.getLinkName', function () {
+      describe('when line is of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'links', value: ['foo:bar']};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+        });
+        it('returns the name portion of the link', function () {
+          var result = scope.getLinkName('foo:bar');
+          expect(result).toEqual('foo');
+        });
+        describe('and name is missing', function () {
+          it('returns an empty name', function () {
+            var result = scope.getLinkName(':bar');
+            expect(result).toEqual('');
+          });
+        });
+
+      });
+
+      describe('when line is not of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'foo'};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+        it('returns undefined', function () {
+          var result = scope.getLinkName('foo:bar');
+          expect(result).toBeUndefined();
+        });
+      });
+    });
+
+    describe('scope.getLinkAlias', function () {
+      describe('when line is of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'links', value: ['foo:bar']};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+        });
+        it('returns the alias portion of the link', function () {
+          var result = scope.getLinkAlias('foo:bar');
+          expect(result).toEqual('bar');
+        });
+        describe('and alias is missing', function () {
+          it('returns an empty alias', function () {
+            var result = scope.getLinkAlias('foo');
+            expect(result).toEqual('');
+          });
+        });
+
+      });
+
+      describe('when line is not of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'foo'};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+        it('returns undefined', function () {
+          var result = scope.getLinkAlias('foo:bar');
+          expect(result).toBeUndefined();
+        });
+      });
+    });
   });
 
 });

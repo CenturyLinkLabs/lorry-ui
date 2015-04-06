@@ -67,6 +67,35 @@ angular.module('lorryApp')
           }
         };
 
+        scope.getLinkName = function(link) {
+          if (scope.line.name === 'links') {
+            return link.split(':')[0];
+          }
+        };
+
+        scope.getLinkAlias = function(link) {
+          if (scope.line.name === 'links') {
+            var arr = link.split(':');
+            return arr.length === 1 ? '' : arr[1];
+          }
+        };
+
+        scope.updateLinkValue = function(index, linkName, linkAlias) {
+          if (scope.line.name === 'links') {
+            var lineValue = '';
+            if (linkName && linkAlias) {
+              lineValue = linkName + ':' + linkAlias;
+            } else if (linkName && !linkAlias) {
+              lineValue = linkName;
+            } else if (!linkName && linkAlias) {
+              lineValue = ':' + linkAlias;
+            } else if (!linkName && !linkAlias) {
+              lineValue = '';
+            }
+            scope.line.value[index] = lineValue;
+          }
+        };
+
         scope.serviceNameList = $rootScope.serviceNameList;
 
       },

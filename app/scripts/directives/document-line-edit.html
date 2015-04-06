@@ -21,7 +21,9 @@
       <div ng-repeat="item in line.value track by $index">
         <div ng-class="keyLabelClasses()"><div ng-show="$index == 0">{{line.name}}</div></div>
         <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
-        <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="line.value[$index]" ng-options="link as link for link in serviceNameList"></select>
+        <span ng-hide="true" ng-init="linkName = getLinkName(line.value[$index]); linkAlias = getLinkAlias(line.value[$index])" ></span>
+        <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkName" ng-blur="updateLinkValue($index, linkName, linkAlias)" ng-options="link as link for link in serviceNameList"></select>
+        <input type='text' class="link-alias-text" ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkAlias" ng-blur="updateLinkValue($index, linkName, linkAlias)"/>
         <div class="delete" ng-class="deleteIconClasses($index)" ng-click="markLineItemForDeletion($index)"></div>
         <div class="info"></div>
       </div>
