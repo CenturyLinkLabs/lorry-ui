@@ -86,8 +86,7 @@
       height: 60px;
 
       h2 {
-        font-size: 1.2em;
-        font-weight: 600;
+        font-size: 1.1em;
       }
     }
 
@@ -143,11 +142,49 @@
 
     .dialog-content {
       border-bottom: 1px solid $lighter_grey;
+
+      h3 {
+        color: $darker_grey;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+    }
+
+    .dialog-instructions {
+      line-height: 1.2em;
     }
 
     textarea {
-      width: 750px;
-      height: 400px;
+      width: 740px;
+      height: 300px;
+      border-color: $lighter_grey;
+      font-family: $monospace_font_family;
+    }
+
+    button,
+    label.button-secondary {
+      font-weight: normal;
+      min-width: 7em;
+    }
+
+    label.button-secondary {
+      cursor: pointer;
+    }
+
+    .importFileName {
+      margin-left: 20px;
+      font-family: $monospace_font_family;
+    }
+
+    input[type="file"] {
+      position: fixed;
+      top:-1000px;
+    }
+
+    input[type="text"] {
+      width: 740px;
+      border-color: $lighter_grey;
+      font-family: $monospace_font_family;
     }
 
     .dialog-footer {
@@ -159,6 +196,7 @@
         float: right;
       }
     }
+
   }
 
 }

@@ -47,6 +47,21 @@ describe('Controller: DocumentImportCtrl', function () {
   });
 
   describe('$scope.setDialogTab', function () {
+    beforeEach(function () {
+      scope.importFileName = 'docker-compose.yml';
+      scope.docImport = { raw: 'blah', remote: 'http://www.example.com' }
+    });
+
+    it('resets the import filename', function () {
+      scope.setDialogTab('any');
+      expect(scope.importFileName).toBeNull();
+    });
+
+    it('resets the docImport model', function () {
+      scope.setDialogTab('any');
+      expect(scope.docImport).toEqual({});
+    });
+
     describe('when the "compose" argument is passed', function () {
       it ('sets the active dialogPane to the "upload" pane for the tab', function () {
         scope.setDialogTab('compose');

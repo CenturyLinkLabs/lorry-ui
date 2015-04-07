@@ -6,7 +6,10 @@ angular.module('lorryApp')
       restrict: 'A',
       link: function(scope, element) {
         element.bind('change', function(){
-          scope.$parent.files = element[0].files;
+          scope.$apply(function () {
+            scope.$parent.files = element[0].files;
+            scope.$parent.importFileName = element[0].files[0].name;
+          });
         });
       }
     };

@@ -1,6 +1,6 @@
 <div class="dialog-header">
   <div class="dialog-title">
-    Import
+    <h2>Import</h2>
     <div class="ngdialog-close"></div>
   </div>
   <div class="dialog-tabs">
@@ -26,29 +26,33 @@
 </div>
 <div class="dialog-content" ng-show="dialogOptions.dialogTab === 'compose'">
   <div ng-show="dialogOptions.dialogPane === 'upload'">
-    <p>Select your local compose.yml</p>
-    <input type="file" file-input accept=".yaml,.yml,text/yaml,text/x-yaml,application/yaml,application/x-yaml"/>
+    <h3>Select your local compose.yml</h3>
+    <label for="composeFileInput" class="button-secondary">Browse local files</label>
+    <span class="importFileName">{{importFileName}}</span>
+    <input id="composeFileInput" type="file" file-input accept=".yaml,.yml,text/yaml,text/x-yaml,application/yaml,application/x-yaml"/>
   </div>
   <div ng-show="dialogOptions.dialogPane === 'paste'">
-    <p>Paste your compose.yml contents below</p>
-    <textarea placeholder="Paste or write your YAML here" ng-model="docImport.raw"></textarea>
+    <h3>Paste your compose.yml contents below</h3>
+    <textarea ng-model="docImport.raw"></textarea>
   </div>
   <div ng-show="dialogOptions.dialogPane === 'remote'">
-    <p>Paste the full URI of your remote compose.yml</p>
+    <h3>Paste the full URI of your remote compose.yml</h3>
     <input type="text" ng-model="docImport.remote">
   </div>
 </div>
 <div class="dialog-content" ng-show="dialogOptions.dialogTab === 'pmx'">
   <div ng-show="dialogOptions.dialogPane === 'pmx-upload'">
-    <p>Select your local Panamax template</p>
-    <input type="file" file-input accept=".pmx"/>
+    <h3>Select your local Panamax template</h3>
+    <label for="pmxFileInput" class="button-secondary">Browse local files</label>
+    <span class="importFileName">{{importFileName}}</span>
+    <input id="pmxFileInput" type="file" file-input accept=".pmx"/>
   </div>
   <div ng-show="dialogOptions.dialogPane === 'pmx-paste'">
-    <p>Paste your Panamax template contents below</p>
-    <textarea placeholder="Paste or write your Panamax template here" ng-model="docImport.raw"></textarea>
+    <h3>Paste your Panamax template contents below</h3>
+    <textarea ng-model="docImport.raw"></textarea>
   </div>
   <div ng-show="dialogOptions.dialogPane === 'pmx-remote'">
-    <p>Paste the full URI of your remote Panamax template</p>
+    <h3>Paste the full URI of your remote Panamax template</h3>
     <input type="text" ng-model="docImport.remote">
   </div>
 </div>

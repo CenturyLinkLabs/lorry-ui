@@ -21,6 +21,8 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '
     };
 
     $scope.setDialogTab = function (tab) {
+      $scope.importFileName = null;
+      $scope.docImport = {};
       $scope.dialogOptions.dialogTab = tab;
       $scope.setDialogPane(tab === 'compose' ? 'upload' : 'pmx-upload');
     };
