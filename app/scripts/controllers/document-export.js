@@ -14,7 +14,19 @@ angular.module('lorryApp').controller('DocumentExportCtrl', ['$scope', '$http', 
     });
 
     $scope.exportable = function () {
-      return (angular.isDefined($scope.yamlDocument) && angular.isDefined($scope.yamlDocument.raw));
+      return (angular.isDefined($scope.yamlDocument) &&
+              angular.isDefined($scope.yamlDocument.raw) &&
+              !($scope.yamlDocument.loadFailure));
+    };
+
+    $scope.exportButtonStyle = function () {
+      var buttonStyle;
+      if ($scope.exportable() && $scope.yamlDocument.parseErrors) {
+        buttonStyle = 'button-warning';
+      } else {
+        buttonStyle = 'button-primary';
+      }
+      return buttonStyle;
     };
 
     $scope.saveDocument = function () {

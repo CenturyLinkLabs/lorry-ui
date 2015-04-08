@@ -35,6 +35,39 @@ describe('Controller: DocumentExportCtrl', function () {
       scope.yamlDocument = {};
       expect(scope.exportable()).toBeFalsy();
     });
+
+    it('returns false if the yaml document could not be loaded', function () {
+      scope.yamlDocument = {loadFailure: true};
+      expect(scope.exportable()).toBeFalsy();
+    });
+  });
+
+  describe('$scope.exportButtonStyle', function () {
+    describe('when the document is not exportable', function () {
+      beforeEach(function () {
+        spyOn(scope, 'exportable').and.returnValue(true);
+      });
+
+      it('returns "button-primary"', function () {
+        scope.yamlDocument = {};
+        expect(scope.exportButtonStyle()).toEqual('button-primary');
+      });
+    });
+    describe('when the document is exportable', function () {
+      beforeEach(function () {
+        spyOn(scope, 'exportable').and.returnValue(true);
+      });
+
+      it('returns "button-primary" if there are no warnings', function () {
+        scope.yamlDocument = {};
+        expect(scope.exportButtonStyle()).toEqual('button-primary');
+      });
+
+      it('returns "button-warning" if there are warnings', function () {
+        scope.yamlDocument = {parseErrors: true};
+        expect(scope.exportButtonStyle()).toEqual('button-warning');
+      });
+    });
   });
 
   describe('copyToClipboard', function () {

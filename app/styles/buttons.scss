@@ -78,3 +78,14 @@ a.button-primary {
     background-color: darken( $dark_red, 10% );
   }
 }
+
+.button-warning {
+  @extend .button-primary;
+  background-color: $orange;
+
+  &:hover {
+    @extend .button-primary;
+    @include box-shadow(0, 0, 5px, rgba( $dark_red, 0.6 ));
+    background-color: darken( $orange, 10% );
+  }
+}

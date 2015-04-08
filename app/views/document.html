@@ -18,7 +18,7 @@
 
 <footer>
   <div id="documentExportPane" ng-controller="DocumentExportCtrl">
-    <a href="" class="button-primary" ng-disabled="!exportable()" ng-click="saveDocument()">Export compose.yml</a>
+    <a href="" ng-class="exportButtonStyle()" ng-disabled="!exportable()" ng-click="saveDocument()">Export compose.yml</a>
     <a href="" class="button-secondary" ng-disabled="!exportable()" ng-click="saveGist()">Save to Gist</a>
     <a href="" class="footer-link" ng-if="exportable()" clip-copy="doc" clip-click="confirmCopy()">{{copyText}}</a>
     <a href="" class="footer-link" ng-if="!exportable()" disabled="disabled">{{copyText}}</a>

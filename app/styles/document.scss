@@ -444,7 +444,9 @@ main footer {
     }
   }
 
-  .button-primary {
+  .button-primary,
+  .button-warning,
+  .button-negative {
     float: right;
     margin-left: 15px;
   }
