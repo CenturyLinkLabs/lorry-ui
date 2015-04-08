@@ -1,4 +1,9 @@
 <div class="line">
+  <div class="imagelayers" ng-if="isImageLine()" ng-click="showImageLayers()"
+       tooltips
+       tooltip-side="bottom"
+       tooltip-size="large"
+       tooltip-title="Inspect this image with ImageLayers.io"></div>
   <div class="gutter">{{line.lineNumber}}</div>
   <div class="line-text"></div>
 </div>

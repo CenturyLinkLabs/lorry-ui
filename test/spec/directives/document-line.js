@@ -7,9 +7,11 @@ describe('Directive: documentLine', function () {
 
   var element,
     compile,
-    scope;
+    scope,
+    win;
 
-  beforeEach(inject(function ($rootScope, $compile) {
+  beforeEach(inject(function ($rootScope, $compile, $window) {
+    win = $window;
     compile = $compile;
     scope = $rootScope.$new();
   }));
@@ -44,8 +46,8 @@ describe('Directive: documentLine', function () {
         scope.$digest();
       });
 
-      it('adds more padding to the line-text div (20px + 10px for every whitespace element)', function () {
-        expect(element.find('.line-text').css('padding-left')).toEqual('60px');
+      it('adds more padding to the line-text div (20px + 15px for every whitespace element)', function () {
+        expect(element.find('.line-text').css('padding-left')).toEqual('80px');
       });
     });
   });
@@ -85,6 +87,49 @@ describe('Directive: documentLine', function () {
 
     it('does not append the line-info div to the element', function () {
       expect(element.find('.line-info').length).toEqual(0);
+    });
+  });
+
+  describe('scope.isImageLine', function () {
+    describe('when the line text does not start with "image:"', function () {
+      beforeEach(function () {
+        scope.lineObj = { text: '', lineNumber: 1, errors: []};
+        element = angular.element('<document-line line="lineObj"></document-line>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
+
+      it('returns false', function () {
+        expect(element.isolateScope().isImageLine()).toBeFalsy();
+      });
+    });
+
+    describe('returns true when the line text does start with "image:"', function () {
+      beforeEach(function () {
+        scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
+        element = angular.element('<document-line line="lineObj"></document-line>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
+
+      it('returns false', function () {
+        expect(element.isolateScope().isImageLine()).toBeTruthy();
+      });
+    });
+  });
+
+  describe('scope.showImageLayers', function () {
+    beforeEach(function () {
+      scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
+      element = angular.element('<document-line line="lineObj"></document-line>');
+      element = compile(element)(scope);
+      scope.$digest();
+    });
+
+    it('opens the image with imagelayers in a new window', function () {
+      spyOn(win, 'open');
+      element.isolateScope().showImageLayers();
+      expect(win.open).toHaveBeenCalledWith('http://imagelayers.io/#/?images=foo%2Fbar%3Aoldest', '_blank');
     });
   });
 });

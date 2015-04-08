@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp')
-  .directive('documentLine', ['$compile', '$sce', 'lodash', function ($compile, $sce, lodash) {
+angular.module('lorryApp').directive('documentLine', ['$compile', '$sce', '$window', 'lodash', 'jsyaml', 'ENV',
+  function ($compile, $sce, $window, lodash, jsyaml, ENV) {
     return {
       scope: {
         line: '='
@@ -13,7 +13,7 @@ angular.module('lorryApp')
           regex = /(^[\s]*)/,
           indent = regex.exec(scope.line.text)[0].length;
 
-        $lineText.css('padding-left', (20 + indent * 10) + 'px');
+        $lineText.css('padding-left', (20 + indent * 15) + 'px');
         $lineText.text($sce.trustAsHtml(scope.line.text.replace(regex, '')));
 
         if (lodash.any(scope.line.errors)) {
@@ -24,6 +24,18 @@ angular.module('lorryApp')
           element.append($compile(info)(scope));
 
         }
+
+        scope.isImageLine = function () {
+          return lodash.startsWith(scope.line.text.trim(), 'image:');
+        };
+
+        scope.showImageLayers = function () {
+          var imageObj, imageName, imageLayersUrl;
+          imageObj = jsyaml.safeLoad(scope.line.text);
+          imageName = imageObj.image;
+          imageLayersUrl = ENV.IMAGE_LAYERS_URL + 'images=' + encodeURIComponent(imageName);
+          $window.open(imageLayersUrl, '_blank');
+        };
       },
       templateUrl: '/scripts/directives/document-line.html'
     };
