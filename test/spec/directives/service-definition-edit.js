@@ -120,10 +120,16 @@ describe('Directive: serviceDefinitionEdit', function () {
         expect(element.isolateScope().$emit).toHaveBeenCalled();
       });
 
-      it('emits saveService passing the old section name, new section name and edited section data', function () {
-        element.isolateScope().saveServiceDefinition();
+      it('emits saveService when form input is valid passing required data', function () {
+        element.isolateScope().saveServiceDefinition(true);
         expect(element.isolateScope().$emit).toHaveBeenCalledWith('saveService', scope.sectionName, scope.sectionName, scope.$parent.editedServiceYamlDocumentJson);
       });
+
+      it('does not emit saveService when form input is invalid', function () {
+        element.isolateScope().saveServiceDefinition(false);
+        expect(element.isolateScope().$emit).not.toHaveBeenCalledWith('saveService');
+      });
+
     });
 
     describe('$scope.cancelEditing', function () {

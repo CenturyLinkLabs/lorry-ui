@@ -5,6 +5,7 @@
       <input name="sectionname" class="section-name" ng-model="newSectionName" type="text" placeholder="sectionname" required ng-pattern="/^[a-zA-Z0-9-_]*$/" ng-trim="false"/>
       <span class="error" ng-show="editForm.sectionname.$dirty && editForm.sectionname.$invalid">Error:
         <span ng-show="editForm.sectionname.$error.pattern">Valid characters are A-Z a-z 0-9 _ -</span>
+        <span ng-show="editForm.sectionname.$error.required">Service name is required</span>
       </span>
       <div ng-repeat="line in editableJson">
         <document-line-edit ng-model="line"></document-line-edit>
@@ -16,7 +17,7 @@
       </div>
       <div class="action-area">
         <a class="button-secondary" href="" ng-click="cancelEditing()">Cancel</a>
-        <a class="button-primary" href="" ng-disabled="editForm.sectionname.$dirty && editForm.sectionname.$invalid" ng-click="saveServiceDefinition()">Save Changes</a>
+        <a class="button-primary" href="" ng-disabled="!editForm.$valid" ng-click="saveServiceDefinition(editForm.$valid)">Save Changes</a>
       </div>
     </div>
   </div>

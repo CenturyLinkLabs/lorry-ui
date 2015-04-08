@@ -63,9 +63,11 @@ angular.module('lorryApp')
           return yamlFrag;
         };
 
-        $scope.saveServiceDefinition = function () {
-          $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
-          $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.$parent.editedServiceYamlDocumentJson);
+        $scope.saveServiceDefinition = function (isFormValid) {
+          if (isFormValid) {
+            $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
+            $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.$parent.editedServiceYamlDocumentJson);
+          }
         };
 
         $scope.cancelEditing = function () {
