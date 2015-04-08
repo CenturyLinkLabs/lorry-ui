@@ -292,6 +292,14 @@ describe('Controller: DocumentCtrl', function () {
       it('stores the yamlized json into the yamlDocument.raw property', function () {
         expect(scope.yamlDocument.raw).not.toBeNull();
       });
+
+      it('sets parseErrors to false', function () {
+        expect(scope.yamlDocument.parseErrors).toEqual(false);
+      });
+
+      it('sets loadFailure to false', function () {
+        expect(scope.yamlDocument.loadFailure).toEqual(false);
+      });
     });
   });
 

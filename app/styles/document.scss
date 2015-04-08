@@ -64,6 +64,12 @@
     color: $white;
   }
 
+  &.valid {
+    padding: 12px;
+    background-color: $ctl_light_green;
+    color: $white;
+  }
+
   .dismiss-alerts {
     float: right;
 

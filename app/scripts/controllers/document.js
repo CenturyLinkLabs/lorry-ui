@@ -54,6 +54,8 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       if(lodash.isEmpty($scope.yamlDocument.json)) {
         this.reset();
       } else {
+        $scope.yamlDocument.parseErrors = false;
+        $scope.yamlDocument.loadFailure = false;
         $scope.yamlDocument.raw = jsyaml.safeDump($scope.yamlDocument.json);
       }
     };

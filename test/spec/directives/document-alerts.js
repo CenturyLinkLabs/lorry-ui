@@ -16,6 +16,7 @@ describe('Directive: documentAlerts', function () {
 
   describe('when the document has parseErrors', function () {
     beforeEach(function () {
+      scope.yamlDocument.errors = [{error: {message: 'syntax error'}}];
       scope.yamlDocument.parseErrors = true;
     });
 
@@ -31,6 +32,13 @@ describe('Directive: documentAlerts', function () {
       element = compile(element)(scope);
       scope.$digest();
       expect(element.hasClass('error')).toBeFalsy();
+    });
+
+    it('the valid class is removed', function () {
+      element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
+      element = compile(element)(scope);
+      scope.$digest();
+      expect(element.hasClass('valid')).toBeFalsy();
     });
 
     describe('when there is a single error message', function () {
@@ -84,8 +92,32 @@ describe('Directive: documentAlerts', function () {
       expect(element.hasClass('warning')).toBeFalsy();
     });
 
+    it('the valid class is removed', function () {
+      expect(element.hasClass('valid')).toBeFalsy();
+    });
+
     it('removes the "file: ," portion of the error message', function () {
       expect(element.text()).not.toContain('file: ,');
+    });
+  });
+
+  describe('when the document has no errors', function () {
+    beforeEach(function () {
+      element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
+      element = compile(element)(scope);
+      scope.$digest();
+    });
+
+    it('the valid class is added', function () {
+      expect(element.hasClass('valid')).toBeTruthy();
+    });
+
+    it('the warning class is removed', function () {
+      expect(element.hasClass('warning')).toBeFalsy();
+    });
+
+    it('the error class is removed', function () {
+      expect(element.hasClass('error')).toBeFalsy();
     });
   });
 
