@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer',
-  function ($rootScope, $scope, $log, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer) {
+angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService',
+  function ($rootScope, $scope, $log, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer, $timeout, cookiesService) {
 
     var self = this;
 
@@ -176,6 +176,20 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
     $scope.inEditMode = function () {
       return lodash.some($scope.yamlDocument.json, 'editMode', true);
+    };
+
+    $scope.triggerClickForElement = function(element_id) {
+      $timeout(function() {
+        angular.element(element_id).triggerHandler('click');
+      }, 0);
+    };
+
+    $scope.isNewSession = function () {
+      return cookiesService.get('lorry-started') ? false : true;
+    };
+
+    $scope.setNewSession = function () {
+      cookiesService.put('lorry-started', 'true');
     };
 
   }]);

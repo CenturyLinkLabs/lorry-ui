@@ -9,10 +9,12 @@ describe('Controller: DocumentCtrl', function () {
     scope,
     yamlValidator,
     jsyaml,
-    ngDialog;
+    ngDialog,
+    timeout,
+    cookiesService;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_, _ngDialog_) {
+  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _cookiesService_) {
     scope = $rootScope.$new();
     DocumentCtrl = $controller('DocumentCtrl', {
       $scope: scope
@@ -20,6 +22,9 @@ describe('Controller: DocumentCtrl', function () {
     yamlValidator = _yamlValidator_;
     jsyaml = _jsyaml_;
     ngDialog = _ngDialog_;
+    timeout = $timeout;
+    cookiesService = _cookiesService_;
+
     $rootScope.markAsDeletedTracker = {};
   }));
 
@@ -612,6 +617,52 @@ describe('Controller: DocumentCtrl', function () {
       });
     });
 
+  });
+
+  ///// Don't know how to test //////
+
+  //describe('$scope.triggerClickForElement', function () {
+  //  beforeEach(function () {
+  //    spyOn(angular.element('#foo'), 'triggerHandler');
+  //  });
+  //
+  //  describe('when triggerClickForElement is called', function () {
+  //    beforeEach(function () {
+  //      scope.triggerClickForElement('#foo');
+  //    });
+  //
+  //    it('triggers a click for the specified element', function () {
+  //      expect(angular.element('#foo').triggerHandler).toHaveBeenCalledWith('click');
+  //    });
+  //  });
+  //});
+
+  describe('$scope.isNewSession', function () {
+    describe('when new session cookie is set', function () {
+      beforeEach(function () {
+        cookiesService.put('lorry-started', 'true');
+      });
+
+      it('returns false', function () {
+        expect(scope.isNewSession()).toBeFalsy();
+      });
+    });
+
+    describe('when new session cookie is not set', function () {
+      it('returns true', function () {
+        expect(scope.isNewSession()).toBeTruthy();
+      });
+    });
+  });
+
+  describe('$scope.setNewSession', function () {
+    beforeEach(function () {
+      scope.setNewSession();
+    });
+
+    it('should set the new session cookie', function () {
+      expect(cookiesService.get('lorry-started')).toBe('true');
+    });
   });
 
 });

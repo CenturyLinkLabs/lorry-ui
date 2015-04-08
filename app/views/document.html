@@ -1,27 +1,45 @@
-<div id="documentActionsPane" ng-controller="DocumentImportCtrl">
-  <div id="documentImportPane" ng-if="importable">
-    <a class="button-primary" href="" ng-click="showImportDialog('compose')">Import compose.yml</a>
-    <a class="button-primary" href="" ng-click="showImportDialog('pmx')">Import PMX Template</a>
-  </div>
-  <div id="documentResetPane" ng-if="resettable">
-    <a class="button-secondary" href="" ng-click="resetWorkspace()">Clear Workspace</a>
-  </div>
-  <document-alerts id="documentAlertsPane" ng-if="resettable"></document-alerts>
-</div>
-
-<div id="documentPane">
-  <div ng-repeat="serviceDefinition in serviceDefinitions">
-    <service-definition-display ng-if="!yamlDocument.json[serviceName(serviceDefinition)].editMode" service-definition="serviceDefinition"></service-definition-display>
-    <service-definition-edit ng-if="yamlDocument.json[serviceName(serviceDefinition)].editMode" section-name="serviceName(serviceDefinition)"></service-definition-edit>
+<!--Screen for the adventure flow only when we have a new session-->
+<div ng-if="isNewSession()" id="homeAdventurePane">
+  <div class="separator"></div>
+  <div id="homeWrapper" class="horz-centered">
+    <h3>Lorry is a compose.yml validator and composer.</h3>
+    <div id="homeImportPane">
+      <a class="button-primary" href="" ng-click="setNewSession(); triggerClickForElement('#importComposeBtn');">Import existing compose.yml</a>
+      <p>We'll validate your yml and then you can edit or add to it using our composer.</p>
+    </div>
+    <div id="homeScratchPane">
+      <a class="button-primary" href="" ng-click="">Compose yml from Scratch</a>
+      <p>Build your compose.yml file service by service.</p>
+    </div>
   </div>
 </div>
 
-<footer>
-  <div id="documentExportPane" ng-controller="DocumentExportCtrl">
-    <a href="" ng-class="exportButtonStyle()" ng-disabled="!exportable()" ng-click="saveDocument()">Export compose.yml</a>
-    <a href="" class="button-secondary" ng-disabled="!exportable()" ng-click="saveGist()">Save to Gist</a>
-    <a href="" class="footer-link" ng-if="exportable()" clip-copy="doc" clip-click="confirmCopy()">{{copyText}}</a>
-    <a href="" class="footer-link" ng-if="!exportable()" disabled="disabled">{{copyText}}</a>
+<!--Screen for the normal flow-->
+<div ng-show="!isNewSession()" >
+  <div id="documentActionsPane" ng-controller="DocumentImportCtrl">
+    <div id="documentImportPane" ng-if="importable">
+      <a id="importComposeBtn" class="button-primary" href="" ng-click="showImportDialog('compose')">Import compose.yml</a>
+      <a class="button-primary" href="" ng-click="showImportDialog('pmx')">Import PMX Template</a>
+    </div>
+    <div id="documentResetPane" ng-if="resettable">
+      <a class="button-secondary" href="" ng-click="resetWorkspace()">Clear Workspace</a>
+    </div>
+    <document-alerts id="documentAlertsPane" ng-if="resettable"></document-alerts>
   </div>
-</footer>
 
+  <div id="documentPane">
+    <div ng-repeat="serviceDefinition in serviceDefinitions">
+      <service-definition-display ng-if="!yamlDocument.json[serviceName(serviceDefinition)].editMode" service-definition="serviceDefinition"></service-definition-display>
+      <service-definition-edit ng-if="yamlDocument.json[serviceName(serviceDefinition)].editMode" section-name="serviceName(serviceDefinition)"></service-definition-edit>
+    </div>
+  </div>
+
+  <footer>
+    <div id="documentExportPane" ng-controller="DocumentExportCtrl">
+      <a href="" ng-class="exportButtonStyle()" ng-disabled="!exportable()" ng-click="saveDocument()">Export compose.yml</a>
+      <a href="" class="button-secondary" ng-disabled="!exportable()" ng-click="saveGist()">Save to Gist</a>
+      <a href="" class="footer-link" ng-if="exportable()" clip-copy="doc" clip-click="confirmCopy()">{{copyText}}</a>
+      <a href="" class="footer-link" ng-if="!exportable()" disabled="disabled">{{copyText}}</a>
+    </div>
+  </footer>
+</div>
