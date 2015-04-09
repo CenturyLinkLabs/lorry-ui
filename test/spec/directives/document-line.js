@@ -129,7 +129,20 @@ describe('Directive: documentLine', function () {
     it('opens the image with imagelayers in a new window', function () {
       spyOn(win, 'open');
       element.isolateScope().showImageLayers();
-      expect(win.open).toHaveBeenCalledWith('http://imagelayers.io/#/?images=foo%2Fbar%3Aoldest', '_blank');
+      expect(win.open).toHaveBeenCalledWith('http://8.22.8.236:9000/#/?images=foo%2Fbar%3Aoldest', '_blank');
+    });
+  });
+
+  describe('scope.tooltip', function () {
+    beforeEach(function () {
+      scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
+      element = angular.element('<document-line line="lineObj"></document-line>');
+      element = compile(element)(scope);
+      scope.$digest();
+    });
+
+    it('returns the image name in the tooltip', function () {
+      expect(element.isolateScope().tooltip()).toEqual('Inspect foo/bar:oldest with ImageLayers.io')
     });
   });
 });
