@@ -129,7 +129,7 @@ describe('Directive: documentLine', function () {
     it('opens the image with imagelayers in a new window', function () {
       spyOn(win, 'open');
       element.isolateScope().showImageLayers();
-      expect(win.open).toHaveBeenCalledWith('http://imagelayers.io/#/?images=foo%2Fbar%3Aoldest', '_blank');
+      expect(win.open).toHaveBeenCalledWith('http://8.22.8.236:9000/#/?images=foo%2Fbar%3Aoldest', '_blank');
     });
   });
 });

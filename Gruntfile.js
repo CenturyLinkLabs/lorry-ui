@@ -41,7 +41,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             LORRY_API_ENDPOINT: 'http://localhost:9292',
-            IMAGE_LAYERS_URL: 'http://imagelayers.io/#/?'
+            IMAGE_LAYERS_URL: 'http://8.22.8.236:9000/#/?'
           }
         }
       },
