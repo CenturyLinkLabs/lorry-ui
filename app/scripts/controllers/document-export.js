@@ -35,7 +35,7 @@ angular.module('lorryApp').controller('DocumentExportCtrl', ['$scope', '$http', 
       if ($scope.exportable()) {
         var yamlDocument = jsyaml.safeDump($scope.yamlDocument.json, {skipInvalid: true});
         var blob = new Blob([yamlDocument], {type: 'text/plain;charset=utf-8'});
-        fileSaver.saveFile(blob, 'compose.yml');
+        fileSaver.saveFile(blob, 'docker-compose.yml');
       }
     };
 

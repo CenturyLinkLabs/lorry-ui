@@ -30,7 +30,7 @@ describe('Service: PMXConverter', function () {
     expect(compose.bar.image).toBe('baz/quux');
   });
 
-  it('does not add attributes to the compose.yml that are not present in the panamax template', function () {
+  it('does not add attributes to the docker-compose.yml that are not present in the panamax template', function () {
     // image name and source are the only required attributes in a pmx template
     var pmx = "---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n";
     var compose = jsyaml.safeLoad(PMXConverter.convert(pmx));

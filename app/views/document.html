@@ -2,14 +2,14 @@
 <div ng-if="isNewSession()" id="homeAdventurePane">
   <div class="separator"></div>
   <div id="homeWrapper" class="horz-centered">
-    <h3>Lorry is a compose.yml validator and composer.</h3>
+    <h3>Lorry is a docker-compose.yml validator and composer.</h3>
     <div id="homeImportPane">
-      <a class="button-primary" href="" ng-click="setNewSession(); triggerClickForElement('#importComposeBtn');">Import existing compose.yml</a>
+      <a class="button-primary" href="" ng-click="setNewSession(); triggerClickForElement('#importComposeBtn');">Import existing Compose YAML</a>
       <p>We'll validate your yml and then you can edit or add to it using our composer.</p>
     </div>
     <div id="homeScratchPane">
-      <a class="button-primary" href="" ng-click="">Compose yml from Scratch</a>
-      <p>Build your compose.yml file service by service.</p>
+      <a class="button-primary" href="" ng-click="">Compose YAML from Scratch</a>
+      <p>Build your docker-compose.yml file service by service.</p>
     </div>
   </div>
 </div>
@@ -18,7 +18,7 @@
 <div ng-show="!isNewSession()" >
   <div id="documentActionsPane" ng-controller="DocumentImportCtrl">
     <div id="documentImportPane" ng-if="importable">
-      <a id="importComposeBtn" class="button-primary" href="" ng-click="showImportDialog('compose')">Import compose.yml</a>
+      <a id="importComposeBtn" class="button-primary" href="" ng-click="showImportDialog('compose')">Import Compose YAML</a>
       <a class="button-primary" href="" ng-click="showImportDialog('pmx')">Import PMX Template</a>
     </div>
     <div id="documentResetPane" ng-if="resettable">
@@ -36,7 +36,7 @@
 
   <footer>
     <div id="documentExportPane" ng-controller="DocumentExportCtrl">
-      <a href="" ng-class="exportButtonStyle()" ng-disabled="!exportable()" ng-click="saveDocument()">Export compose.yml</a>
+      <a href="" ng-class="exportButtonStyle()" ng-disabled="!exportable()" ng-click="saveDocument()">Export Compose YAML</a>
       <a href="" class="button-secondary" ng-disabled="!exportable()" ng-click="saveGist()">Save to Gist</a>
       <a href="" class="footer-link" ng-if="exportable()" clip-copy="doc" clip-click="confirmCopy()">{{copyText}}</a>
       <a href="" class="footer-link" ng-if="!exportable()" disabled="disabled">{{copyText}}</a>
