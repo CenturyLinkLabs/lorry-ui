@@ -444,6 +444,18 @@ main footer {
     }
   }
 
+  .button-negative {
+    &[disabled] {
+      background-color: $dark_red;
+      color: $white;
+
+      &:hover {
+        @include box-shadow(0, 0, 5px, rgba( $dark_red, 0.0 ));
+        cursor: not-allowed;
+      }
+    }
+  }
+
   .button-primary,
   .button-warning,
   .button-negative {

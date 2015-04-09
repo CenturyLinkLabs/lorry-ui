@@ -46,13 +46,24 @@ describe('Controller: DocumentExportCtrl', function () {
     describe('when the document is not exportable', function () {
       beforeEach(function () {
         spyOn(scope, 'exportable').and.returnValue(true);
+        scope.yamlDocument = {};
       });
 
-      it('returns "button-primary"', function () {
-        scope.yamlDocument = {};
-        expect(scope.exportButtonStyle()).toEqual('button-primary');
+      describe('when the document has load failures (i.e. could not be parsed)', function () {
+        it('returns "button-primary"', function () {
+          scope.yamlDocument.loadFailure = true;
+          expect(scope.exportButtonStyle()).toEqual('button-negative');
+        });
+      });
+
+      describe('if the document has no load failures', function () {
+        it('returns "button-primary"', function () {
+          scope.yamlDocument = {};
+          expect(scope.exportButtonStyle()).toEqual('button-primary');
+        });
       });
     });
+
     describe('when the document is exportable', function () {
       beforeEach(function () {
         spyOn(scope, 'exportable').and.returnValue(true);
