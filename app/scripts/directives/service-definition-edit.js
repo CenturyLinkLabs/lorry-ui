@@ -19,6 +19,11 @@ angular.module('lorryApp')
             $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
           } else {
             $scope.editableJson = $scope.transformToEditableJson($scope.$parent.editedServiceYamlDocumentJson);
+            // since image/build section is mandatory, add it to the json if not present
+            if (!lodash.findWhere($scope.editableJson, {name: 'image'}) &&
+              !lodash.findWhere($scope.editableJson, {name: 'build'})) {
+              $scope.editableJson.push({name: 'image', value: ''})
+            }
           }
         };
 
@@ -71,6 +76,15 @@ angular.module('lorryApp')
         };
 
         $scope.cancelEditing = function () {
+          // reset scratch form values
+          $scope.newSectionName = '';
+          $scope.editableJson = [];
+          // since image/build section is mandatory, add it to the json if not present
+          if (!lodash.findWhere($scope.editableJson, {name: 'image'}) &&
+            !lodash.findWhere($scope.editableJson, {name: 'build'})) {
+            $scope.editableJson.push({name: 'image', value: ''})
+          }
+
           $scope.$emit('cancelEditing', $scope.sectionName);
         };
 

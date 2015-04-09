@@ -9,6 +9,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     $scope.resettable = false;
     $scope.importable = true;
     $scope.editedServiceYamlDocumentJson = {};
+    $scope.newServiceBlock = false;
     $rootScope.serviceNameList = [];
     $rootScope.markAsDeletedTracker = {};
 
@@ -47,6 +48,8 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
     this.reset = function () {
       $scope.yamlDocument = {};
+      $scope.editedServiceYamlDocumentJson = {};
+      $scope.newServiceBlock = false;
       this.buildServiceDefinitions();
     };
 
@@ -118,12 +121,6 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
         // turn on edit mode
         $scope.yamlDocument.json[serviceName].editMode = true;
-
-        // since image/build section is mandatory, add it to the json if not present
-        if (!lodash.has($scope.editedServiceYamlDocumentJson, 'image') &&
-            !lodash.has($scope.editedServiceYamlDocumentJson, 'build')) {
-          $scope.editedServiceYamlDocumentJson['image'] = 'image or build is required';
-        }
       }
     };
 
@@ -132,11 +129,22 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       updatedSectionData = self.deleteItemsMarkedForDeletion(updatedSectionData);
 
       // Update the json for the service name
-      if (oldServiceName != newServiceName) {
+      if (oldServiceName && oldServiceName != newServiceName) {
         delete $scope.yamlDocument.json[oldServiceName];
       }
-      $scope.yamlDocument.json[newServiceName] = updatedSectionData;
-      delete $scope.yamlDocument.json[newServiceName].editMode;
+
+      if ($scope.yamlDocument.json && $scope.yamlDocument.json[newServiceName]) {
+        // editing an existing yaml block in an existing yaml doc
+        $scope.yamlDocument.json[newServiceName] = updatedSectionData;
+        delete $scope.yamlDocument.json[newServiceName].editMode;
+      } else {
+        // add a new service block either to an existing yaml doc or an empty one
+        if (!$scope.yamlDocument.json) {
+          $scope.yamlDocument.json = {};
+        }
+        $scope.yamlDocument.json[newServiceName] = updatedSectionData;
+        $scope.newServiceBlock = false;
+      }
 
       self.validateJson();
     });
@@ -145,8 +153,13 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       // reset the delete tracker
       $rootScope.markAsDeletedTracker = {};
 
-      // turn off edit mode
-      delete $scope.yamlDocument.json[serviceName].editMode;
+      if ($scope.yamlDocument.json && $scope.newServiceBlock) {
+        // hide new service block and show new service button
+        $scope.newServiceBlock = false;
+      } else if ($scope.yamlDocument.json[serviceName]) {
+        // turn off edit mode
+        delete $scope.yamlDocument.json[serviceName].editMode;
+      }
     });
 
     this.deleteItemsMarkedForDeletion = function(data) {
@@ -190,6 +203,15 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
     $scope.setNewSession = function () {
       cookiesService.put('lorry-started', 'true');
+    };
+
+    $scope.addNewServiceDef = function() {
+      $scope.newServiceBlock = true;
+    };
+
+    $scope.showAddServiceBlockOrBtn = function() {
+      // the inverse is: !$scope.serviceDefinitions || $scope.serviceDefinitions.length == 0 || $scope.newServiceBlock
+      return $scope.serviceDefinitions && $scope.serviceDefinitions.length > 0 && !$scope.newServiceBlock ? true : false;
     };
 
   }]);

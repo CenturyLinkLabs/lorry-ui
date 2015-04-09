@@ -23,6 +23,58 @@ describe('Directive: serviceDefinitionEdit', function () {
 
   describe('Controller: serviceDefinitionEdit', function () {
 
+    describe('$scope.transformToJson', function () {
+      describe('when editableJson is populated', function () {
+        beforeEach(function () {
+          scope.sectionName = 'adapter';
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+
+          element.isolateScope().editableJson = [
+            {name: "build", value: "foo"},
+            {name: "command", value: "bar"},
+            {name: "ports", value: ["1111:2222", "3333:4444"]}
+          ];
+
+          spyOn(element.isolateScope(), 'transformToYamlDocumentFragment');
+          spyOn(element.isolateScope(), 'transformToEditableJson');
+
+          element.isolateScope().transformToJson();
+        });
+
+        it('calls $scope.transformToYamlDocumentFragment', function () {
+          expect(element.isolateScope().transformToYamlDocumentFragment).toHaveBeenCalled();
+        });
+      });
+
+      describe('when editableJson is undefined', function () {
+        beforeEach(function () {
+          scope.editedServiceYamlDocumentJson = {};
+          scope.sectionName = 'adapter';
+          scope.editableJson = undefined;
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+
+          element.isolateScope().editableJson = undefined;
+
+          spyOn(element.isolateScope(), 'transformToYamlDocumentFragment');
+          spyOn(element.isolateScope(), 'transformToEditableJson').and.returnValue([{name: "command", value: "foo"}]);
+
+          element.isolateScope().transformToJson();
+        });
+
+        it('calls $scope.transformToEditableJson', function () {
+          expect(element.isolateScope().transformToEditableJson).toHaveBeenCalled();
+        });
+
+        it('should add an image key to the service', function () {
+          expect(element.isolateScope().editableJson[1].name).toBe('image');
+        });
+
+      });
+
+    });
+
     describe('$scope.transformToEditableJson', function () {
 
       describe('when yaml json is empty', function () {
@@ -98,14 +150,10 @@ describe('Directive: serviceDefinitionEdit', function () {
       beforeEach(function () {
         scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
         scope.sectionName = 'adapter';
-        scope.fullJson = {
-          "adapter": {
-            "build": "foo",
-            "ports": ["1111:2222", "3333:4444"]
-          }};
         scope.$parent.editedServiceYamlDocumentJson = {
           "command": "foo",
-          "ports": ["1111:2222", "3333:4444"]
+          "ports": ["1111:2222", "3333:4444"],
+          "image": ''
         };
 
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
@@ -135,14 +183,12 @@ describe('Directive: serviceDefinitionEdit', function () {
     describe('$scope.cancelEditing', function () {
       beforeEach(function () {
         scope.sectionName = 'adapter';
-        scope.fullJson = {
-          "adapter": {
-            "build": "foo",
-            "command": "bar",
-            "ports": ["1111:2222", "3333:4444"]
-          }};
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
+
+        element.isolateScope().editableJson = [
+          {name: "command", value: "bar"}
+        ];
 
         spyOn(element.isolateScope(), '$emit');
       });
@@ -151,6 +197,16 @@ describe('Directive: serviceDefinitionEdit', function () {
         var btnCancel = element.find('.button-secondary')[0];
         angular.element(btnCancel).triggerHandler('click');
         expect(element.isolateScope().$emit).toHaveBeenCalled();
+      });
+
+      it('resets the section name', function () {
+        element.isolateScope().cancelEditing();
+        expect(element.isolateScope().newSectionName).toBe('');
+      });
+
+      it('resets editableJson and adds an image key', function () {
+        element.isolateScope().cancelEditing();
+        expect(element.isolateScope().editableJson[0].name).toBe('image');
       });
 
       it('emits cancelEditing passing the section name', function () {

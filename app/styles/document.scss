@@ -29,6 +29,14 @@
     font-family: $monospace_font_family;
     font-size: 1em;
   }
+
+  #newServiceBlockBtn {
+    margin-top: 20px;
+    margin-left: 76px;
+    .button-secondary {
+      font-family: $base_font_family;
+    }
+  }
 }
 
 #documentActionsPane {

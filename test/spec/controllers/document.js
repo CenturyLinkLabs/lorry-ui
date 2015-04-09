@@ -177,6 +177,18 @@ describe('Controller: DocumentCtrl', function () {
       DocumentCtrl.reset();
       expect(DocumentCtrl.buildServiceDefinitions).toHaveBeenCalled();
     });
+
+    it('resets the $scope.editedServiceYamlDocumentJson to an empty object', function () {
+      scope.editedServiceYamlDocumentJson = { foo: 'bar' };
+      expect(scope.editedServiceYamlDocumentJson).toEqual({ foo: 'bar' });
+      DocumentCtrl.reset();
+      expect(scope.editedServiceYamlDocumentJson).toEqual({});
+    });
+
+    it('resets the $scope.newServiceBlock flag to false', function () {
+      DocumentCtrl.reset();
+      expect(scope.newServiceBlock).toBeFalsy();
+    });
   });
 
   describe('$scope.resetWorkspace', function () {
@@ -507,16 +519,16 @@ describe('Controller: DocumentCtrl', function () {
       });
     });
 
-    describe('when a new service is added', function () {
+    describe('when an existing service is renamed', function () {
       beforeEach(function () {
         scope.$emit('saveService', 'service1', 'service2', scope.updatedJsonData);
       });
 
-      it('should add a new service', function () {
+      it('should add the service with new name', function () {
         expect(scope.yamlDocument.json).hasOwnProperty('service2');
       });
 
-      it('should delete the old service', function () {
+      it('should delete the service with old name', function () {
         !expect(scope.yamlDocument.json).hasOwnProperty('service1');
       });
 
@@ -533,6 +545,28 @@ describe('Controller: DocumentCtrl', function () {
       });
     });
 
+    describe('when a new service block is added', function () {
+      beforeEach(function () {
+        scope.$emit('saveService', undefined, 'newservice', scope.updatedJsonData);
+      });
+
+      it('should add the new service', function () {
+        expect(scope.yamlDocument.json).hasOwnProperty('newservice');
+      });
+
+      it('should hide the new service block', function () {
+        expect(scope.newServiceBlock).toBeFalsy();
+      });
+
+      it('should add data for the new service to the yamlDocument.json', function () {
+        expect(scope.yamlDocument.json['newservice']).toEqual(scope.updatedJsonData);
+      });
+
+      it('should call validateJson', function () {
+        expect(DocumentCtrl.validateJson).toHaveBeenCalled();
+      });
+    });
+
   });
 
   describe('$scope.$on cancelEditing', function () {
@@ -542,16 +576,21 @@ describe('Controller: DocumentCtrl', function () {
           "build": "fooUpdated",
           "command": "new key added"
         }};
-
-      // simulate edit mode turned on
-      scope.yamlDocument.json['service1'].editMode = true;
+      // simulate some deletes
+      scope.markAsDeletedTracker['build'] = ['delete me'];
+      scope.markAsDeletedTracker['ports'] = ['0'];
     });
 
-    describe('when editing is cancelled', function () {
+    it('should reset the delete tracker', function () {
+      // call cancel
+      scope.$emit('cancelEditing', 'service1');
+      expect(scope.markAsDeletedTracker).toEqual({});
+    });
+
+    describe('when editing is cancelled for an existing service', function () {
       beforeEach(function () {
-        // simulate some deletes
-        scope.markAsDeletedTracker['build'] = ['delete me'];
-        scope.markAsDeletedTracker['ports'] = ['0'];
+        // simulate edit mode turned on
+        scope.yamlDocument.json['service1'].editMode = true;
 
         // call cancel
         scope.$emit('cancelEditing', 'service1');
@@ -561,8 +600,14 @@ describe('Controller: DocumentCtrl', function () {
         !expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
       });
 
-      it('should reset the delete tracker', function () {
-        expect(scope.markAsDeletedTracker).toEqual({});
+      describe('when editing is cancelled for a new service block', function () {
+        beforeEach(function () {
+          // call cancel
+          scope.$emit('cancelEditing', 'service1');
+        });
+        it('should hide the new service block and show new service block button', function () {
+          expect(scope.newServiceBlock).toBeFalsy();
+        });
       });
     });
 
@@ -662,6 +707,63 @@ describe('Controller: DocumentCtrl', function () {
 
     it('should set the new session cookie', function () {
       expect(cookiesService.get('lorry-started')).toBe('true');
+    });
+  });
+
+  describe('$scope.addNewServiceDef', function () {
+    beforeEach(function () {
+      scope.addNewServiceDef();
+    });
+
+    it('should set the new service block flag to true', function () {
+      expect(scope.newServiceBlock).toBeTruthy();
+    });
+  });
+
+  describe('$scope.showAddServiceBlockOrBtn', function () {
+    describe('when service definitions are present', function () {
+      beforeEach(function () {
+        scope.serviceDefinitions = [[{text: 'db:\\n', lineNumber: 1}]];
+      });
+      describe('and new service block is showing', function () {
+        beforeEach(function () {
+          scope.newServiceBlock = true;
+        });
+        it('should return false', function () {
+          expect(scope.showAddServiceBlockOrBtn()).toBeFalsy();
+        });
+      });
+      describe('and new service block is not showing', function () {
+        beforeEach(function () {
+          scope.newServiceBlock = false;
+        });
+        it('should return true', function () {
+          expect(scope.showAddServiceBlockOrBtn()).toBeTruthy();
+        });
+      });
+
+    });
+
+    describe('when service definitions are not present', function () {
+      beforeEach(function () {
+        scope.serviceDefinitions = [];
+      });
+      describe('and new service block is showing', function () {
+        beforeEach(function () {
+          scope.newServiceBlock = true;
+        });
+        it('should return false', function () {
+          expect(scope.showAddServiceBlockOrBtn()).toBeFalsy();
+        });
+      });
+      describe('and new service block is not showing', function () {
+        beforeEach(function () {
+          scope.newServiceBlock = false;
+        });
+        it('should return false', function () {
+          expect(scope.showAddServiceBlockOrBtn()).toBeFalsy();
+        });
+      });
     });
   });
 
