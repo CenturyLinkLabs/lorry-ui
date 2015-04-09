@@ -31,7 +31,7 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$sce', '$wind
         }
 
         scope.isImageLine = function () {
-          return lodash.startsWith(scope.line.text.trim(), 'image:');
+          return lodash.startsWith(scope.line.text.trim(), 'image:') && !lodash.isEmpty(imageName());
         };
 
         scope.showImageLayers = function () {

@@ -104,17 +104,33 @@ describe('Directive: documentLine', function () {
       });
     });
 
-    describe('returns true when the line text does start with "image:"', function () {
-      beforeEach(function () {
-        scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
-        element = angular.element('<document-line line="lineObj"></document-line>');
-        element = compile(element)(scope);
-        scope.$digest();
+    describe('when the line text does start with "image:"', function () {
+      describe('when the image name is not blank', function () {
+        beforeEach(function () {
+          scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
+          element = angular.element('<document-line line="lineObj"></document-line>');
+          element = compile(element)(scope);
+          scope.$digest();
+        });
+
+        it('returns true', function () {
+          expect(element.isolateScope().isImageLine()).toBeTruthy();
+        });
       });
 
-      it('returns false', function () {
-        expect(element.isolateScope().isImageLine()).toBeTruthy();
+      describe('when the image name is blank', function () {
+        beforeEach(function () {
+          scope.lineObj = { text: 'image:', lineNumber: 1, errors: []};
+          element = angular.element('<document-line line="lineObj"></document-line>');
+          element = compile(element)(scope);
+          scope.$digest();
+        });
+
+        it('returns false', function () {
+          expect(element.isolateScope().isImageLine()).toBeFalsy();
+        });
       });
+
     });
   });
 
