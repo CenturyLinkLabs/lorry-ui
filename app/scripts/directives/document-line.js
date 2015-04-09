@@ -25,17 +25,23 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$sce', '$wind
 
         }
 
+        function imageName() {
+          var imageObj = jsyaml.safeLoad(scope.line.text);
+          return imageObj.image;
+        }
+
         scope.isImageLine = function () {
           return lodash.startsWith(scope.line.text.trim(), 'image:');
         };
 
         scope.showImageLayers = function () {
-          var imageObj, imageName, imageLayersUrl;
-          imageObj = jsyaml.safeLoad(scope.line.text);
-          imageName = imageObj.image;
-          imageLayersUrl = ENV.IMAGE_LAYERS_URL + 'images=' + encodeURIComponent(imageName);
+          var imageLayersUrl = ENV.IMAGE_LAYERS_URL + 'images=' + encodeURIComponent(imageName());
           $window.open(imageLayersUrl, '_blank');
         };
+
+        scope.tooltip = function () {
+          return 'Inspect ' + imageName() + ' with ImageLayers.io';
+        }
       },
       templateUrl: '/scripts/directives/document-line.html'
     };
