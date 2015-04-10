@@ -587,6 +587,12 @@ describe('Controller: DocumentCtrl', function () {
       expect(scope.markAsDeletedTracker).toEqual({});
     });
 
+    it('should reset the editedServiceYamlDocumentJson', function () {
+      // call cancel
+      scope.$emit('cancelEditing', 'service1');
+      expect(scope.editedServiceYamlDocumentJson).toEqual({});
+    });
+
     describe('when editing is cancelled for an existing service', function () {
       beforeEach(function () {
         // simulate edit mode turned on

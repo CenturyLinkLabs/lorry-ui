@@ -152,6 +152,8 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     $scope.$on('cancelEditing', function (e, serviceName) {
       // reset the delete tracker
       $rootScope.markAsDeletedTracker = {};
+      // reset the edited service yaml
+      $scope.editedServiceYamlDocumentJson = {};
 
       if ($scope.yamlDocument.json && $scope.newServiceBlock) {
         // hide new service block and show new service button
