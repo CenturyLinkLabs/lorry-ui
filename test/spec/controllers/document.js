@@ -718,12 +718,28 @@ describe('Controller: DocumentCtrl', function () {
 
   describe('$scope.addNewServiceDef', function () {
     beforeEach(function () {
-      scope.addNewServiceDef();
+      scope.newServiceBlock = false;
     });
 
-    it('should set the new service block flag to true', function () {
-      expect(scope.newServiceBlock).toBeTruthy();
+    describe('when any services are not in edit mode', function () {
+      beforeEach(function () {
+        scope.inEditMode = function () {return false};
+        scope.addNewServiceDef();
+      });
+      it('should set the new service block flag to true', function () {
+        expect(scope.newServiceBlock).toBeTruthy();
+      });
     });
+    describe('when any services are in edit mode', function () {
+      beforeEach(function () {
+        scope.inEditMode = function () {return true};
+        scope.addNewServiceDef();
+      });
+     it('should not modify the new service flag', function () {
+        expect(scope.newServiceBlock).toBeFalsy();
+      });
+    });
+
   });
 
   describe('$scope.showAddServiceBlockOrBtn', function () {

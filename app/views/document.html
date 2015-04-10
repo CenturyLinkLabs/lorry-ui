@@ -33,7 +33,7 @@
       <service-definition-edit ng-if="yamlDocument.json[serviceName(serviceDefinition)].editMode" section-name="serviceName(serviceDefinition)"></service-definition-edit>
     </div>
     <div id="newServiceBlockBtn" ng-if="showAddServiceBlockOrBtn()">
-      <a class="button-secondary" href="" ng-click="addNewServiceDef()">Add a New Service Block</a>
+      <a class="button-secondary" href="" ng-disabled="inEditMode()" ng-click="addNewServiceDef()">Add a New Service Block</a>
     </div>
     <div ng-if="!showAddServiceBlockOrBtn()">
       <service-definition-edit section-name=""></service-definition-edit>

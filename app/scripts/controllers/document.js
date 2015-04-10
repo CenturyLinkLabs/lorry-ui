@@ -155,12 +155,14 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       // reset the edited service yaml
       $scope.editedServiceYamlDocumentJson = {};
 
-      if ($scope.yamlDocument.json && $scope.newServiceBlock) {
-        // hide new service block and show new service button
-        $scope.newServiceBlock = false;
-      } else if ($scope.yamlDocument.json[serviceName]) {
-        // turn off edit mode
-        delete $scope.yamlDocument.json[serviceName].editMode;
+      if ($scope.yamlDocument.json) {
+        if ($scope.newServiceBlock) {
+          // hide new service block and show new service button
+          $scope.newServiceBlock = false;
+        } else if ($scope.yamlDocument.json[serviceName]) {
+          // turn off edit mode
+          delete $scope.yamlDocument.json[serviceName].editMode;
+        }
       }
     });
 
@@ -208,7 +210,13 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     };
 
     $scope.addNewServiceDef = function() {
-      $scope.newServiceBlock = true;
+      if (!$scope.inEditMode()) {
+        $scope.newServiceBlock = true;
+      }
+    };
+
+    $scope.inNewServiceMode = function() {
+      return $scope.newServiceBlock;
     };
 
     $scope.showAddServiceBlockOrBtn = function() {

@@ -61,19 +61,45 @@ describe('Directive: serviceDefinitionDisplay', function () {
           scope.$parent.inEditMode = function () { return true };
         });
 
-        describe('when the serviceDefinition has lines', function () {
-          it('should be disabled', function () {
-            element.isolateScope().serviceDefinition = [{text: 'test'}];
-            expect(element.isolateScope().classes()).toBe('disabled');
+        describe('when a new service is being added', function () {
+          beforeEach(function () {
+            scope.$parent.inNewServiceMode = function () {return true};
+          });
+
+          describe('when the serviceDefinition has lines', function () {
+            it('should be disabled', function () {
+              element.isolateScope().serviceDefinition = [{text: 'test'}];
+              expect(element.isolateScope().classes()).toBe('disabled');
+            });
+          });
+
+          describe('when the serviceDefinition has no lines', function () {
+            it('should be disabled', function () {
+              element.isolateScope().serviceDefinition = [];
+              expect(element.isolateScope().classes()).toBe('disabled');
+            });
+          });
+        });
+        describe('when a new service is not being added', function () {
+          beforeEach(function () {
+            scope.$parent.inNewServiceMode = function () { return false };
+          });
+
+          describe('when the serviceDefinition has lines', function () {
+            it('should be disabled', function () {
+              element.isolateScope().serviceDefinition = [{text: 'test'}];
+              expect(element.isolateScope().classes()).toBe('disabled');
+            });
+          });
+
+          describe('when the serviceDefinition has no lines', function () {
+            it('should be disabled', function () {
+              element.isolateScope().serviceDefinition = [];
+              expect(element.isolateScope().classes()).toBe('disabled');
+            });
           });
         });
 
-        describe('when the serviceDefinition has no lines', function () {
-          it('should be disabled', function () {
-            element.isolateScope().serviceDefinition = [];
-            expect(element.isolateScope().classes()).toBe('disabled');
-          });
-        });
       });
 
       describe('when services are not in edit mode', function () {
@@ -81,20 +107,48 @@ describe('Directive: serviceDefinitionDisplay', function () {
           scope.$parent.inEditMode = function () { return false };
         });
 
-        describe('when the serviceDefinition has lines', function () {
-          it('should be highlightable', function () {
-            element.isolateScope().serviceDefinition = [{text: 'test'}];
-            expect(element.isolateScope().classes()).toBe('highlightable');
+        describe('when a new service is being added', function () {
+          beforeEach(function () {
+            scope.$parent.inNewServiceMode = function () { return true };
+          });
+
+          describe('when the serviceDefinition has lines', function () {
+            it('should be disabled', function () {
+              element.isolateScope().serviceDefinition = [{text: 'test'}];
+              expect(element.isolateScope().classes()).toBe('disabled');
+            });
+          });
+
+          describe('when the serviceDefinition has no lines', function () {
+            it('should be disabled', function () {
+              element.isolateScope().serviceDefinition = [];
+              expect(element.isolateScope().classes()).toBe('disabled');
+            });
           });
         });
 
-        describe('when the serviceDefinition has no lines', function () {
-          it('should be disabled', function () {
-            element.isolateScope().serviceDefinition = [];
-            expect(element.isolateScope().classes()).toBe('disabled');
+        describe('when a new service is not being added', function () {
+          beforeEach(function () {
+            scope.$parent.inNewServiceMode = function () { return false };
+          });
+
+          describe('when the serviceDefinition has lines', function () {
+            it('should be highlightable', function () {
+              element.isolateScope().serviceDefinition = [{text: 'test'}];
+              expect(element.isolateScope().classes()).toBe('highlightable');
+            });
+          });
+
+          describe('when the serviceDefinition has no lines', function () {
+            it('should be disabled', function () {
+              element.isolateScope().serviceDefinition = [];
+              expect(element.isolateScope().classes()).toBe('disabled');
+            });
           });
         });
+
       });
+
     });
 
   });

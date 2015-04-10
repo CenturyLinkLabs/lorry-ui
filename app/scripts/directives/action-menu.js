@@ -8,7 +8,7 @@ angular.module('lorryApp')
       link: function postLink(scope, element, attrs) {
 
         scope.deleteServiceDefinition = function () {
-          if (!scope.$parent.inEditMode()) {
+          if (!scope.$parent.inEditMode() && !scope.$parent.inNewServiceMode()) {
             var serviceName = scope.serviceName();
 
             scope.confirmMessage = 'Are you sure you want to delete this block?';
@@ -26,7 +26,7 @@ angular.module('lorryApp')
         };
 
         scope.editServiceDefinition = function () {
-          if (!scope.$parent.inEditMode()) {
+          if (!scope.$parent.inEditMode() && !scope.$parent.inNewServiceMode()) {
             var serviceName = scope.serviceName();
             scope.$parent.editService(serviceName);
           }

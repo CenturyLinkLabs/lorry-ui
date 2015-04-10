@@ -41,7 +41,7 @@ describe('Directive: actionMenu', function () {
 
     describe('when the user cancels the delete action', function () {
       it("does not call deleteService on the scope's parent", function () {
-        var p = jasmine.createSpyObj('$parent', ['deleteService', 'inEditMode']);
+        var p = jasmine.createSpyObj('$parent', ['deleteService', 'inEditMode', 'inNewServiceMode']);
         scope.$parent = p;
         scope.deleteServiceDefinition();
         deferredSuccess.reject();
@@ -60,9 +60,9 @@ describe('Directive: actionMenu', function () {
         expect(scope.deleteServiceDefinition).toHaveBeenCalled();
       });
 
-      describe('when any of the services are not in edit mode', function () {
+      describe('when any of the services are not in edit mode and new service is not being added', function () {
         it('calls deleteService on the parent with the name of the service definition to be deleted', function () {
-          var p = jasmine.createSpyObj('$parent', ['deleteService', 'inEditMode']);
+          var p = jasmine.createSpyObj('$parent', ['deleteService', 'inEditMode', 'inNewServiceMode']);
           scope.$parent = p;
           scope.deleteServiceDefinition();
           deferredSuccess.resolve();
@@ -71,10 +71,33 @@ describe('Directive: actionMenu', function () {
         });
       });
 
-      describe('when any of the services are in edit mode', function () {
+      describe('when any of the services are not in edit mode and new service is being added', function () {
+        it('does not call deleteService on parent', function () {
+          var p = jasmine.createSpyObj('$parent', ['deleteService', 'inEditMode']);
+          p.inNewServiceMode = function () { return true };
+          scope.$parent = p;
+          scope.deleteServiceDefinition();
+          deferredSuccess.resolve();
+          scope.$digest();
+          expect(p.deleteService).not.toHaveBeenCalled();
+        });
+      });
+      describe('when any of the services are in edit mode and new service is not being added', function () {
+        it('does not call deleteService on parent', function () {
+          var p = jasmine.createSpyObj('$parent', ['deleteService', 'inNewServiceMode']);
+          p.inEditMode = function () { return true };
+          scope.$parent = p;
+          scope.deleteServiceDefinition();
+          deferredSuccess.resolve();
+          scope.$digest();
+          expect(p.deleteService).not.toHaveBeenCalled();
+        });
+      });
+      describe('when any of the services are in edit mode and new service is being added', function () {
         it('does not call deleteService on parent', function () {
           var p = jasmine.createSpyObj('$parent', ['deleteService']);
           p.inEditMode = function () { return true };
+          p.inNewServiceMode = function () { return true };
           scope.$parent = p;
           scope.deleteServiceDefinition();
           deferredSuccess.resolve();
@@ -94,19 +117,38 @@ describe('Directive: actionMenu', function () {
       expect(scope.editServiceDefinition).toHaveBeenCalled();
     });
 
-    describe('when any of the services are not in edit mode', function () {
+    describe('when any of the services are not in edit mode and new service is not being added', function () {
       it('calls editService on the parent with the name of the service definition to be edited', function () {
-        var p = jasmine.createSpyObj('$parent', ['editService', 'inEditMode']);
+        var p = jasmine.createSpyObj('$parent', ['editService', 'inEditMode', 'inNewServiceMode']);
         scope.$parent = p;
         scope.editServiceDefinition();
         expect(p.editService).toHaveBeenCalledWith('someService');
       });
     });
 
-    describe('when any of the services are in edit mode', function () {
+    describe('when any of the services are not in edit mode and new service is being added', function () {
+      it('does not call editService on the parent', function () {
+        var p = jasmine.createSpyObj('$parent', ['editService', 'inEditMode']);
+        p.inNewServiceMode = function () { return true };
+        scope.$parent = p;
+        scope.editServiceDefinition();
+        expect(p.editService).not.toHaveBeenCalled();
+      });
+    });
+    describe('when any of the services are in edit mode and new service is not being added', function () {
+      it('does not call editService on the parent', function () {
+        var p = jasmine.createSpyObj('$parent', ['editService', 'inNewServiceMode']);
+        p.inEditMode = function () { return true };
+        scope.$parent = p;
+        scope.editServiceDefinition();
+        expect(p.editService).not.toHaveBeenCalled();
+      });
+    });
+    describe('when any of the services are in edit mode and new service is being added', function () {
       it('does not call editService on the parent', function () {
         var p = jasmine.createSpyObj('$parent', ['editService']);
         p.inEditMode = function () { return true };
+        p.inNewServiceMode = function () { return true };
         scope.$parent = p;
         scope.editServiceDefinition();
         expect(p.editService).not.toHaveBeenCalled();
