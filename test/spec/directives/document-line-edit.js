@@ -21,7 +21,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.hasMultipleItems', function () {
       describe('when the line has one item', function () {
         beforeEach(function () {
-          scope.line = { name: 'line', value: 'bar' };
+          scope.line = {name: 'line', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -33,7 +33,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when the line has multiple items', function () {
         beforeEach(function () {
-          scope.line = { name: 'line', value: [{name: 'foo1', value: 'bar1'}, {name: 'foo2', value: 'bar2'}] };
+          scope.line = {name: 'line', value: [{name: 'foo1', value: 'bar1'}, {name: 'foo2', value: 'bar2'}]};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -48,7 +48,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.isImageOrBuild', function () {
       describe('when the line has image', function () {
         beforeEach(function () {
-          scope.line = { name: 'image', value: 'bar' };
+          scope.line = {name: 'image', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -60,7 +60,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when the line has build', function () {
         beforeEach(function () {
-          scope.line = { name: 'build', value: 'bar' };
+          scope.line = {name: 'build', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -72,7 +72,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when the line does not have image or build', function () {
         beforeEach(function () {
-          scope.line = { name: 'line', value: 'bar' };
+          scope.line = {name: 'line', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -86,7 +86,7 @@ describe('Directive: documentLineEdit', function () {
 
     describe('scope.serviceNameList', function () {
       beforeEach(function () {
-        scope.line = { name: 'line', value: 'bar' };
+        scope.line = {name: 'line', value: 'bar'};
         rootScope.serviceNameList = ['foo', 'bar'];
         element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
         scope.$digest();
@@ -101,7 +101,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.isValidKey', function () {
       describe('when key is valid', function () {
         beforeEach(function () {
-          scope.line = { name: 'command', value: 'bar' };
+          scope.line = {name: 'command', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -113,7 +113,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when key is invalid', function () {
         beforeEach(function () {
-          scope.line = { name: 'blah', value: 'bar' };
+          scope.line = {name: 'blah', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -127,7 +127,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.searchLinkClasses', function () {
       describe('when line key is image', function () {
         beforeEach(function () {
-          scope.line = { name: 'image', value: 'bar' };
+          scope.line = {name: 'image', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -139,7 +139,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line key is build', function () {
         beforeEach(function () {
-          scope.line = { name: 'build', value: 'bar' };
+          scope.line = {name: 'build', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -153,7 +153,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.keyLabelClasses', function () {
       describe('when line has valid key', function () {
         beforeEach(function () {
-          scope.line = { name: 'command', value: 'bar' };
+          scope.line = {name: 'command', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -165,7 +165,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line has invalid key', function () {
         beforeEach(function () {
-          scope.line = { name: 'blah', value: 'bar' };
+          scope.line = {name: 'blah', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -179,7 +179,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.markForDeletionClasses', function () {
       describe('when line is marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'command', value: 'bar' };
+          scope.line = {name: 'command', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -193,7 +193,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line is not marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'command', value: 'bar' };
+          scope.line = {name: 'command', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -207,7 +207,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line item is marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          scope.line = {name: 'ports', value: ['1000:1000', '2000:2000']};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -221,7 +221,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line item is not marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          scope.line = {name: 'ports', value: ['1000:1000', '2000:2000']};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -237,7 +237,7 @@ describe('Directive: documentLineEdit', function () {
 
     describe('scope.addNewValueForLine', function () {
       beforeEach(function () {
-        scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+        scope.line = {name: 'ports', value: ['1000:1000', '2000:2000']};
         element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
         scope.$digest();
 
@@ -258,7 +258,7 @@ describe('Directive: documentLineEdit', function () {
 
     describe('scope.markLineForDeletion', function () {
       beforeEach(function () {
-        scope.line = { name: 'command', value: 'blah' };
+        scope.line = {name: 'command', value: 'blah'};
         element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
         scope.$digest();
 
@@ -284,7 +284,7 @@ describe('Directive: documentLineEdit', function () {
 
     describe('scope.markLineItemForDeletion', function () {
       beforeEach(function () {
-        scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+        scope.line = {name: 'ports', value: ['1000:1000', '2000:2000']};
         element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
         scope.$digest();
 
@@ -312,7 +312,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.deleteIconClasses', function () {
       describe('when line is marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'command', value: 'bar' };
+          scope.line = {name: 'command', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -326,7 +326,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line is not marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'command', value: 'bar' };
+          scope.line = {name: 'command', value: 'bar'};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -340,7 +340,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line item is marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          scope.line = {name: 'ports', value: ['1000:1000', '2000:2000']};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -354,7 +354,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line item is not marked for deletion', function () {
         beforeEach(function () {
-          scope.line = { name: 'ports', value: ['1000:1000', '2000:2000'] };
+          scope.line = {name: 'ports', value: ['1000:1000', '2000:2000']};
           element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
           scope.$digest();
 
@@ -383,9 +383,9 @@ describe('Directive: documentLineEdit', function () {
           angular.element(aliasTxt).triggerHandler('blur');
           expect(scope.updateLinkValue).toHaveBeenCalled();
         });
-        it('is triggered on blur of link name select box', function () {
+        it('is triggered on change of link name select box', function () {
           var nameSelect = element.find('select')[0];
-          angular.element(nameSelect).triggerHandler('blur');
+          angular.element(nameSelect).triggerHandler('change');
           expect(scope.updateLinkValue).toHaveBeenCalled();
         });
 
@@ -483,7 +483,6 @@ describe('Directive: documentLineEdit', function () {
             expect(result).toEqual('');
           });
         });
-
       });
 
       describe('when line is not of type links', function () {
@@ -517,7 +516,6 @@ describe('Directive: documentLineEdit', function () {
             expect(result).toEqual('');
           });
         });
-
       });
 
       describe('when line is not of type links', function () {
@@ -532,6 +530,72 @@ describe('Directive: documentLineEdit', function () {
         });
       });
     });
-  });
 
+    describe('scope.setLinkName', function () {
+      describe('when line is of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'links', value: ['foo:bar']};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+        });
+        it('sets the link with name', function () {
+          scope.setLinkName(0, 'fooz');
+          expect(scope.line.value[0]).toEqual('fooz:bar');
+        });
+        describe('and name is missing', function () {
+          it('sets the link with empty name', function () {
+            scope.setLinkName(0, '');
+            expect(scope.line.value[0]).toEqual(':bar');
+          });
+        });
+      });
+
+      describe('when line is not of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'cmd'};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+        it('does not modify the line value', function () {
+          scope.setLinkName(0, 'fooz');
+          expect(scope.line.value).toEqual('cmd');
+        });
+      });
+    });
+
+    describe('scope.setLinkAlias', function () {
+      describe('when line is of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'links', value: ['foo:bar']};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+        });
+        it('sets the link with alias', function () {
+          scope.setLinkAlias(0, 'baaz');
+          expect(scope.line.value[0]).toEqual('foo:baaz');
+        });
+        describe('and alias is missing', function () {
+          it('sets the link with empty alias', function () {
+            scope.setLinkAlias(0, '');
+            expect(scope.line.value[0]).toEqual('foo');
+          });
+        });
+      });
+
+      describe('when line is not of type links', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'cmd'};
+          element = compile('<document-line-edit ng-model="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+        it('does not modify the line value', function () {
+          scope.setLinkAlias(0, 'baaz');
+          expect(scope.line.value).toEqual('cmd');
+        });
+      });
+    });
+
+  });
 });

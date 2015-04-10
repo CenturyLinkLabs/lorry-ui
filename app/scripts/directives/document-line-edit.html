@@ -22,8 +22,8 @@
         <div ng-class="keyLabelClasses()"><div ng-show="$index == 0">{{line.name}}</div></div>
         <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
         <span ng-hide="true" ng-init="linkName = getLinkName(line.value[$index]); linkAlias = getLinkAlias(line.value[$index])" ></span>
-        <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkName" ng-blur="updateLinkValue($index, linkName, linkAlias)" ng-options="link as link for link in serviceNameList"></select>
-        <input type='text' class="link-alias-text" placeholder="alias" ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkAlias" ng-blur="updateLinkValue($index, linkName, linkAlias)"/>
+        <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkName" ng-change="setLinkName($index, linkName)" ng-options="link as link for link in serviceNameList"></select>
+        <input type='text' class="link-alias-text" placeholder="alias" ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkAlias" ng-blur="setLinkAlias($index, linkAlias)"/>
         <div class="delete" ng-class="deleteIconClasses($index)" ng-click="markLineItemForDeletion($index)"></div>
         <div class="info"></div>
       </div>

@@ -80,6 +80,20 @@ angular.module('lorryApp')
           }
         };
 
+        scope.setLinkName = function(index, linkName) {
+          if (scope.line.name === 'links') {
+            var linkAlias = scope.getLinkAlias(scope.line.value[index]);
+            scope.updateLinkValue(index, linkName, linkAlias);
+          }
+        };
+
+        scope.setLinkAlias = function(index, linkAlias) {
+          if (scope.line.name === 'links') {
+            var linkName = scope.getLinkName(scope.line.value[index]);
+            scope.updateLinkValue(index, linkName, linkAlias);
+          }
+        };
+
         scope.updateLinkValue = function(index, linkName, linkAlias) {
           if (scope.line.name === 'links') {
             var lineValue = '';
