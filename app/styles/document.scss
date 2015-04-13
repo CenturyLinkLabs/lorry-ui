@@ -18,8 +18,6 @@
 #documentPane {
   float: left;
   width: 100%;
-  font-family: $monospace_font_family;
-  line-height: 1.5em;
   margin-bottom: 75px;
   padding-bottom: 15px;
 
@@ -27,15 +25,11 @@
   input[type='radio'],
   select {
     font-family: $monospace_font_family;
-    font-size: 1em;
   }
 
   #newServiceBlockBtn {
     margin-top: 20px;
     margin-left: 76px;
-    .button-secondary {
-      font-family: $base_font_family;
-    }
 
     a {
       &[disabled=disabled] {
@@ -209,16 +203,13 @@
       float: right;
       margin-top: 10px;
       margin-right: 90px;
-
-      .button-primary, .button-secondary {
-        font-family: $base_font_family;
-      }
-
     }
   }
 }
 
 .line-edit {
+  font-family: $monospace_font_family;
+  font-size: 0.85em;
   display: inline-block;
 
   .radio-edit-group {
@@ -356,11 +347,14 @@
 }
 
 .line {
+  font-family: $monospace_font_family;
   position: relative;
   margin-right: 60px;
   background-color: $dark_grey;
+  line-height: 1.5em;
 
   .gutter {
+    font-size: 1em;
     float:left;
     color: $light_grey;
     display: inline-block;
@@ -391,6 +385,7 @@
     background-color: $darker_grey;
     margin-left: 55px;
     padding-left: 20px;
+    font-size: .85em;
 
     &:after {
       content: "";
