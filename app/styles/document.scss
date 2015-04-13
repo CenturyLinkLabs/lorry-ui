@@ -211,6 +211,7 @@
   font-family: $monospace_font_family;
   font-size: 0.85em;
   display: inline-block;
+  position: relative;
 
   .radio-edit-group {
     display: inline-block;
@@ -255,7 +256,7 @@
 
   input[type='text'].link-alias-text {
     margin-left: 10px;
-    width: 256px;
+    width: 260px;
   }
 
   .add-link {
@@ -281,6 +282,7 @@
     text-align: center;
     line-height: 50px;
     margin-left: 10px;
+    margin-right: 25px;
 
     a.active {
       color: $lighter_grey;
@@ -297,33 +299,33 @@
 
   .info {
     display: inline-block;
-    float: right;
+    position: absolute;
     background-image: url('../images/icon_info.svg');
     background-repeat: no-repeat;
-    @include background-size(60px, 60px);
-    background-position: 0 0;
-    width: 50px;
-    height: 30px;
+    @include background-size(40px, 40px);
+    background-position: -10px 0;
+    width: 20px;
+    height: 20px;
+    right: -30px;
+    top: 12px;
+
     color: $lighter_grey;
-    margin-top: 12px;
-    margin-left: 2px;
-    margin-right: 5px;
 
     &:hover {
       cursor: pointer;
+      background-position: -10px -20px;
     }
   }
 
   .delete {
     display: inline-block;
-    float: right;
+    position: absolute;
     @extend .icon-x-medium;
     width: 20px;
     height: 20px;
-    margin-left: 2px;
-    margin-right: 5px;
-    margin-top: 20px;
     cursor: pointer;
+    right: -65px;
+    top: 15px;
 
     &:hover {
       @include icon-red;
@@ -411,18 +413,18 @@
 
     .line-info {
       width: 50px;
-      height: 25px;
+      height: 20px;
       background-image: url('../images/icon_info.svg');
       background-repeat: no-repeat;
-      @include background-size(50px, 50px);
+      @include background-size(40px, 40px);
       background-position: 0 0;
       position: absolute;
       display: inline-block;
       right: -55px;
-      top: -1px;
+      top: 2px;
       &:hover {
         cursor: pointer;
-        background-position: 0 -25px;
+        background-position: 0 -20px;
       }
     }
   }
