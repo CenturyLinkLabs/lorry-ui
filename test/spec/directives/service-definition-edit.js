@@ -12,13 +12,14 @@ describe('Directive: serviceDefinitionEdit', function () {
 
   beforeEach(inject(function($compile, $rootScope, _lodash_){
     scope = $rootScope.$new();
+    lodash = _lodash_;
+    compile = $compile;
     rootScope = $rootScope;
     rootScope.serviceNames = function() {
       return ['foo', 'bar'];
     };
     rootScope.markAsDeletedTracker = {};
-    lodash = _lodash_;
-    compile = $compile;
+    rootScope.validKeys = ['command', 'links', 'ports', 'volumes', 'environment', 'external_links'];
   }));
 
   describe('Controller: serviceDefinitionEdit', function () {
@@ -148,7 +149,6 @@ describe('Directive: serviceDefinitionEdit', function () {
 
     describe('$scope.saveServiceDefinition', function () {
       beforeEach(function () {
-        scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
         scope.sectionName = 'adapter';
         scope.$parent.editedServiceYamlDocumentJson = {
           "command": "foo",
@@ -168,9 +168,18 @@ describe('Directive: serviceDefinitionEdit', function () {
         expect(element.isolateScope().$emit).toHaveBeenCalled();
       });
 
+      it('editable json should not be empty before save is called', function () {
+        expect(element.isolateScope().editableJson).not.toEqual([]);
+      });
+
       it('emits saveService when form input is valid passing required data', function () {
         element.isolateScope().saveServiceDefinition(true);
         expect(element.isolateScope().$emit).toHaveBeenCalledWith('saveService', scope.sectionName, scope.sectionName, scope.$parent.editedServiceYamlDocumentJson);
+      });
+
+      it('resets editable json after successfully saved', function () {
+        element.isolateScope().saveServiceDefinition(true);
+        expect(element.isolateScope().editableJson).toEqual([]);
       });
 
       it('does not emit saveService when form input is invalid', function () {
@@ -455,7 +464,6 @@ describe('Directive: serviceDefinitionEdit', function () {
 
     describe('$scope.buildValidKeyList', function () {
       beforeEach(function () {
-        scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
         scope.sectionName = 'adapter';
         scope.fullJson = {
           "adapter": {
@@ -474,7 +482,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       it('returns keys not already present in the json', function () {
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['volumes', 'links', 'environment', 'external_links']);
+        expect(result).toEqual(['links', 'volumes', 'environment', 'external_links']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });

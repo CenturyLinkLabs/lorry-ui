@@ -14,6 +14,7 @@ describe('Directive: documentLineEdit', function () {
     rootScope = $rootScope;
     compile = $compile;
     rootScope.markAsDeletedTracker = {};
+    rootScope.validKeys = ['command', 'links', 'ports', 'volumes', 'environment', 'external_links'];
   }));
 
   describe('Link: documentLineEdit', function () {

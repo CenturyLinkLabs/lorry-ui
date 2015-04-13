@@ -72,6 +72,8 @@ angular.module('lorryApp')
           if (isFormValid) {
             $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
             $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.$parent.editedServiceYamlDocumentJson);
+            // reset edited json
+            $scope.editableJson = [];
           }
         };
 
@@ -89,7 +91,7 @@ angular.module('lorryApp')
         };
 
         $scope.addNewKey = function (key) {
-          if (lodash.includes($scope.validKeys, key)) {
+          if (lodash.includes($rootScope.validKeys, key)) {
             var keyValue = $scope.createNewEmptyValueForKey(key);
             $scope.editableJson.push({name: key, value: keyValue});
             $scope.transformToJson();
@@ -122,7 +124,7 @@ angular.module('lorryApp')
         });
 
         $scope.buildValidKeyList = function () {
-          return lodash.difference($scope.validKeys, lodash.keys($scope.$parent.editedServiceYamlDocumentJson));
+          return lodash.difference($rootScope.validKeys, lodash.keys($scope.$parent.editedServiceYamlDocumentJson));
         };
 
         $scope.createNewEmptyValueForKey = function(key) {
@@ -132,13 +134,32 @@ angular.module('lorryApp')
             case 'links':
             case 'external_links':
             case 'ports':
+            case 'expose':
             case 'volumes':
+            case 'volumes_from':
             case 'environment':
+            case 'env_file':
+            case 'dns':
+            case 'cap_add':
+            case 'cap_drop':
+            case 'dns_search':
               keyValue = [''];
               break;
             case 'command':
             case 'image':
             case 'build':
+            case 'net':
+            case 'working_dir':
+            case 'entrypoint':
+            case 'user':
+            case 'hostname':
+            case 'domainname':
+            case 'mem_limit':
+            case 'privileged':
+            case 'restart':
+            case 'stdin_open':
+            case 'tty':
+            case 'cpu_shares':
               keyValue = '';
               break;
             default:
@@ -179,8 +200,6 @@ angular.module('lorryApp')
             }
           }
         };
-
-        $scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
 
       }
     };

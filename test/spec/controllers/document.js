@@ -7,15 +7,18 @@ describe('Controller: DocumentCtrl', function () {
 
   var DocumentCtrl,
     scope,
+    rootScope,
     yamlValidator,
     jsyaml,
     ngDialog,
     timeout,
-    cookiesService;
+    cookiesService,
+    keysService;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _cookiesService_) {
+  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _cookiesService_, _keysService_) {
     scope = $rootScope.$new();
+    rootScope = $rootScope;
     DocumentCtrl = $controller('DocumentCtrl', {
       $scope: scope
     });
@@ -24,8 +27,9 @@ describe('Controller: DocumentCtrl', function () {
     ngDialog = _ngDialog_;
     timeout = $timeout;
     cookiesService = _cookiesService_;
+    keysService = _keysService_;
 
-    $rootScope.markAsDeletedTracker = {};
+    rootScope.markAsDeletedTracker = {};
   }));
 
   describe('$scope.hasErrors', function () {
@@ -477,6 +481,15 @@ describe('Controller: DocumentCtrl', function () {
       spyOn(DocumentCtrl, 'validateJson');
     });
 
+    describe('after save is called', function () {
+      beforeEach(function () {
+        scope.$emit('saveService', 'service1', 'service1', scope.updatedJsonData);
+      });
+      it('should reset the editedServiceYamlDocumentJson', function () {
+        expect(scope.editedServiceYamlDocumentJson).toEqual({});
+      });
+    });
+
     describe('when existing items for an existing service is updated', function () {
       beforeEach(function () {
         scope.$emit('saveService', 'service1', 'service1', scope.updatedJsonData);
@@ -789,4 +802,51 @@ describe('Controller: DocumentCtrl', function () {
     });
   });
 
+  describe('$scope.getValidKeys', function () {
+    beforeEach(function () {
+      rootScope.validKeys = [];
+    });
+
+    describe('when api call succeeds', function() {
+      var deferredSuccess;
+
+      beforeEach(inject(function($q) {
+        deferredSuccess = $q.defer();
+        spyOn(keysService, 'keys').and.returnValue(deferredSuccess.promise);
+        scope.getValidKeys();
+        deferredSuccess.resolve({data: [ {"image": {"desc": "blah blah", "required": false}}, {"build": {"desc": "blah blah", "required": false}}, {"command": {"desc": "blah blah", "required": false}}, {"ports": {"desc": "blah blah", "required": false}} ]});
+        scope.$digest();
+      }));
+
+      it ('sets $rootScope.validKeys to be not empty', function() {
+        expect(rootScope.validKeys).not.toEqual([]);
+      });
+
+      it ('sets $rootScope.validKeys with valid keys', function() {
+        expect(rootScope.validKeys).toEqual(['command', 'ports']);
+      });
+
+      it ('sets $rootScope.validKeys to not include image or build keys', function() {
+        expect(rootScope.validKeys).not.toContain('image');
+        expect(rootScope.validKeys).not.toContain('build');
+      });
+    });
+
+    describe('when api call fails', function() {
+      var deferredError;
+
+      beforeEach(inject(function($q) {
+        deferredError = $q.defer();
+        spyOn(keysService, 'keys').and.returnValue(deferredError.promise);
+        scope.getValidKeys();
+        deferredError.reject({status: 500, data: {}});
+        scope.$digest();
+      }));
+
+      it ('sets $rootScope.validKeys to be empty', function() {
+        expect(rootScope.validKeys).toEqual([]);
+      });
+    });
+
+  });
 });
