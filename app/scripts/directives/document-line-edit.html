@@ -6,6 +6,7 @@
     </div>
     <input type='text' class="build-image-text" ng-if="selectedImageName == null" ng-model="line.value"/>
     <input type='text' class="build-image-text" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
+    <div class="spacer"></div>
     <div class="info"></div>
     <div class="search-link">Or <a ng-class="searchLinkClasses()" href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></div>
   </div>
