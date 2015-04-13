@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService',
-  function ($rootScope, $scope, $log, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer, $timeout, cookiesService) {
+angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService',
+  function ($rootScope, $scope, $log, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService) {
 
     var self = this;
 
@@ -224,4 +224,21 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       return $scope.serviceDefinitions && $scope.serviceDefinitions.length > 0 && !$scope.newServiceBlock ? true : false;
     };
 
+    $scope.getValidKeys = function () {
+      keysService.keys()
+        .then(function (response) {
+          var keys = [];
+          angular.forEach(response.data, function(v, _) {
+            var key = lodash.keys(v)[0];
+            // don't add 'image' or 'build' keys, as they are added by default
+            if ( key !== 'image' && key !== 'build') {
+              keys.push(key);
+            }
+          });
+          $rootScope.validKeys = keys;
+        })
+        .catch(function (response) {
+          $rootScope.validKeys = [];
+        });
+    };
   }]);

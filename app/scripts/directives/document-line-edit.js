@@ -7,7 +7,6 @@ angular.module('lorryApp')
       replace: true,
       link: function postLink(scope, element, attrs) {
         //$log.log(scope.line);
-        scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
 
         scope.isImageOrBuild = function () {
           return (scope.line.name === 'image' || scope.line.name === 'build');
@@ -18,7 +17,7 @@ angular.module('lorryApp')
         };
 
         scope.isValidKey = function() {
-          return lodash.includes(scope.validKeys, scope.line.name);
+          return lodash.includes($rootScope.validKeys, scope.line.name);
         };
 
         scope.searchLinkClasses = function() {

@@ -27,7 +27,7 @@
     <document-alerts id="documentAlertsPane" ng-if="resettable"></document-alerts>
   </div>
 
-  <div id="documentPane">
+  <div id="documentPane" ng-init="getValidKeys()">
     <div ng-repeat="serviceDefinition in serviceDefinitions">
       <service-definition-display ng-if="!yamlDocument.json[serviceName(serviceDefinition)].editMode" service-definition="serviceDefinition"></service-definition-display>
       <service-definition-edit ng-if="yamlDocument.json[serviceName(serviceDefinition)].editMode" section-name="serviceName(serviceDefinition)"></service-definition-edit>
