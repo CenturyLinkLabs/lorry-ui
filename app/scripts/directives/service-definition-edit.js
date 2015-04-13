@@ -72,6 +72,8 @@ angular.module('lorryApp')
           if (isFormValid) {
             $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
             $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.$parent.editedServiceYamlDocumentJson);
+            // reset edited json
+            $scope.editableJson = [];
           }
         };
 

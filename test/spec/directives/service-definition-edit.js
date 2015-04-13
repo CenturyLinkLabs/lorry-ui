@@ -168,9 +168,18 @@ describe('Directive: serviceDefinitionEdit', function () {
         expect(element.isolateScope().$emit).toHaveBeenCalled();
       });
 
+      it('editable json should not be empty before save is called', function () {
+        expect(element.isolateScope().editableJson).not.toEqual([]);
+      });
+
       it('emits saveService when form input is valid passing required data', function () {
         element.isolateScope().saveServiceDefinition(true);
         expect(element.isolateScope().$emit).toHaveBeenCalledWith('saveService', scope.sectionName, scope.sectionName, scope.$parent.editedServiceYamlDocumentJson);
+      });
+
+      it('resets editable json after successfully saved', function () {
+        element.isolateScope().saveServiceDefinition(true);
+        expect(element.isolateScope().editableJson).toEqual([]);
       });
 
       it('does not emit saveService when form input is invalid', function () {

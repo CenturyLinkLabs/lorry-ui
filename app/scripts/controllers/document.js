@@ -146,6 +146,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
         $scope.newServiceBlock = false;
       }
 
+      // reset the edited service yaml
+      $scope.editedServiceYamlDocumentJson = {};
+
       self.validateJson();
     });
 

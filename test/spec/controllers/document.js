@@ -481,6 +481,15 @@ describe('Controller: DocumentCtrl', function () {
       spyOn(DocumentCtrl, 'validateJson');
     });
 
+    describe('after save is called', function () {
+      beforeEach(function () {
+        scope.$emit('saveService', 'service1', 'service1', scope.updatedJsonData);
+      });
+      it('should reset the editedServiceYamlDocumentJson', function () {
+        expect(scope.editedServiceYamlDocumentJson).toEqual({});
+      });
+    });
+
     describe('when existing items for an existing service is updated', function () {
       beforeEach(function () {
         scope.$emit('saveService', 'service1', 'service1', scope.updatedJsonData);
