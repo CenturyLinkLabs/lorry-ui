@@ -18,14 +18,18 @@ describe('Service: service-definition-transformer', function () {
     var serviceDefs = [
       [
         {
-          text: 'db:\\n',
+          text: 'db:\ ',
+          lineKey: 'db',
+          lineValue: '',
           lineNumber: 1,
           errors: [
             { error: { message: 'error1', line: 1, column: 2} }
           ]
         },
         {
-          text: '  image: postgres:latest\\n',
+          text: '  image: postgres:latest\ ',
+          lineKey: 'image',
+          lineValue: 'postgres:latest',
           lineNumber: 2,
           errors: [
             { error: { message: 'error2', line: 2, column: 3} }
@@ -34,14 +38,18 @@ describe('Service: service-definition-transformer', function () {
       ],
       [
         {
-          text: 'web:\\n',
+          text: 'web:\ ',
+          lineKey: 'web',
+          lineValue: '',
           lineNumber: 3,
           errors: [
             { error: { message: 'error3', line: 3, column: 2} }
           ]
         },
         {
-          text: '  image: apache:latest\\n',
+          text: '  image: apache:latest\ ',
+          lineKey: 'image',
+          lineValue: 'apache:latest',
           lineNumber: 4,
           errors: [
             { error: { message: 'error4', line: 4, column: 3} }
@@ -50,14 +58,14 @@ describe('Service: service-definition-transformer', function () {
       ]
     ];
 
-    var rawYaml = "db:\\n  image: postgres:latest\\nweb:\\n  image: apache:latest\\n";
+    var rawYaml = "db:\   image: postgres:latest\ web:\   image: apache:latest\ ";
 
     var yamlDoc = {
       lines: [
-        'db:\\n',
-        '  image: postgres:latest\\n',
-        'web:\\n',
-        '  image: apache:latest\\n'
+        'db:\ ',
+        '  image: postgres:latest\ ',
+        'web:\ ',
+        '  image: apache:latest\ '
       ],
       errors: [
         { error: { message: 'error1', line: 1, column: 2} },
