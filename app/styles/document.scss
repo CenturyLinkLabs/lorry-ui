@@ -356,11 +356,14 @@
 }
 
 .line {
+  font-family: $monospace_font_family;
   position: relative;
   margin-right: 60px;
   background-color: $dark_grey;
+  line-height: 1.5em;
 
   .gutter {
+    font-size: 1em;
     float:left;
     color: $light_grey;
     display: inline-block;
@@ -391,6 +394,7 @@
     background-color: $darker_grey;
     margin-left: 55px;
     padding-left: 20px;
+    font-size: .85em;
 
     &:after {
       content: "";
@@ -416,18 +420,18 @@
 
     .line-info {
       width: 50px;
-      height: 25px;
+      height: 20px;
       background-image: url('../images/icon_info.svg');
       background-repeat: no-repeat;
-      @include background-size(50px, 50px);
+      @include background-size(40px, 40px);
       background-position: 0 0;
       position: absolute;
       display: inline-block;
       right: -55px;
-      top: -1px;
+      top: 2px;
       &:hover {
         cursor: pointer;
-        background-position: 0 -25px;
+        background-position: 0 -20px;
       }
     }
   }
