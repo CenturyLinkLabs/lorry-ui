@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp').directive('documentLine', ['$compile', '$sce', '$window', 'lodash', 'jsyaml', 'ENV',
-  function ($compile, $sce, $window, lodash, jsyaml, ENV) {
+angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lodash', 'jsyaml', 'ENV',
+  function ($compile, $window, lodash, jsyaml, ENV) {
     return {
       scope: {
         line: '='
@@ -9,20 +9,26 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$sce', '$wind
       restrict: 'E',
       replace: true,
       link: function postLink(scope, element) {
-        var $lineText = element.find('.line-text'),
-          regex = /(^[\s]*)/,
-          indent = regex.exec(scope.line.text)[0].length;
 
-        $lineText.css('padding-left', (20 + indent * 15) + 'px');
-        $lineText.text($sce.trustAsHtml(scope.line.text.replace(regex, '')));
+        function lineHtml() {
+          var html = '';
+          if (scope.line.lineKey) {
+            html += scope.line.text.replace(scope.line.lineKey + ':',
+                                            '<span class="service-key">' + scope.line.lineKey + ':</span>');
+          } else {
+            html += scope.line.text;
+          }
+          return html;
+        }
 
-        if (lodash.any(scope.line.errors)) {
-          element.addClass('warning');
-          var info = angular.element('<div class="line-info" tooltips tooltip-side="left" tooltip-size="large" ' +
-                                      'tooltip-title="' + scope.line.errors[0].error.message + '">' +
-                                      '</div>');
-          element.append($compile(info)(scope));
-
+        function addErrorStyle() {
+          if (lodash.any(scope.line.errors)) {
+            element.addClass('warning');
+            var info = angular.element('<div class="line-info" tooltips tooltip-side="left" tooltip-size="large" ' +
+            'tooltip-title="' + scope.line.errors[0].error.message + '">' +
+            '</div>');
+            element.append($compile(info)(scope));
+          }
         }
 
         function imageName() {
@@ -41,7 +47,16 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$sce', '$wind
 
         scope.tooltip = function () {
           return 'Inspect ' + imageName() + ' with ImageLayers.io';
-        }
+        };
+
+        var $lineText = element.find('.line-text'),
+          indentRegex = /(^[\s]*)/,
+          indentLevel = indentRegex.exec(scope.line.text)[0].length;
+
+        $lineText.css('padding-left', (20 + indentLevel * 15) + 'px');
+        $lineText.html(lineHtml());
+
+        addErrorStyle();
       },
       templateUrl: '/scripts/directives/document-line.html'
     };

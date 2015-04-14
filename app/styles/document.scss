@@ -150,6 +150,10 @@
     }
   }
 
+  .line:nth-of-type(2) .line-text .service-key {
+    color: $white;
+  }
+
   .action-menu {
     position: absolute;
     top: 0;
@@ -403,6 +407,10 @@
     padding-left: 20px;
     font-size: .85em;
 
+    .service-key {
+      color: #04C6FF;
+    }
+
     &:after {
       content: "";
       display: table;
@@ -423,6 +431,9 @@
 
     .line-text {
       background-color: $orange;
+      .service-key {
+        color: $white;
+      }
     }
 
     .line-info {

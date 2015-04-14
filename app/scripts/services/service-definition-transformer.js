@@ -3,14 +3,15 @@
 angular.module('lorryApp').factory('serviceDefTransformer', ['$log', 'lodash', 'jsyaml',
   function($log, lodash, jsyaml) {
     function parseLine(line) {
-      try {
-        var lineKey, lineValue,
-          lineYaml = jsyaml.safeLoad(line.trim()),
-          keys = lodash.keys(lineYaml),
-          values = lodash.values(lineYaml);
+      var lineKey, lineValue, lineYaml, keys, values;
 
-        if (angular.isDefined(lodash.first(keys)) && lodash.first(keys) !== "0") {
-          lineKey = lodash.first(keys)
+      try {
+        lineYaml = jsyaml.safeLoad(line.trim());
+        keys = lodash.keys(lineYaml);
+        values = lodash.values(lineYaml);
+
+        if (angular.isDefined(lodash.first(keys)) && lodash.first(keys) !== '0') {
+          lineKey = lodash.first(keys);
         }
         lineValue = values.join('');
       } catch (err) {
@@ -21,10 +22,10 @@ angular.module('lorryApp').factory('serviceDefTransformer', ['$log', 'lodash', '
 
     return {
       toRawYaml: function(serviceDefs) {
-        var yaml = "";
-        serviceDefs.forEach(function(sDef, _) {
-          sDef.forEach(function(lineDef, _) {
-            yaml += lineDef['text'];
+        var yaml = '';
+        serviceDefs.forEach(function(sDef) {
+          sDef.forEach(function(lineDef) {
+            yaml += lineDef.text;
           });
         });
         return yaml;

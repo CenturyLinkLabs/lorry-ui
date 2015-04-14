@@ -101,7 +101,8 @@ describe('Controller: DocumentCtrl', function () {
 
       it ('builds the service definitions', function() {
         expect(scope.serviceDefinitions).toBeDefined();
-        expect(scope.serviceDefinitions).toContain([{ text: 'line', lineNumber: 1, errors: [  ] }]);
+        expect(scope.serviceDefinitions)
+          .toContain([{ text: 'line', lineKey: undefined, lineValue: 'line', lineNumber: 1, errors: [  ] }]);
       });
 
       it ('sets the parseErrors flag for message display true', function () {

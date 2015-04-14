@@ -20,7 +20,7 @@ angular.module('lorryApp')
         };
 
         scope.serviceName = function () {
-          return scope.serviceDefinition[0].text.split(':')[0]
+          return scope.serviceDefinition[0].text.split(':')[0];
         };
       },
       templateUrl: '/scripts/directives/service-definition-display.html'

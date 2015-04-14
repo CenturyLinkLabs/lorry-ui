@@ -90,6 +90,33 @@ describe('Directive: documentLine', function () {
     });
   });
 
+  describe('identifying attribute keys', function () {
+    describe('when the line contains a service definition attribute key', function () {
+      beforeEach(function () {
+        scope.lineObj = { text: 'foo: blah', lineKey: 'foo', lineValue: 'blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line line="lineObj"></document-line>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
+
+      it('surrounds the key with a span with class "service-key"', function () {
+        expect(element.find('.service-key').length).not.toEqual(0);
+      });
+    });
+    describe('when the line does not contain a service definition attribute key', function () {
+      beforeEach(function () {
+        scope.lineObj = { text: 'blah', lineKey: undefined, lineValue: 'blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line line="lineObj"></document-line>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
+
+      it('does not output a span with class "service-key"', function () {
+
+      });
+    });
+  });
+
   describe('scope.isImageLine', function () {
     describe('when the line text does not start with "image:"', function () {
       beforeEach(function () {
