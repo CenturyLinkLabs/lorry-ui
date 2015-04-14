@@ -23,6 +23,10 @@
   margin-bottom: 75px;
   padding-bottom: 15px;
 
+  .button-secondary {
+    margin-right: 10px;
+  }
+
   input[type='text'],
   input[type='radio'],
   select {
@@ -159,7 +163,14 @@
 .section-edit {
   position: relative;
   width: 100%;
+  font-family: $monospace_font_family;
+  font-size: 0.85em;
   border-bottom: 1px solid $darkest_grey;
+
+  .button-primary, .button-secondary {
+    font-family: $base_font_family;
+    font-size: 1.0em;
+  }
 
   .gutter {
     position: absolute;
@@ -208,12 +219,7 @@
     .action-area {
       float: right;
       margin-top: 10px;
-      margin-right: 90px;
-
-      .button-primary, .button-secondary {
-        font-family: $base_font_family;
-      }
-
+      margin-right: 70px;
     }
   }
 }
@@ -251,7 +257,7 @@
   }
 
   input[type='text'].build-image-text {
-    width: 614px;
+    width: 640px;
   }
 
   select {
@@ -264,7 +270,7 @@
 
   input[type='text'].link-alias-text {
     margin-left: 10px;
-    width: 256px;
+    width: 260px;
   }
 
   .add-link {
@@ -309,17 +315,18 @@
     float: right;
     background-image: url('../images/icon_info.svg');
     background-repeat: no-repeat;
-    @include background-size(60px, 60px);
+    @include background-size(40px, 40px);
     background-position: 0 0;
-    width: 50px;
-    height: 30px;
+    width: 30px;
+    height: 20px;
     color: $lighter_grey;
-    margin-top: 12px;
-    margin-left: 2px;
+    margin-top: 14px;
+    margin-left: 1px;
     margin-right: 5px;
+    cursor: pointer;
 
     &:hover {
-      cursor: pointer;
+      background-position: 0px -20px;
     }
   }
 
@@ -331,7 +338,7 @@
     height: 20px;
     margin-left: 2px;
     margin-right: 5px;
-    margin-top: 20px;
+    margin-top: 16px;
     cursor: pointer;
 
     &:hover {
