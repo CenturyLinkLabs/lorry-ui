@@ -30,7 +30,7 @@ module.exports = function (grunt) {
     ngconstant: {
       options: {
         space: '  ',
-        wrap: '"use strict";\n\n {%= __ngModule %}',
+        wrap: '\'use strict\';\n\n {%= __ngModule %}',
         name: 'config'
       },
       // Environment targets
@@ -476,6 +476,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'jshint:all',
       'ngconstant:development',
       'wiredep',
       'html2js',
@@ -494,6 +495,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'jshint:all',
+    'jshint:test',
     'ngconstant:development',
     'wiredep:test',
     'concurrent:test',
