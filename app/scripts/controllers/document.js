@@ -129,7 +129,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       updatedSectionData = self.deleteItemsMarkedForDeletion(updatedSectionData);
 
       // Update the json for the service name
-      if (oldServiceName && oldServiceName != newServiceName) {
+      if (oldServiceName && oldServiceName !== newServiceName) {
         delete $scope.yamlDocument.json[oldServiceName];
       }
 
@@ -178,7 +178,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
         } else {
           lodash.pullAt(data[k], v);
           // delete key if no items are left
-          if (lodash.size(data[k]) == 0) {
+          if (lodash.size(data[k]) === 0) {
             delete data[k];
           }
         }
@@ -198,9 +198,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       return lodash.some($scope.yamlDocument.json, 'editMode', true);
     };
 
-    $scope.triggerClickForElement = function(element_id) {
+    $scope.triggerClickForElement = function(elementId) {
       $timeout(function() {
-        angular.element(element_id).triggerHandler('click');
+        angular.element(elementId).triggerHandler('click');
       }, 0);
     };
 
@@ -231,13 +231,13 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       keysService.keys()
         .then(function (response) {
           var keys = [];
-          angular.forEach(response.data, function(v, _) {
+          angular.forEach(response.data, function(v) {
             var key = lodash.keys(v)[0];
               keys.push(key);
           });
           $rootScope.validKeys = keys;
         })
-        .catch(function (response) {
+        .catch(function () {
           $rootScope.validKeys = [];
         });
     };
