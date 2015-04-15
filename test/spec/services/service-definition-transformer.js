@@ -58,7 +58,7 @@ describe('Service: service-definition-transformer', function () {
       ]
     ];
 
-    var rawYaml = "db:\   image: postgres:latest\ web:\   image: apache:latest\ ";
+    var rawYaml = 'db:\   image: postgres:latest\ web:\   image: apache:latest\ ';
 
     var yamlDoc = {
       lines: [
@@ -77,7 +77,7 @@ describe('Service: service-definition-transformer', function () {
 
     describe('toRawYaml', function() {
 
-      it("should transform service definitions to yaml", function () {
+      it('should transform service definitions to yaml', function () {
         var yamlResp = serviceDefTransformer.toRawYaml(serviceDefs);
 
         expect(rawYaml).toEqual(yamlResp);
@@ -87,7 +87,7 @@ describe('Service: service-definition-transformer', function () {
 
     describe('fromYamlDocument', function() {
 
-      it("should transform yaml to service definitions", function () {
+      it('should transform yaml to service definitions', function () {
         var sDefResp = serviceDefTransformer.fromYamlDocument(yamlDoc);
 
         expect(serviceDefs).toEqual(sDefResp);

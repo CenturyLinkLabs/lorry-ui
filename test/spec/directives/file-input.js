@@ -11,7 +11,7 @@ describe('Directive: fileInput', function () {
     scope = $rootScope.$new();
   }));
 
-  it("should put the file specified in the file input element on the parent scope", inject(function ($compile) {
+  it('should put the file specified in the file input element on the parent scope', inject(function ($compile) {
     element = angular.element('<input type="file" file-input/>');
     element = $compile(element)(scope);
 

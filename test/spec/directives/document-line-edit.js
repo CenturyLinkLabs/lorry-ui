@@ -184,7 +184,7 @@ describe('Directive: documentLineEdit', function () {
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
 
-          scope.markAsDeletedTracker['command'] = 'delete me';
+          scope.markAsDeletedTracker.command = 'delete me';
         });
 
         it('returns classes that includes mark-for-deletion', function () {
@@ -212,7 +212,7 @@ describe('Directive: documentLineEdit', function () {
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
 
-          scope.markAsDeletedTracker['ports'] = [0];
+          scope.markAsDeletedTracker.ports = [0];
         });
 
         it('returns classes that includes mark-for-deletion', function () {
@@ -317,7 +317,7 @@ describe('Directive: documentLineEdit', function () {
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
 
-          scope.markAsDeletedTracker['command'] = 'delete me';
+          scope.markAsDeletedTracker.command = 'delete me';
         });
 
         it('returns classes that includes marked', function () {
@@ -345,7 +345,7 @@ describe('Directive: documentLineEdit', function () {
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
 
-          scope.markAsDeletedTracker['ports'] = [0];
+          scope.markAsDeletedTracker.ports = [0];
         });
 
         it('returns classes that includes marked', function () {

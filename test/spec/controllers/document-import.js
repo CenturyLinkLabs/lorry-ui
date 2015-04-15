@@ -34,7 +34,7 @@ describe('Controller: DocumentImportCtrl', function () {
 
   describe('$scope.tabStyleClasses', function () {
     beforeEach(function () {
-      scope.dialogOptions['dialogTab'] = 'compose';
+      scope.dialogOptions.dialogTab = 'compose';
     });
 
     it ('returns the selected button when the tab argument matches the current dialogTab', function () {
@@ -49,7 +49,7 @@ describe('Controller: DocumentImportCtrl', function () {
   describe('$scope.setDialogTab', function () {
     beforeEach(function () {
       scope.importFileName = 'docker-compose.yml';
-      scope.docImport = { raw: 'blah', remote: 'http://www.example.com' }
+      scope.docImport = { raw: 'blah', remote: 'http://www.example.com' };
     });
 
     it('resets the import filename', function () {
@@ -104,7 +104,7 @@ describe('Controller: DocumentImportCtrl', function () {
       spyOn(scope, 'upload');
     });
 
-    describe("when the dialogPane ends with 'remote'", function () {
+    describe('when the dialogPane ends with "remote"', function () {
       it('triggers DocumentImportCtrl.fetchRemoteContent to fetch from the remote address', function () {
         var docImport = { remote: 'http://www.example.com' };
         scope.dialogOptions.dialogPane = 'remote';
@@ -113,7 +113,7 @@ describe('Controller: DocumentImportCtrl', function () {
       });
     });
 
-    describe("when the dialogPane ends with 'paste'", function () {
+    describe('when the dialogPane ends with "paste"', function () {
       it('triggers DocumentImportCtrl.importPastedContent', function () {
         var docImport = {raw: 'asdf'};
         scope.dialogOptions.dialogPane = 'paste';
@@ -122,7 +122,7 @@ describe('Controller: DocumentImportCtrl', function () {
       });
     });
 
-    describe("when the dialogPane ends with 'upload'", function () {
+    describe('when the dialogPane ends with "upload"', function () {
       it('triggers $scope.upload', function () {
         scope.dialogOptions.dialogPane = 'upload';
         scope.files = {};
@@ -149,7 +149,7 @@ describe('Controller: DocumentImportCtrl', function () {
 
     describe('when the import pmx template tab is displayed', function () {
       it('sets the PMXConverter converted value pasted into $scope.yamlDocument.raw', function () {
-        var docImport = {raw: "---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n"};
+        var docImport = {raw: '---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n'};
         scope.dialogOptions.dialogTab = 'pmx';
         DocumentImportCtrl.importPastedContent(docImport.raw);
         expect(scope.yamlDocument.raw).toEqual(PMXConverter.convert(docImport.raw));
@@ -206,12 +206,12 @@ describe('Controller: DocumentImportCtrl', function () {
 
   describe('$scope.upload', function(){
     var eventListener = jasmine.createSpy();
-    var reader = { addEventListener: eventListener, readAsText: function (file) {} };
+    var reader = { addEventListener: eventListener, readAsText: function () {} };
     var fakeFile = {};
 
     beforeEach(function(){
       scope.files = [fakeFile];
-      spyOn(window, "FileReader").and.returnValue(reader);
+      spyOn(window, 'FileReader').and.returnValue(reader);
       spyOn(scope, 'validateYaml');
       scope.upload();
     });
