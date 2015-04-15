@@ -4,9 +4,10 @@
       <input type='radio' ng-model="line.name" value='image' ng-checked="line.name === 'image'">Image
       <input type='radio' ng-model="line.name" value='build' ng-checked="line.name === 'build'">Build
     </div>
-    <input type='text' class="build-image-text" ng-if="selectedImageName == null" ng-model="line.value"/>
-    <input type='text' class="build-image-text" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
-    <div class="spacer"></div>
+    <input type='text' class="build-image-text" ng-class="markForDeletionClasses(null)" ng-if="selectedImageName == null" ng-model="line.value"/>
+    <input type='text' class="build-image-text" ng-class="markForDeletionClasses(null)" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
+    <div class="spacer" ng-hide="serviceHasMultipleLines()" ></div>
+    <div class="delete" ng-show="serviceHasMultipleLines()" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
     <div class="info"></div>
     <div class="search-link">Or <a ng-class="searchLinkClasses()" href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></div>
   </div>

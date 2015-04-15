@@ -233,10 +233,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
           var keys = [];
           angular.forEach(response.data, function(v, _) {
             var key = lodash.keys(v)[0];
-            // don't add 'image' or 'build' keys, as they are added by default
-            if ( key !== 'image' && key !== 'build') {
               keys.push(key);
-            }
           });
           $rootScope.validKeys = keys;
         })

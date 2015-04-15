@@ -824,12 +824,7 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it ('sets $rootScope.validKeys with valid keys', function() {
-        expect(rootScope.validKeys).toEqual(['command', 'ports']);
-      });
-
-      it ('sets $rootScope.validKeys to not include image or build keys', function() {
-        expect(rootScope.validKeys).not.toContain('image');
-        expect(rootScope.validKeys).not.toContain('build');
+        expect(rootScope.validKeys).toEqual(['image', 'build', 'command', 'ports']);
       });
     });
 

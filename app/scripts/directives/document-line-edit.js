@@ -3,6 +3,10 @@
 angular.module('lorryApp')
   .directive('documentLineEdit', ['$rootScope', '$log', 'lodash', function ($rootScope, $log, lodash) {
     return {
+      scope: {
+        line: '=',
+        numLines: '='
+      },
       restrict: 'E',
       replace: true,
       link: function postLink(scope, element, attrs) {
@@ -107,6 +111,10 @@ angular.module('lorryApp')
             }
             scope.line.value[index] = lineValue;
           }
+        };
+
+        scope.serviceHasMultipleLines = function() {
+          return scope.numLines > 1;
         };
 
         scope.serviceNameList = $rootScope.serviceNameList;

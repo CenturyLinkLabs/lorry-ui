@@ -8,7 +8,7 @@
         <span ng-show="editForm.sectionname.$error.required">Service name is required</span>
       </span>
       <div ng-repeat="line in editableJson">
-        <document-line-edit ng-model="line"></document-line-edit>
+        <document-line-edit num-lines="editableJson.length" line="line"></document-line-edit>
       </div>
       <div class="add-new-line">
         <select ng-model="newline.name" ng-change="addNewKey(newline.name)" ng-options="cmd as cmd for cmd in buildValidKeyList()">

@@ -37,8 +37,9 @@
   #newServiceBlockBtn {
     margin-top: 20px;
     margin-left: 76px;
-    .button-secondary {
+    .button-primary, .button-secondary {
       font-family: $base_font_family;
+      line-height: 1em;
     }
 
     a {
@@ -167,13 +168,12 @@
 .section-edit {
   position: relative;
   width: 100%;
-  font-family: $monospace_font_family;
-  font-size: 0.85em;
   border-bottom: 1px solid $darkest_grey;
 
-  .button-primary, .button-secondary {
+  .button-primary, .button-secondary, .button-primary:hover, .button-secondary:hover {
     font-family: $base_font_family;
-    font-size: 1.0em;
+    font-size: 1.1em;
+    line-height: 1em;
   }
 
   .gutter {
@@ -190,6 +190,8 @@
   }
 
   .section {
+    font-family: $monospace_font_family;
+    font-size: 0.85em;
     display: inline-block;
     margin-bottom: 10px;
     margin-left: 70px;
@@ -223,7 +225,7 @@
     .action-area {
       float: right;
       margin-top: 10px;
-      margin-right: 70px;
+      margin-right: 65px;
     }
   }
 }

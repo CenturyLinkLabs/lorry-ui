@@ -22,7 +22,7 @@ angular.module('lorryApp')
             // since image/build section is mandatory, add it to the json if not present
             if (!lodash.findWhere($scope.editableJson, {name: 'image'}) &&
               !lodash.findWhere($scope.editableJson, {name: 'build'})) {
-              $scope.editableJson.push({name: 'image', value: ''})
+              $scope.editableJson.push({name: 'image', value: ''});
             }
           }
         };
@@ -124,7 +124,13 @@ angular.module('lorryApp')
         });
 
         $scope.buildValidKeyList = function () {
-          return lodash.difference($rootScope.validKeys, lodash.keys($scope.$parent.editedServiceYamlDocumentJson));
+          if ($rootScope.validKeys) {
+            var existingKeys = lodash.pluck($scope.editableJson, 'name');
+            if (lodash.includes(existingKeys, 'image') || lodash.includes(existingKeys, 'build')) {
+              existingKeys = lodash.union(existingKeys, ['image', 'build']);
+            }
+            return lodash.difference($rootScope.validKeys, existingKeys);
+          }
         };
 
         $scope.createNewEmptyValueForKey = function(key) {
