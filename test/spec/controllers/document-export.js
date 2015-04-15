@@ -20,6 +20,7 @@ describe('Controller: DocumentExportCtrl', function () {
     fileSaver = _fileSaver_;
     $timeout = _$timeout_;
     scope = $rootScope.$new();
+    scope.inEditMode = function () {}; // for mocking
     DocumentExportCtrl = $controller('DocumentExportCtrl', {
       $scope: scope
     });
@@ -38,6 +39,11 @@ describe('Controller: DocumentExportCtrl', function () {
 
     it('returns false if the yaml document could not be loaded', function () {
       scope.yamlDocument = {loadFailure: true};
+      expect(scope.exportable()).toBeFalsy();
+    });
+
+    it('returns false if the yaml document is being edited', function () {
+      spyOn(scope, 'inEditMode').and.returnValue(true);
       expect(scope.exportable()).toBeFalsy();
     });
   });

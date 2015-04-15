@@ -16,7 +16,8 @@ angular.module('lorryApp').controller('DocumentExportCtrl', ['$scope', '$http', 
     $scope.exportable = function () {
       return (angular.isDefined($scope.yamlDocument) &&
               angular.isDefined($scope.yamlDocument.raw) &&
-              !($scope.yamlDocument.loadFailure));
+              !($scope.yamlDocument.loadFailure) &&
+              !($scope.inEditMode()));
     };
 
     $scope.exportButtonStyle = function () {
