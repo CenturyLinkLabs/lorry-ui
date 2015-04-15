@@ -6,9 +6,9 @@ angular.module('lorryApp')
       'query': {
         method:'GET',
         isArray: true,
-        transformResponse: function(data, headers){
+        transformResponse: function(data){
           var res = angular.fromJson(data).results;
-          angular.forEach(res, function(value, key) {
+          angular.forEach(res, function(value) {
             // check for images without usernames i.e. busybox
             if (value.name.split('/').length === 1) {
               value.username = '';
@@ -25,7 +25,7 @@ angular.module('lorryApp')
         url: ENV.LORRY_API_ENDPOINT + '/images/tags/:repoName',
         method:'GET',
         isArray: true,
-        transformResponse: function(data, headers){
+        transformResponse: function(data){
           var resp = angular.fromJson(data);
           return resp;
         }
@@ -34,7 +34,7 @@ angular.module('lorryApp')
         url: ENV.LORRY_API_ENDPOINT + '/images/tags/:repoUser/:repoName',
         method:'GET',
         isArray: true,
-        transformResponse: function(data, headers){
+        transformResponse: function(data){
           var resp = angular.fromJson(data);
           return resp;
         }

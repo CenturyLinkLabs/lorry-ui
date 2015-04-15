@@ -366,14 +366,10 @@ describe('Controller: DocumentCtrl', function () {
     describe('when the edited section has a service without the build or image key', function () {
       beforeEach(function () {
         scope.yamlDocument.json = {
-          "service1": {
-            "command": "foo"
+          'service1': {
+            'command': 'foo'
           }};
         scope.editService('service1');
-      });
-
-      it('should add an image key to the service', function () {
-        expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('image');
       });
 
     });
@@ -381,22 +377,22 @@ describe('Controller: DocumentCtrl', function () {
     describe('when the edited section has a service matching the serviceName', function () {
       beforeEach(function () {
         scope.yamlDocument.json = {
-          "service1": {
-            "build": "foo",
-            "ports": ["1111:2222", "3333:4444"]
+          'service1': {
+            'build': 'foo',
+            'ports': ['1111:2222', '3333:4444']
           }};
         scope.editService('service1');
       });
 
       it('should make a copy of the original service json for editing', function () {
         // remove the editMode for testing equality
-        delete scope.yamlDocument.json['service1'].editMode;
-        expect(scope.yamlDocument.json['service1']).toEqual(scope.editedServiceYamlDocumentJson);
+        delete scope.yamlDocument.json.service1.editMode;
+        expect(scope.yamlDocument.json.service1).toEqual(scope.editedServiceYamlDocumentJson);
       });
 
       it('should flag the service to be in editMode', function () {
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
-        expect(scope.yamlDocument.json['service1'].editMode).toEqual(true);
+        expect(scope.yamlDocument.json.service1.editMode).toBeDefined();
+        expect(scope.yamlDocument.json.service1.editMode).toEqual(true);
       });
     });
 
@@ -411,7 +407,7 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should not flag the service to be in editMode', function () {
-        !expect(scope.yamlDocument.json['someService']).hasOwnProperty('editMode');
+        expect(scope.yamlDocument.json.someService).toBeUndefined();
       });
     });
   });
@@ -420,25 +416,25 @@ describe('Controller: DocumentCtrl', function () {
     describe('when some keys and items in a key are deleted', function () {
       beforeEach(function () {
         // simulate deletes as marked
-        scope.markAsDeletedTracker['build'] = ['delete me'];
-        scope.markAsDeletedTracker['ports'] = ['0'];
+        scope.markAsDeletedTracker.build = ['delete me'];
+        scope.markAsDeletedTracker.ports = ['0'];
       });
 
       it('should delete the items marked for deletion', function () {
         var sectionData = {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
+          'build': 'foo',
+          'ports': ['1111:2222', '3333:4444']
         };
         var result = DocumentCtrl.deleteItemsMarkedForDeletion(sectionData);
 
-        expect(result).not.hasOwnProperty('build');
-        expect(result['ports'].length).toBe(1);
+        expect(result.build).toBeUndefined();
+        expect(result.ports.length).toBe(1);
       });
 
       it('should reset the delete tracker', function () {
         var sectionData = {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
+          'build': 'foo',
+          'ports': ['1111:2222', '3333:4444']
         };
         DocumentCtrl.deleteItemsMarkedForDeletion(sectionData);
 
@@ -449,20 +445,19 @@ describe('Controller: DocumentCtrl', function () {
     describe('when all the items in a key are deleted', function () {
       beforeEach(function () {
         // simulate deletes as marked
-        scope.markAsDeletedTracker['build'] = ['delete me'];
-        scope.markAsDeletedTracker['ports'] = ['0'];
-        scope.markAsDeletedTracker['ports'] = ['1'];
+        scope.markAsDeletedTracker.build = ['delete me'];
+        scope.markAsDeletedTracker.ports = [0,1];
       });
 
       it('should delete the whole key', function () {
         var sectionData = {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
+          'build': 'foo',
+          'ports': ['1111:2222', '3333:4444']
         };
         var result = DocumentCtrl.deleteItemsMarkedForDeletion(sectionData);
 
-        expect(result).not.hasOwnProperty('build');
-        expect(result).not.hasOwnProperty('ports');
+        expect(result.build).toBeUndefined();
+        expect(result.ports).toBeUndefined();
       });
     });
   });
@@ -470,13 +465,13 @@ describe('Controller: DocumentCtrl', function () {
   describe('$scope.$on saveService', function () {
     beforeEach(function () {
       scope.yamlDocument.json = {
-        "service1": {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
+        'service1': {
+          'build': 'foo',
+          'ports': ['1111:2222', '3333:4444']
         }};
       scope.updatedJsonData = {
-          "build": "bar",
-          "ports": ["1111:1111", "2222:2222"]
+          'build': 'bar',
+          'ports': ['1111:1111', '2222:2222']
       };
 
       spyOn(DocumentCtrl, 'validateJson');
@@ -497,11 +492,11 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should update the service', function () {
-        expect(scope.yamlDocument.json['service1']).toEqual(scope.updatedJsonData);
+        expect(scope.yamlDocument.json.service1).toEqual(scope.updatedJsonData);
       });
 
       it('should unset the edit mode for the yamlDocument.json service', function () {
-        expect(scope.yamlDocument.json['service1']).not.hasOwnProperty('editMode');
+        expect(scope.yamlDocument.json.service1.editMode).toBeUndefined();
       });
 
       it('should call validateJson', function () {
@@ -512,20 +507,20 @@ describe('Controller: DocumentCtrl', function () {
     describe('when new items for an existing service is added', function () {
       beforeEach(function () {
         scope.updatedJsonData = {
-          "command": "my command",
-          "build": "bar",
-          "ports": ["1111:1111", "2222:2222"]
+          'command': 'my command',
+          'build': 'bar',
+          'ports': ['1111:1111', '2222:2222']
         };
         scope.$emit('saveService', 'service1', 'service1', scope.updatedJsonData);
       });
 
       it('should update the service with the new item', function () {
-        expect(scope.yamlDocument.json['service1']).hasOwnProperty('command');
-        expect(scope.yamlDocument.json['service1']).toEqual(scope.updatedJsonData);
+        expect(scope.yamlDocument.json.service1.command).toBeDefined();
+        expect(scope.yamlDocument.json.service1).toEqual(scope.updatedJsonData);
       });
 
       it('should unset the edit mode for the yamlDocument.json service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
+        expect(scope.yamlDocument.json.service1.editMode).toBeUndefined();
       });
 
       it('should call validateJson', function () {
@@ -539,19 +534,19 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should add the service with new name', function () {
-        expect(scope.yamlDocument.json).hasOwnProperty('service2');
+        expect(scope.yamlDocument.json.service2).toBeDefined();
       });
 
       it('should delete the service with old name', function () {
-        !expect(scope.yamlDocument.json).hasOwnProperty('service1');
+        expect(scope.yamlDocument.json.service1).toBeUndefined();
       });
 
       it('should add updated data for the new service to the yamlDocument.json', function () {
-        expect(scope.yamlDocument.json['service2']).toEqual(scope.updatedJsonData);
+        expect(scope.yamlDocument.json.service2).toEqual(scope.updatedJsonData);
       });
 
       it('should unset the edit mode for the yamlDocument.json service', function () {
-        !expect(scope.yamlDocument.json['service2']).hasOwnProperty('editMode');
+        expect(scope.yamlDocument.json.service2.editMode).toBeUndefined();
       });
 
       it('should call validateJson', function () {
@@ -565,7 +560,7 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should add the new service', function () {
-        expect(scope.yamlDocument.json).hasOwnProperty('newservice');
+        expect(scope.yamlDocument.json.newservice).toBeDefined();
       });
 
       it('should hide the new service block', function () {
@@ -573,7 +568,7 @@ describe('Controller: DocumentCtrl', function () {
       });
 
       it('should add data for the new service to the yamlDocument.json', function () {
-        expect(scope.yamlDocument.json['newservice']).toEqual(scope.updatedJsonData);
+        expect(scope.yamlDocument.json.newservice).toEqual(scope.updatedJsonData);
       });
 
       it('should call validateJson', function () {
@@ -586,13 +581,13 @@ describe('Controller: DocumentCtrl', function () {
   describe('$scope.$on cancelEditing', function () {
     beforeEach(function () {
       scope.yamlDocument.json = {
-        "service1": {
-          "build": "fooUpdated",
-          "command": "new key added"
+        'service1': {
+          'build': 'fooUpdated',
+          'command': 'new key added'
         }};
       // simulate some deletes
-      scope.markAsDeletedTracker['build'] = ['delete me'];
-      scope.markAsDeletedTracker['ports'] = ['0'];
+      scope.markAsDeletedTracker.build = ['delete me'];
+      scope.markAsDeletedTracker.ports = ['0'];
     });
 
     it('should reset the delete tracker', function () {
@@ -610,14 +605,14 @@ describe('Controller: DocumentCtrl', function () {
     describe('when editing is cancelled for an existing service', function () {
       beforeEach(function () {
         // simulate edit mode turned on
-        scope.yamlDocument.json['service1'].editMode = true;
+        scope.yamlDocument.json.service = {editMode: true};
 
         // call cancel
         scope.$emit('cancelEditing', 'service1');
       });
 
       it('should unset the edit mode for the yamlDocument.json service', function () {
-        !expect(scope.yamlDocument.json['service1']).hasOwnProperty('editMode');
+        expect(scope.yamlDocument.json.service1.editMode).toBeUndefined();
       });
 
       describe('when editing is cancelled for a new service block', function () {
@@ -636,11 +631,11 @@ describe('Controller: DocumentCtrl', function () {
   describe('$scope.serviceNames', function () {
     beforeEach(function () {
       scope.yamlDocument.json = {
-        "foo": {
-          "build": "foo"
+        'foo': {
+          'build': 'foo'
         },
-        "bar": {
-          "build": "bar"
+        'bar': {
+          'build': 'bar'
         }
       };
       scope.$digest();
@@ -656,12 +651,12 @@ describe('Controller: DocumentCtrl', function () {
   describe('$scope.inEditMode', function () {
     beforeEach(function () {
       scope.yamlDocument.json = {
-        "service1": {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
+        'service1': {
+          'build': 'foo',
+          'ports': ['1111:2222', '3333:4444']
         },
-        "service2": {
-          "command": "bar"
+        'service2': {
+          'command': 'bar'
         }
       };
     });
@@ -737,7 +732,7 @@ describe('Controller: DocumentCtrl', function () {
 
     describe('when any services are not in edit mode', function () {
       beforeEach(function () {
-        scope.inEditMode = function () {return false};
+        scope.inEditMode = function () {return false;};
         scope.addNewServiceDef();
       });
       it('should set the new service block flag to true', function () {
@@ -746,7 +741,7 @@ describe('Controller: DocumentCtrl', function () {
     });
     describe('when any services are in edit mode', function () {
       beforeEach(function () {
-        scope.inEditMode = function () {return true};
+        scope.inEditMode = function () {return true;};
         scope.addNewServiceDef();
       });
      it('should not modify the new service flag', function () {
@@ -815,7 +810,7 @@ describe('Controller: DocumentCtrl', function () {
         deferredSuccess = $q.defer();
         spyOn(keysService, 'keys').and.returnValue(deferredSuccess.promise);
         scope.getValidKeys();
-        deferredSuccess.resolve({data: [ {"image": {"desc": "blah blah", "required": false}}, {"build": {"desc": "blah blah", "required": false}}, {"command": {"desc": "blah blah", "required": false}}, {"ports": {"desc": "blah blah", "required": false}} ]});
+        deferredSuccess.resolve({data: [ {'image': {'desc': 'blah blah', 'required': false}}, {'build': {'desc': 'blah blah', 'required': false}}, {'command': {'desc': 'blah blah', 'required': false}}, {'ports': {'desc': 'blah blah', 'required': false}} ]});
         scope.$digest();
       }));
 

@@ -58,12 +58,12 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
       describe('when any of the services are in edit mode', function () {
         beforeEach(function () {
-          scope.$parent.inEditMode = function () { return true };
+          scope.$parent.inEditMode = function () { return true; };
         });
 
         describe('when a new service is being added', function () {
           beforeEach(function () {
-            scope.$parent.inNewServiceMode = function () {return true};
+            scope.$parent.inNewServiceMode = function () { return true; };
           });
 
           describe('when the serviceDefinition has lines', function () {
@@ -82,7 +82,7 @@ describe('Directive: serviceDefinitionDisplay', function () {
         });
         describe('when a new service is not being added', function () {
           beforeEach(function () {
-            scope.$parent.inNewServiceMode = function () { return false };
+            scope.$parent.inNewServiceMode = function () { return false; };
           });
 
           describe('when the serviceDefinition has lines', function () {
@@ -104,12 +104,12 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
       describe('when services are not in edit mode', function () {
         beforeEach(function () {
-          scope.$parent.inEditMode = function () { return false };
+          scope.$parent.inEditMode = function () { return false; };
         });
 
         describe('when a new service is being added', function () {
           beforeEach(function () {
-            scope.$parent.inNewServiceMode = function () { return true };
+            scope.$parent.inNewServiceMode = function () { return true; };
           });
 
           describe('when the serviceDefinition has lines', function () {
@@ -129,7 +129,7 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
         describe('when a new service is not being added', function () {
           beforeEach(function () {
-            scope.$parent.inNewServiceMode = function () { return false };
+            scope.$parent.inNewServiceMode = function () { return false; };
           });
 
           describe('when the serviceDefinition has lines', function () {

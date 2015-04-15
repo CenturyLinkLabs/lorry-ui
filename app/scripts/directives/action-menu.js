@@ -5,7 +5,7 @@ angular.module('lorryApp')
     return {
       restrict: 'E',
       replace: true,
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
 
         scope.deleteServiceDefinition = function () {
           if (!scope.$parent.inEditMode() && !scope.$parent.inNewServiceMode()) {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('serviceDefinitionEdit', [ '$rootScope', '$log', 'lodash', function ($rootScope, $log, lodash) {
+  .directive('serviceDefinitionEdit', [ '$rootScope', function ($rootScope) {
     return {
       scope: {
         sectionName: '='
@@ -46,7 +46,7 @@ angular.module('lorryApp')
                 lines.push(lineObj);
               });
             }
-            if (skey != 'editMode') {
+            if (skey !== 'editMode') {
               sectionObj.name = skey;
               if (lines.length > 0) {
                 sectionObj.value = lines;
@@ -62,7 +62,7 @@ angular.module('lorryApp')
 
         $scope.transformToYamlDocumentFragment = function (editedJson) {
           var yamlFrag = {};
-          angular.forEach(editedJson, function(svalue, skey) {
+          angular.forEach(editedJson, function(svalue) {
             yamlFrag[svalue.name] = svalue.value;
           });
           return yamlFrag;
@@ -84,7 +84,7 @@ angular.module('lorryApp')
           // since image/build section is mandatory, add it to the json if not present
           if (!lodash.findWhere($scope.editableJson, {name: 'image'}) &&
             !lodash.findWhere($scope.editableJson, {name: 'build'})) {
-            $scope.editableJson.push({name: 'image', value: ''})
+            $scope.editableJson.push({name: 'image', value: ''});
           }
 
           $scope.$emit('cancelEditing', $scope.sectionName);
@@ -179,14 +179,14 @@ angular.module('lorryApp')
 
           // toggle add/remove items from the delete marker
           if (tracker.hasOwnProperty(key)) {
-            if (index != null) {
+            if (index !== null) {
               if (lodash.includes(tracker[key], index)) {
                 // remove the item from tracker
                 lodash.remove(tracker[key], function (v) {
-                  return v == index;
+                  return v === index;
                 });
                 // if no items in tracker, delete the key
-                if (lodash.size(tracker[key]) == 0) {
+                if (lodash.size(tracker[key]) === 0) {
                   delete tracker[key];
                 }
               } else {
@@ -199,7 +199,7 @@ angular.module('lorryApp')
           } else {
             // add key/index to tracker
             tracker[key] = [];
-            if (index != null) {
+            if (index !== null) {
               tracker[key].push(index);
             } else {
               tracker[key].push('delete me');

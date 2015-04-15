@@ -11,36 +11,36 @@ describe('Controller: SearchCtrl', function () {
 
   var controller, scope, Image, httpBackend, SearchCtrl;
   var searchResponse = {
-    "results": [
+    'results': [
       {
-        "name": "baruser/foo",
-        "is_trusted": true,
-        "is_official": false,
-        "star_count": 5,
-        "description": "foo service",
-        "username": "baruser",
-        "reponame": "foo"
+        'name': 'baruser/foo',
+        'is_trusted': true,
+        'is_official': false,
+        'star_count': 5,
+        'description': 'foo service',
+        'username': 'baruser',
+        'reponame': 'foo'
       },
       {
-        "name": "tag/me",
-        "is_trusted": true,
-        "is_official": false,
-        "star_count": 1,
-        "description": "tag me service",
-        "username": "tag",
-        "reponame": "me"
+        'name': 'tag/me',
+        'is_trusted': true,
+        'is_official': false,
+        'star_count': 1,
+        'description': 'tag me service',
+        'username': 'tag',
+        'reponame': 'me'
       }
     ]
   };
 
   var tagsResponse = [
     {
-      "layer": "11111111",
-      "name": "latest"
+      'layer': '11111111',
+      'name': 'latest'
     },
     {
-      "layer": "22222222",
-      "name": "latest"
+      'layer': '22222222',
+      'name': 'latest'
     }
   ];
 
@@ -160,24 +160,24 @@ describe('Controller: SearchCtrl', function () {
 
     describe('without username: ', function () {
       var searchResponseWithoutUsername = {
-        "results": [
+        'results': [
           {
-            "name": "foo",
-            "is_trusted": true,
-            "is_official": false,
-            "star_count": 5,
-            "description": "foo service",
-            "username": "",
-            "reponame": "foo"
+            'name': 'foo',
+            'is_trusted': true,
+            'is_official': false,
+            'star_count': 5,
+            'description': 'foo service',
+            'username': '',
+            'reponame': 'foo'
           },
           {
-            "name": "me",
-            "is_trusted": true,
-            "is_official": false,
-            "star_count": 1,
-            "description": "tag me service",
-            "username": "",
-            "reponame": "me"
+            'name': 'me',
+            'is_trusted': true,
+            'is_official': false,
+            'star_count': 1,
+            'description': 'tag me service',
+            'username': '',
+            'reponame': 'me'
           }
         ]
       };

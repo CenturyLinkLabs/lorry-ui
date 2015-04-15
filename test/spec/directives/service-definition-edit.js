@@ -32,9 +32,9 @@ describe('Directive: serviceDefinitionEdit', function () {
           scope.$digest();
 
           element.isolateScope().editableJson = [
-            {name: "build", value: "foo"},
-            {name: "command", value: "bar"},
-            {name: "ports", value: ["1111:2222", "3333:4444"]}
+            {name: 'build', value: 'foo'},
+            {name: 'command', value: 'bar'},
+            {name: 'ports', value: ['1111:2222', '3333:4444']}
           ];
 
           spyOn(element.isolateScope(), 'transformToYamlDocumentFragment');
@@ -59,7 +59,7 @@ describe('Directive: serviceDefinitionEdit', function () {
           element.isolateScope().editableJson = undefined;
 
           spyOn(element.isolateScope(), 'transformToYamlDocumentFragment');
-          spyOn(element.isolateScope(), 'transformToEditableJson').and.returnValue([{name: "command", value: "foo"}]);
+          spyOn(element.isolateScope(), 'transformToEditableJson').and.returnValue([{name: 'command', value: 'foo'}]);
 
           element.isolateScope().transformToJson();
         });
@@ -82,7 +82,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         beforeEach(function () {
           scope.sectionName = 'foo';
           scope.fullJson = {
-            "foo": {}
+            'foo': {}
           };
           element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
@@ -95,17 +95,17 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       describe('when yaml json is valid', function () {
         var editableJson = [
-          { name: "build", value: "foo"},
-          { name: "command", value: "bar"},
-          { name: "ports", value: ["1111:2222", "3333:4444"]}
+          { name: 'build', value: 'foo'},
+          { name: 'command', value: 'bar'},
+          { name: 'ports', value: ['1111:2222', '3333:4444']}
         ];
         beforeEach(function () {
           scope.sectionName = 'adapter';
           scope.fullJson = {
-            "adapter": {
-              "build": "foo",
-              "command": "bar",
-              "ports": ["1111:2222", "3333:4444"]
+            'adapter': {
+              'build': 'foo',
+              'command': 'bar',
+              'ports': ['1111:2222', '3333:4444']
             }};
           element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
@@ -123,17 +123,17 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       describe('when editableJson is passed', function () {
         var editableJson = [
-          { name: "build", value: "foo"},
-          { name: "command", value: "bar"},
-          { name: "ports", value: ["1111:2222", "3333:4444"]}
+          { name: 'build', value: 'foo'},
+          { name: 'command', value: 'bar'},
+          { name: 'ports', value: ['1111:2222', '3333:4444']}
         ];
         beforeEach(function () {
           scope.sectionName = 'adapter';
           scope.fullJson = {
-            "adapter": {
-              "build": "foo",
-              "command": "bar",
-              "ports": ["1111:2222", "3333:4444"]
+            'adapter': {
+              'build': 'foo',
+              'command': 'bar',
+              'ports': ['1111:2222', '3333:4444']
             }};
           element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
@@ -151,9 +151,9 @@ describe('Directive: serviceDefinitionEdit', function () {
       beforeEach(function () {
         scope.sectionName = 'adapter';
         scope.$parent.editedServiceYamlDocumentJson = {
-          "command": "foo",
-          "ports": ["1111:2222", "3333:4444"],
-          "image": ''
+          'command': 'foo',
+          'ports': ['1111:2222', '3333:4444'],
+          'image': ''
         };
 
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
@@ -196,7 +196,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         scope.$digest();
 
         element.isolateScope().editableJson = [
-          {name: "command", value: "bar"}
+          {name: 'command', value: 'bar'}
         ];
 
         spyOn(element.isolateScope(), '$emit');
@@ -229,9 +229,9 @@ describe('Directive: serviceDefinitionEdit', function () {
         scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
         scope.sectionName = 'adapter';
         scope.fullJson = {
-          "adapter": {
-            "build": "foo",
-            "ports": ["1111:2222", "3333:4444"]
+          'adapter': {
+            'build': 'foo',
+            'ports': ['1111:2222', '3333:4444']
           }};
 
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
@@ -256,7 +256,7 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
 
           it('should not add the invalid key to the editable json', function () {
-            expect(element.isolateScope().editableJson).not.toContain({"name": "invalid", "value": ''});
+            expect(element.isolateScope().editableJson).not.toContain({'name': 'invalid', 'value': ''});
           });
           it('should not add the invalid key to the edited service', function () {
             expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('invalid');
@@ -270,7 +270,7 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
 
           it('should not add the invalid key to the editable json', function () {
-            expect(element.isolateScope().editableJson).not.toContain({"name": "volumes", "value": ['']});
+            expect(element.isolateScope().editableJson).not.toContain({'name': 'volumes', 'value': ['']});
           });
           it('should add the invalid key to the edited service', function () {
             expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('invalid');
@@ -290,11 +290,11 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
 
           it('should add a new key to the editable json with empty value', function () {
-            expect(element.isolateScope().editableJson).toContain({"name": "command", "value": ''});
+            expect(element.isolateScope().editableJson).toContain({'name': 'command', 'value': ''});
           });
           it('should add a new key to the edited service with empty value', function () {
             expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('command');
-            expect(scope.editedServiceYamlDocumentJson['command']).toBe('');
+            expect(scope.editedServiceYamlDocumentJson.command).toBe('');
           });
 
         });
@@ -305,11 +305,11 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
 
           it('should add a new key to the editable json with empty sequence', function () {
-            expect(element.isolateScope().editableJson).toContain({"name": "volumes", "value": ['']});
+            expect(element.isolateScope().editableJson).toContain({'name': 'volumes', 'value': ['']});
           });
           it('should add a new key to the edited service with empty sequence', function () {
             expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('volumes');
-            expect(scope.editedServiceYamlDocumentJson['volumes']).toEqual(['']);
+            expect(scope.editedServiceYamlDocumentJson.volumes).toEqual(['']);
           });
         });
       });
@@ -319,21 +319,21 @@ describe('Directive: serviceDefinitionEdit', function () {
       beforeEach(function () {
         scope.sectionName = 'adapter';
         scope.fullJson = {
-          "adapter": {
-            "build": "foo",
-            "ports": ["1111:2222", "3333:4444"]
+          'adapter': {
+            'build': 'foo',
+            'ports': ['1111:2222', '3333:4444']
           }};
         scope.editedServiceYamlDocumentJson = {
-          "build": "foo",
-          "ports": ["1111:2222", "3333:4444"]
+          'build': 'foo',
+          'ports': ['1111:2222', '3333:4444']
         };
 
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
         element.isolateScope().editableJson = [
-          {"name": "build", "value": "foo"},
-          {"name": "ports", "value": ["1111:2222", "3333:4444"]}
+          {'name': 'build', 'value': 'foo'},
+          {'name': 'ports', 'value': ['1111:2222', '3333:4444']}
         ];
 
       });
@@ -344,7 +344,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
 
         it('should not add a new key value', function () {
-          expect(element.isolateScope().editableJson).not.toContain({"name": "command", "value": ''});
+          expect(element.isolateScope().editableJson).not.toContain({'name': 'command', 'value': ''});
           expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('command');
         });
       });
@@ -355,9 +355,9 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
 
         it('should add a new key value to the service with empty sequence', function () {
-          expect(element.isolateScope().editableJson[1]).toEqual({"name": "ports", "value": ["1111:2222", "3333:4444", ""]});
+          expect(element.isolateScope().editableJson[1]).toEqual({'name': 'ports', 'value': ['1111:2222', '3333:4444', '']});
           expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('ports');
-          expect(scope.editedServiceYamlDocumentJson['ports']).toEqual(["1111:2222", "3333:4444", ""]);
+          expect(scope.editedServiceYamlDocumentJson.ports).toEqual(['1111:2222', '3333:4444', '']);
         });
       });
 
@@ -367,8 +367,8 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
 
         it('should not add a new key value', function () {
-          expect(element.isolateScope().editableJson).not.toContain({"name": "invalid", "value": ['']});
-          !expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('invalid');
+          expect(element.isolateScope().editableJson).not.toContain({'name': 'invalid', 'value': ['']});
+          expect(scope.editedServiceYamlDocumentJson.invalid).toBeUndefined();
         });
       });
 
@@ -378,17 +378,17 @@ describe('Directive: serviceDefinitionEdit', function () {
       beforeEach(function () {
         scope.sectionName = 'adapter';
         scope.fullJson = {
-          "adapter": {
-            "build": "foo",
-            "ports": ["1111:2222", "3333:4444"]
+          'adapter': {
+            'build': 'foo',
+            'ports': ['1111:2222', '3333:4444']
           }};
 
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
         element.isolateScope().editableJson = [
-          {"name": "build", "value": "foo"},
-          {"name": "ports", "value": ["1111:2222", "3333:4444"]}
+          {'name': 'build', 'value': 'foo'},
+          {'name': 'ports', 'value': ['1111:2222', '3333:4444']}
         ];
 
         spyOn(element.isolateScope(), 'markItemForDeletion');
@@ -422,17 +422,17 @@ describe('Directive: serviceDefinitionEdit', function () {
       beforeEach(function () {
         scope.sectionName = 'adapter';
         scope.fullJson = {
-          "adapter": {
-            "build": "foo",
-            "ports": ["1111:2222", "3333:4444"]
+          'adapter': {
+            'build': 'foo',
+            'ports': ['1111:2222', '3333:4444']
           }};
 
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
         element.isolateScope().editableJson = [
-          {"name": "build", "value": "foo"},
-          {"name": "ports", "value": ["1111:2222", "3333:4444"]}
+          {'name': 'build', 'value': 'foo'},
+          {'name': 'ports', 'value': ['1111:2222', '3333:4444']}
         ];
 
         spyOn(element.isolateScope(), 'markItemForDeletion');
@@ -472,8 +472,8 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       it('returns keys not already present in the json', function () {
         element.isolateScope().editableJson = [
-          {name: "command", value: "foo"},
-          {name: "ports", value: ["1111:2222", "3333:4444"]}
+          {name: 'command', value: 'foo'},
+          {name: 'ports', value: ['1111:2222', '3333:4444']}
         ];
 
         var result = element.isolateScope().buildValidKeyList();
@@ -484,9 +484,9 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       it('returns keys without image or build if either is present in the json', function () {
         element.isolateScope().editableJson = [
-          {name: "image", value: "bar"},
-          {name: "command", value: "foo"},
-          {name: "ports", value: ["1111:2222", "3333:4444"]}
+          {name: 'image', value: 'bar'},
+          {name: 'command', value: 'foo'},
+          {name: 'ports', value: ['1111:2222', '3333:4444']}
         ];
 
         var result = element.isolateScope().buildValidKeyList();
@@ -545,7 +545,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
         it('should add the key name to delete tracker', function () {
           expect(scope.markAsDeletedTracker).hasOwnProperty('key1');
-          expect(scope.markAsDeletedTracker['key1']).toEqual(['delete me']);
+          expect(scope.markAsDeletedTracker.key1).toEqual(['delete me']);
         });
       });
 
@@ -569,7 +569,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
         it('should add the key item indexes to the delete tracker', function () {
           expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
-          expect(scope.markAsDeletedTracker['key2']).toEqual([0,1]);
+          expect(scope.markAsDeletedTracker.key2).toEqual([0,1]);
         });
       });
 
@@ -583,7 +583,7 @@ describe('Directive: serviceDefinitionEdit', function () {
           // undelete only one item
           element.isolateScope().markItemForDeletion('key2', 1);
           expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
-          expect(scope.markAsDeletedTracker['key2']).toEqual([0]);
+          expect(scope.markAsDeletedTracker.key2).toEqual([0]);
         });
       });
 

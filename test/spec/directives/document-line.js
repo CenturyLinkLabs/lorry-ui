@@ -185,7 +185,7 @@ describe('Directive: documentLine', function () {
     });
 
     it('returns the image name in the tooltip', function () {
-      expect(element.isolateScope().tooltip()).toEqual('Inspect foo/bar:oldest with ImageLayers.io')
+      expect(element.isolateScope().tooltip()).toEqual('Inspect foo/bar:oldest with ImageLayers.io');
     });
   });
 });

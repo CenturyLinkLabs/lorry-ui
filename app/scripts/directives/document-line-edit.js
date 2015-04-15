@@ -9,9 +9,7 @@ angular.module('lorryApp')
       },
       restrict: 'E',
       replace: true,
-      link: function postLink(scope, element, attrs) {
-        //$log.log(scope.line);
-
+      link: function postLink(scope) {
         scope.isImageOrBuild = function () {
           return (scope.line.name === 'image' || scope.line.name === 'build');
         };

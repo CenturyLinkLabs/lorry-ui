@@ -24,7 +24,7 @@ describe('Service: cookiesService', function () {
   describe('#put', function () {
     it('puts the value of a cookie', function () {
       cookiesService.put('foo', 'baz');
-      expect(cookies['foo']).toBe('baz');
+      expect(cookies.foo).toBe('baz');
     });
   });
 
@@ -35,7 +35,7 @@ describe('Service: cookiesService', function () {
 
     it('remove the value of a cookie', function () {
       cookiesService.remove('foo');
-      expect(cookies['foo']).toBeUndefined();
+      expect(cookies.foo).toBeUndefined();
     });
   });
 

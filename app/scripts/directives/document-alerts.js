@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('documentAlerts', ['lodash', function (lodash) {
+  .directive('documentAlerts', function () {
     return {
       restrict: 'E',
       replace: true,
@@ -40,4 +40,4 @@ angular.module('lorryApp')
       },
       templateUrl: '/scripts/directives/document-alerts.html'
     };
-  }]);
+  });

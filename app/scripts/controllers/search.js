@@ -18,13 +18,13 @@ angular.module('lorryApp')
         showClose: false,
         scope: $scope
       });
-      $scope.dialog.closePromise.then(function (data) {
+      $scope.dialog.closePromise.then(function () {
         $scope.resetSearch();
       });
     };
 
     $scope.selectImage = function(selImageName, selImageTag) {
-      $scope.$parent.selectedImageName = selImageName + ":" + selImageTag;
+      $scope.$parent.selectedImageName = selImageName + ':' + selImageTag;
       $scope.dialog.close();
     };
 
@@ -37,9 +37,9 @@ angular.module('lorryApp')
     };
 
     $scope.insertTags = function(username, reponame){
-      angular.forEach($scope.searchResults, function(value, key) {
+      angular.forEach($scope.searchResults, function(value) {
         // get tags only the first time
-        if (lodash.isUndefined(value['tags'])) {
+        if (lodash.isUndefined(value.tags)) {
           var name = (username === '') ? reponame : username + '/' + reponame;
           if (value.name === name) {
             value.tags = $scope.getTags(username, reponame);

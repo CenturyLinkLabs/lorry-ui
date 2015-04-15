@@ -6,9 +6,11 @@ describe('Directive: documentAlerts', function () {
 
   var element,
     compile,
-    scope;
+    scope,
+    win;
 
-  beforeEach(inject(function ($rootScope, $compile) {
+  beforeEach(inject(function ($rootScope, $compile, $window) {
+    win = $window;
     scope = $rootScope.$new();
     scope.yamlDocument = { errors: [] };
     compile = $compile;
@@ -129,9 +131,9 @@ describe('Directive: documentAlerts', function () {
     });
 
     it('removes the alert', function () {
-      spyOn(jQuery.fn, 'remove');
+      spyOn(win.jQuery.fn, 'remove');
       element.scope().dismiss();
-      expect(jQuery.fn.remove).toHaveBeenCalled();
+      expect(win.jQuery.fn.remove).toHaveBeenCalled();
     });
   });
 

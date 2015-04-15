@@ -160,7 +160,7 @@ describe('Controller: DocumentExportCtrl', function () {
 
       it('the fileSaver service is used to push the file to the user', function () {
         scope.saveDocument();
-        expect(fileSaver.saveFile).toHaveBeenCalledWith(blobMock, "docker-compose.yml");
+        expect(fileSaver.saveFile).toHaveBeenCalledWith(blobMock, 'docker-compose.yml');
       });
     });
   });

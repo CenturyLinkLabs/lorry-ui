@@ -24,34 +24,34 @@ describe('Service: registry-service', function () {
     describe('search', function() {
       describe('for images with username', function() {
         var searchResults = {
-          "results": [{
-            "name": "baruser/foo",
-            "is_trusted": true,
-            "is_official": false,
-            "star_count": 5,
-            "description": "foo service"
+          'results': [{
+            'name': 'baruser/foo',
+            'is_trusted': true,
+            'is_official': false,
+            'star_count': 5,
+            'description': 'foo service'
           }]
         };
 
         beforeEach(function() {
-        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images?q=foo").respond(searchResults);
+        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + '/images?q=foo').respond(searchResults);
       });
 
-        it("should search for image repositories", function () {
+        it('should search for image repositories', function () {
           var results = Image.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].name).toEqual('baruser/foo');
         });
 
-        it("should insert username into search results", function () {
+        it('should insert username into search results', function () {
           var results = Image.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].username).toEqual('baruser');
         });
 
-        it("should insert reponame into search results", function () {
+        it('should insert reponame into search results', function () {
           var results = Image.query({searchTerm: 'foo'});
           httpBackend.flush();
 
@@ -61,34 +61,34 @@ describe('Service: registry-service', function () {
 
       describe('for images without username', function() {
         var searchResults = {
-          "results": [{
-            "name": "foo",
-            "is_trusted": true,
-            "is_official": false,
-            "star_count": 5,
-            "description": "foo service"
+          'results': [{
+            'name': 'foo',
+            'is_trusted': true,
+            'is_official': false,
+            'star_count': 5,
+            'description': 'foo service'
           }]
         };
 
         beforeEach(function() {
-          httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images?q=foo").respond(searchResults);
+          httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + '/images?q=foo').respond(searchResults);
         });
 
-        it("should search for image repositories", function () {
+        it('should search for image repositories', function () {
           var results = Image.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].name).toEqual('foo');
         });
 
-        it("should insert username into search results", function () {
+        it('should insert username into search results', function () {
           var results = Image.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].username).toEqual('');
         });
 
-        it("should insert reponame into search results", function () {
+        it('should insert reponame into search results', function () {
           var results = Image.query({searchTerm: 'foo'});
           httpBackend.flush();
 
@@ -101,13 +101,13 @@ describe('Service: registry-service', function () {
     describe('tags', function() {
       var tagsResults = [
         {
-          "layer": "11111111",
-          "name": 'latest'
+          'layer': '11111111',
+          'name': 'latest'
         }
       ];
 
-      it("should get tags for repository", function () {
-        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images/tags/baruser/foo").respond(tagsResults);
+      it('should get tags for repository', function () {
+        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + '/images/tags/baruser/foo').respond(tagsResults);
         var results = Image.tags({
           repoUser: 'baruser',
           repoName: 'foo'
@@ -122,13 +122,13 @@ describe('Service: registry-service', function () {
     describe('tagsWithoutUsername', function() {
       var tagsResults = [
         {
-          "layer": "11111111",
-          "name": 'latest'
+          'layer': '11111111',
+          'name': 'latest'
         }
       ];
 
-      it("should get tags for repository", function () {
-        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + "/images/tags/foo").respond(tagsResults);
+      it('should get tags for repository', function () {
+        httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + '/images/tags/foo').respond(tagsResults);
         var results = Image.tagsWithoutUsername({
           repoName: 'foo'
         });
