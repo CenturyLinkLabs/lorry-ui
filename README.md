@@ -14,7 +14,7 @@ version 0.11.0.
 * install Ruby if you don't already have it
 * install compass with `gem install compass`
 * install local node modules with `npm install`
-* install local node modules with `bower install`
+* install local JS modules with `bower install`
 
 * launch the application in your browser by running `grunt serve`
 
