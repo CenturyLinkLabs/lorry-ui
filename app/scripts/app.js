@@ -14,6 +14,10 @@ angular
     'angular.filter',
     '720kb.tooltips',
     'ngClipboard'
-  ]).config(['ngClipProvider', function(ngClipProvider) {
+  ])
+  .config(['ngClipProvider', function(ngClipProvider) {
     ngClipProvider.setPath('images/ZeroClipboard.swf');
+  }])
+  .service('cfgData', ['$location', function ($location) {
+     this.baseUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port();
   }]);

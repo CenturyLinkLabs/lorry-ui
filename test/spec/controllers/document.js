@@ -13,10 +13,12 @@ describe('Controller: DocumentCtrl', function () {
     ngDialog,
     timeout,
     cookiesService,
-    keysService;
+    keysService,
+    loc,
+    $httpBackend;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _cookiesService_, _keysService_) {
+  beforeEach(inject(function ($controller, $rootScope, $location, _$httpBackend_, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _cookiesService_, _keysService_) {
     scope = $rootScope.$new();
     rootScope = $rootScope;
     DocumentCtrl = $controller('DocumentCtrl', {
@@ -28,9 +30,75 @@ describe('Controller: DocumentCtrl', function () {
     timeout = $timeout;
     cookiesService = _cookiesService_;
     keysService = _keysService_;
+    loc = $location;
+    $httpBackend = _$httpBackend_;
 
     rootScope.markAsDeletedTracker = {};
   }));
+
+  describe('initialization', function () {
+    var remoteGistHandler;
+    var uri = encodeURIComponent('http://www.example.com');
+
+    beforeEach(function () {
+      spyOn(scope, 'setNewSession');
+      remoteGistHandler = $httpBackend.when('GET', uri);
+    });
+
+    describe('when a gist url is not in the querystring', function () {
+      it ('does not create a new session', function () {
+        DocumentCtrl.initialize();
+        expect(scope.setNewSession).not.toHaveBeenCalled();
+      });
+
+      it ('does not call the http get', function () {
+        DocumentCtrl.initialize();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      });
+    });
+
+    describe('when a gist url is in the querystring', function () {
+
+      beforeEach(function () {
+        spyOn(DocumentCtrl, 'failFastOrValidateYaml');  // ignore validation when gist is imported for these tests
+        loc.search({gist: uri});
+        remoteGistHandler.respond('raw gist content');
+      });
+
+      it('starts a new session', function () {
+        DocumentCtrl.initialize();
+        $httpBackend.flush();
+        expect(scope.setNewSession).toHaveBeenCalled();
+      });
+
+      it('fetches the gist', function () {
+        $httpBackend.expectGET(uri);
+        DocumentCtrl.initialize();
+        $httpBackend.flush();
+      });
+
+      describe('when the gist can be retrieved', function () {
+        it('assigns the response to yamlDocument.raw', function () {
+          DocumentCtrl.initialize();
+          $httpBackend.flush();
+          expect(scope.yamlDocument.raw).toEqual('raw gist content');
+        });
+      });
+
+      describe('when the gist cannot be retrieved', function () {
+        beforeEach(function () {
+          remoteGistHandler.respond(404, 'NOT FOUND');
+        });
+        it('sets the yamlDocument.raw to null', function () {
+          DocumentCtrl.initialize();
+          $httpBackend.flush();
+          expect(scope.yamlDocument.raw).toBeNull();
+        });
+      });
+
+    });
+  });
 
   describe('$scope.hasErrors', function () {
     it('returns truthy when the yamlDocumet has errors', function () {

@@ -11,15 +11,19 @@ describe('Controller: DocumentExportCtrl', function () {
     documentEndpointHandler,
     win,
     fileSaver,
-    $timeout;
+    $timeout,
+    ngDialog,
+    cfgData;
 
-  beforeEach(inject(function ($controller, $rootScope,_$httpBackend_, _$window_, _$timeout_, _fileSaver_, _ENV_) {
+  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _$window_, _$timeout_, _ngDialog_, _fileSaver_, _cfgData_, _ENV_) {
     $httpBackend = _$httpBackend_;
     win = _$window_;
     ENV = _ENV_;
     fileSaver = _fileSaver_;
     $timeout = _$timeout_;
     scope = $rootScope.$new();
+    ngDialog = _ngDialog_;
+    cfgData = _cfgData_;
     scope.inEditMode = function () {}; // for mocking
     DocumentExportCtrl = $controller('DocumentExportCtrl', {
       $scope: scope
@@ -171,6 +175,95 @@ describe('Controller: DocumentExportCtrl', function () {
     });
   });
 
+  describe('DocumentExportCtrl.showGistConfirmationDialog', function () {
+    var closePromise;
+
+    beforeEach(inject(function($q) {
+      closePromise = $q.defer();
+      spyOn(ngDialog, 'open').and.returnValue({closePromise: closePromise.promise});
+    }));
+
+    it('opens a confirmation dialog', function () {
+      DocumentExportCtrl.showGistConfirmationDialog();
+      expect(ngDialog.open).toHaveBeenCalled();
+    });
+
+    describe('when no argument is passed', function () {
+      beforeEach(function () {
+        DocumentExportCtrl.showGistConfirmationDialog();
+      });
+
+      it('does not set a gistUri', function () {
+        expect(scope.gistUri).toBeUndefined();
+      });
+
+      it('does not set a shareUri', function () {
+        expect(scope.shareUri).toBeUndefined();
+      });
+    });
+
+    describe('when an argument is passed', function () {
+      var gist = {href: 'the href', raw_url: 'the raw url'};
+
+      beforeEach(function () {
+        DocumentExportCtrl.showGistConfirmationDialog(gist);
+        //closePromise.resolve();
+        //scope.$digest();
+      });
+
+      it('sets the gistUri', function () {
+        expect(scope.gistUri).toEqual(gist.href);
+      });
+
+      it('sets the shareUri', function () {
+        expect(scope.shareUri).toEqual(cfgData.baseUrl + '/#/?gist=' + encodeURIComponent(gist.raw_url));
+      });
+    });
+
+    describe('when the dialog is closed', function () {
+      beforeEach(function() {
+        scope.yamlDocument = {json: ''};
+      });
+
+      it('resets the clipCopyGistText', function () {
+        scope.clipCopyGistText = 'not the default';
+        DocumentExportCtrl.showGistConfirmationDialog();
+        closePromise.resolve();
+        scope.$digest();
+        expect(scope.clipCopyGistText).toEqual('Copy to Clipboard');
+      });
+
+      it('resets the gistUri', function () {
+        scope.gistUri = 'not the default';
+        DocumentExportCtrl.showGistConfirmationDialog();
+        closePromise.resolve();
+        scope.$digest();
+        expect(scope.gistUri).toBeNull();
+      });
+
+      it('removes the "copied" class from the clipCopyGistClasses', function () {
+        scope.clipCopyGistClasses = ['copied'];
+        DocumentExportCtrl.showGistConfirmationDialog();
+        closePromise.resolve();
+        scope.$digest();
+        expect(scope.clipCopyGistClasses).not.toContain('copied');
+      });
+    });
+  });
+
+  describe('scope.confirmGistCopy', function () {
+    it('pushes "copied" onto the array of clipCopyGistClasses', function () {
+      scope.confirmGistCopy();
+      expect(scope.clipCopyGistClasses).toContain('copied');
+    });
+
+    it('resets the clipCopyGistText', function () {
+      scope.clipCopyGistText = 'Copy to Clipboard';
+      scope.confirmGistCopy();
+      expect(scope.clipCopyGistText).toEqual('Copied to Clipboard');
+    });
+  });
+
   describe('$scope.saveGist', function () {
     beforeEach(function () {
       documentEndpointHandler = $httpBackend.when('POST', ENV.LORRY_API_ENDPOINT + '/documents')
@@ -193,6 +286,7 @@ describe('Controller: DocumentExportCtrl', function () {
     describe('when $scope.exportable returns true', function () {
       beforeEach(function () {
         spyOn(scope, 'exportable').and.returnValue(true);
+        spyOn(DocumentExportCtrl, 'showGistConfirmationDialog');
       });
 
       it('posts the document to the Lorry API documents endpoint', function () {
@@ -201,11 +295,30 @@ describe('Controller: DocumentExportCtrl', function () {
         $httpBackend.flush();
       });
 
-      it('opens a new window with the gist href', function () {
-        spyOn(win, 'open');
-        scope.saveGist();
-        $httpBackend.flush();
-        expect(win.open).toHaveBeenCalledWith('http://example.com', '_blank');
+      describe('when the gist is created', function () {
+        var gist = {href: 'the href', raw_url: 'the raw url'};
+
+        beforeEach(function () {
+          documentEndpointHandler.respond({links: {gist: gist}});
+        });
+
+        it('opens a confirmation dialog with the gist', function () {
+          scope.saveGist();
+          $httpBackend.flush();
+          expect(DocumentExportCtrl.showGistConfirmationDialog).toHaveBeenCalledWith(gist);
+        });
+      });
+
+      describe('when the gist cannot be created', function () {
+        beforeEach(function () {
+          documentEndpointHandler.respond(500, 'INTERNAL SERVER ERROR');
+        });
+
+        it('opens a confirmation dialog with no arguments passed', function () {
+          scope.saveGist();
+          $httpBackend.flush();
+          expect(DocumentExportCtrl.showGistConfirmationDialog).toHaveBeenCalledWith();
+        });
       });
     });
   });

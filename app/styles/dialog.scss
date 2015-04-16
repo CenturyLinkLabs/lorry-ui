@@ -1,3 +1,4 @@
+@import 'icons';
 @import 'colors';
 @import 'variables';
 @import 'buttons';
@@ -38,6 +39,12 @@
 .ngdialog-theme-lorry {
   padding-bottom: 160px;
   padding-top: 160px;
+
+  &.notification {
+    .ngdialog-content {
+      width: 580px;
+    }
+  }
 
   .ngdialog-content {
     background: #fff;
@@ -142,11 +149,81 @@
 
     .dialog-content {
       border-bottom: 1px solid $lighter_grey;
+      overflow: auto;
 
       h3 {
         color: $darker_grey;
         font-weight: bold;
         font-size: 1.1em;
+      }
+
+      .success {
+        color: $white;
+        background-color: $ctl_light_green;
+        padding: 12px;
+        margin-bottom: 20px;
+      }
+
+      .failure {
+        color: $white;
+        background-color: $dark_red;
+        padding: 12px;
+        margin-bottom: 20px;
+      }
+
+      .gist-uri {
+        font-family: $monospace_font_family;
+        background-color: $lightest_grey;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: none;
+        width: 350px;
+      }
+
+      .clip-copy {
+        float: right;
+        margin: 10px 10px 20px;
+        text-decoration: underline;
+        position: relative;
+        &:hover {
+          text-decoration: underline;
+          color: $light_grey;
+          cursor: pointer;
+        }
+        &:before, &:after {
+          content: '';
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          display: block;
+          left: -30px;
+          top: 0;
+        }
+        &.copied {
+          font-style: italic;
+        }
+
+        &:before {
+          border-radius: 10px;
+          background: $lighter_grey;
+        }
+        &.copied:before {
+          background: $ctl_light_green;
+        }
+
+        &:after {
+          background-size: 10px 10px;
+        }
+        &.checkmark:after {
+          @extend .icon-checkmark-for-button;
+          top: 3px;
+          left: -28px;
+        }
+      }
+
+      .footer-link {
+        clear: both;
+        float: left;
       }
     }
 

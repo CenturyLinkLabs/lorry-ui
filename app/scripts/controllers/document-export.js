@@ -1,8 +1,10 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentExportCtrl', ['$scope', '$http', '$window', '$timeout', 'jsyaml', 'fileSaver', 'ENV',
-  function ($scope, $http, $window, $timeout, jsyaml, fileSaver, ENV) {
+angular.module('lorryApp').controller('DocumentExportCtrl',
+  ['$scope', '$http', '$timeout', 'jsyaml', 'ngDialog', 'fileSaver', 'ENV', 'cfgData',
+  function ($scope, $http, $timeout, jsyaml, ngDialog, fileSaver, ENV, cfgData) {
 
+    var self = this;
     var defaultCopyText = 'Copy to Clipboard';
 
     $scope.doc = '';
@@ -40,17 +42,6 @@ angular.module('lorryApp').controller('DocumentExportCtrl', ['$scope', '$http', 
       }
     };
 
-    $scope.saveGist = function () {
-      if ($scope.exportable()) {
-        var yamlDocument = jsyaml.safeDump($scope.yamlDocument.json, {skipInvalid: true});
-        $http.post(ENV.LORRY_API_ENDPOINT + '/documents', {document: yamlDocument})
-          .then(function (response) {
-            var link = response.data.links.gist;
-            $window.open(link.href, '_blank');
-          });
-      }
-    };
-
     $scope.confirmCopy = function () {
       if ($scope.exportable()) {
         $scope.copyText = 'Copied!';
@@ -60,5 +51,46 @@ angular.module('lorryApp').controller('DocumentExportCtrl', ['$scope', '$http', 
       }
     };
 
+
+    $scope.dialogOptions = {};
+    $scope.clipCopyGistText = defaultCopyText;
+    $scope.clipCopyGistClasses = ['clip-copy', 'checkmark'];
+
+    this.showGistConfirmationDialog = function (gist) {
+      if(angular.isDefined(gist)) {
+        $scope.gistUri = gist.href;
+        $scope.shareUri = cfgData.baseUrl + '/#/?gist=' + encodeURIComponent(gist.raw_url);
+      }
+      $scope.dialog = ngDialog.open({
+        template: '/views/gist-dialog.html',
+        className: 'ngdialog-theme-lorry notification',
+        showClose: false,
+        scope: $scope
+      });
+      $scope.dialog.closePromise.then(function () {
+        $scope.clipCopyGistText = defaultCopyText;
+        $scope.gistUri = null;
+        $scope.clipCopyGistClasses.pop();
+      });
+    };
+
+    $scope.confirmGistCopy = function () {
+      $scope.clipCopyGistClasses.push('copied');
+      $scope.clipCopyGistText = 'Copied to Clipboard';
+    };
+
+    $scope.saveGist = function () {
+      if ($scope.exportable()) {
+        var yamlDocument = jsyaml.safeDump($scope.yamlDocument.json, {skipInvalid: true});
+        $http.post(ENV.LORRY_API_ENDPOINT + '/documents', {document: yamlDocument})
+          .then(function (response) {
+            var gist = response.data.links.gist;
+            self.showGistConfirmationDialog(gist);
+          })
+          .catch(function () {
+            self.showGistConfirmationDialog();
+          });
+      }
+    };
   }
 ]);

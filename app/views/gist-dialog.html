@@ -1,0 +1,15 @@
+<div class="dialog-header">
+  <div class="dialog-title">
+    <h2>Save to Gist</h2>
+    <div class="ngdialog-close"></div>
+  </div>
+</div>
+<div class="dialog-content" ng-if="gistUri">
+  <div class="success">Gist successfully saved!</div>
+  <input type="text" class="gist-uri" value="{{shareUri}}" disabled="disabled"/>
+  <a ng-href="" ng-class="clipCopyGistClasses" clip-copy="shareUri" clip-click="confirmGistCopy()">{{clipCopyGistText}}</a>
+  <a ng-href="{{gistUri}}" class="footer-link" ng-if="gistUri" target="_blank">View Gist on GitHub</a>
+</div>
+<div class="dialog-content" ng-if="!(!!gistUri)">
+  <div class="failure">The Gist could not be saved.  Please try again.</div>
+</div>

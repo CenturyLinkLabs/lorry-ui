@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService',
-  function ($rootScope, $scope, $log, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService) {
+angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', '$http', '$location', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService',
+  function ($rootScope, $scope, $log, $http, $location, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService) {
 
     var self = this;
 
@@ -252,5 +252,23 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     $scope.hasLoadFailure = function () {
       return $scope.yamlDocument.loadFailure;
     };
+
+
+    this.initialize = function () {
+      var gistUri = $location.search().gist;
+      if (angular.isDefined(gistUri)) {
+        $scope.setNewSession();
+        $http.get(gistUri)
+          .then(function (response) {
+            $scope.yamlDocument.raw = response.data;
+          })
+          .catch(function (response) {
+            $log.error(response);
+            $scope.yamlDocument.raw = null;
+          });
+      }
+    };
+
+    self.initialize();
 
   }]);
