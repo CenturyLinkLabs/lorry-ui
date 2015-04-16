@@ -8,13 +8,15 @@ describe('Directive: serviceDefinitionEdit', function () {
     rootScope,
     lodash,
     compile,
+    $document,
     element;
 
-  beforeEach(inject(function($compile, $rootScope, _lodash_){
+  beforeEach(inject(function($compile, $rootScope, _$document_, _lodash_){
     scope = $rootScope.$new();
     lodash = _lodash_;
     compile = $compile;
     rootScope = $rootScope;
+    $document = _$document_;
     rootScope.serviceNames = function() {
       return ['foo', 'bar'];
     };
@@ -159,6 +161,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
+        spyOn($document, 'scrollTop');
         spyOn(element.isolateScope(), '$emit');
       });
 
@@ -175,6 +178,11 @@ describe('Directive: serviceDefinitionEdit', function () {
       it('emits saveService when form input is valid passing required data', function () {
         element.isolateScope().saveServiceDefinition(true);
         expect(element.isolateScope().$emit).toHaveBeenCalledWith('saveService', scope.sectionName, scope.sectionName, scope.$parent.editedServiceYamlDocumentJson);
+      });
+
+      it('scrolls back to the top of the document', function() {
+        element.isolateScope().saveServiceDefinition(true);
+        expect($document.scrollTop).toHaveBeenCalledWith(0);
       });
 
       it('resets editable json after successfully saved', function () {
@@ -200,12 +208,18 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         spyOn(element.isolateScope(), '$emit');
+        spyOn($document, 'scrollTop');
       });
 
       it('is triggered when cancel button is clicked', function () {
         var btnCancel = element.find('.button-secondary')[0];
         angular.element(btnCancel).triggerHandler('click');
         expect(element.isolateScope().$emit).toHaveBeenCalled();
+      });
+
+      it('scrolls back to the top of the document', function() {
+        element.isolateScope().cancelEditing();
+        expect($document.scrollTop).toHaveBeenCalledWith(0);
       });
 
       it('resets the section name', function () {

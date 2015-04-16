@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('serviceDefinitionEdit', [ '$rootScope', function ($rootScope) {
+  .directive('serviceDefinitionEdit', [ '$rootScope', '$document', function ($rootScope, $document) {
     return {
       scope: {
         sectionName: '='
@@ -10,6 +10,8 @@ angular.module('lorryApp')
       replace: 'true',
       templateUrl: '/scripts/directives/service-definition-edit.html',
       controller: function ($scope, lodash) {
+
+        var self = this;
 
         $scope.transformToJson = function () {
           if (!$scope.newSectionName) {
@@ -75,6 +77,7 @@ angular.module('lorryApp')
             // reset edited json
             $scope.editableJson = [];
           }
+          self.editCompleted();
         };
 
         $scope.cancelEditing = function () {
@@ -88,6 +91,11 @@ angular.module('lorryApp')
           }
 
           $scope.$emit('cancelEditing', $scope.sectionName);
+          self.editCompleted();
+        };
+
+        self.editCompleted = function() {
+          $document.scrollTop(0);
         };
 
         $scope.addNewKey = function (key) {

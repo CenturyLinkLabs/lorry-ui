@@ -9,7 +9,6 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lo
       restrict: 'E',
       replace: true,
       link: function postLink(scope, element) {
-
         function lineHtml() {
           var html = '';
           if (scope.line.lineKey) {
