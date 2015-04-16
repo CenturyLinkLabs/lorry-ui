@@ -852,4 +852,14 @@ describe('Controller: DocumentCtrl', function () {
     });
 
   });
+
+  describe('$scope.hasLoadFailure', function () {
+    beforeEach(function () {
+      scope.yamlDocument.loadFailure = true;
+    });
+    it('should return true', function () {
+      expect(scope.hasLoadFailure()).toBeTruthy();
+    });
+  });
+
 });

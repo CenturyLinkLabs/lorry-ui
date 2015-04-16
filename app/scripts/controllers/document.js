@@ -249,4 +249,8 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
         });
     };
 
+    $scope.hasLoadFailure = function () {
+      return $scope.yamlDocument.loadFailure;
+    };
+
   }]);
