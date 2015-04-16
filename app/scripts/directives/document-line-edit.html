@@ -8,7 +8,7 @@
     <input type='text' class="build-image-text" ng-class="markForDeletionClasses(null)" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
     <div class="spacer" ng-hide="serviceHasMultipleLines()" ></div>
     <div class="delete" ng-show="serviceHasMultipleLines()" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
-    <div class="info"></div>
+    <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
     <div class="search-link">Or <a ng-class="searchLinkClasses()" href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></div>
   </div>
   <div ng-hide="isImageOrBuild()">
@@ -16,7 +16,7 @@
       <div ng-class="keyLabelClasses()">{{line.name}}</div>
       <input type='text' ng-class="markForDeletionClasses(null)" ng-model="line.value" value='{{line.value}}' />
       <div class="delete" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
-      <div class="info"></div>
+      <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
     </div>
     <div ng-show="hasMultipleItems()">
       <div ng-repeat="item in line.value track by $index">
@@ -26,7 +26,7 @@
         <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkName" ng-change="setLinkName($index, linkName)" ng-options="link as link for link in serviceNameList"></select>
         <input type='text' class="link-alias-text" placeholder="alias" ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkAlias" ng-blur="setLinkAlias($index, linkAlias)"/>
         <div class="delete" ng-class="deleteIconClasses($index)" ng-click="markLineItemForDeletion($index)"></div>
-        <div class="info"></div>
+        <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
       </div>
       <div class="add-link" ng-if="isValidKey()">+ <a href="" ng-click="addNewValueForLine()">Add {{line.name}}</a></div>
     </div>

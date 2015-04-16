@@ -115,6 +115,15 @@ angular.module('lorryApp')
           return scope.numLines > 1;
         };
 
+        scope.getHelpTextForKey = function() {
+          var helpText = '';
+          if (!lodash.isEmpty($rootScope.keysHelpText)) {
+            var node = lodash.find($rootScope.keysHelpText, scope.line.name);
+            helpText = node[scope.line.name];
+          }
+          return helpText;
+        };
+
         scope.serviceNameList = $rootScope.serviceNameList;
 
       },
