@@ -1,9 +1,14 @@
-<div class="line">
+<div class="line" ng-class="lineClasses()">
   <div class="imagelayers" ng-if="isImageLine()" ng-click="showImageLayers()"
        tooltips
        tooltip-side="bottom"
        tooltip-size="large"
-       tooltip-title="{{tooltip()}}"></div>
+       tooltip-content="tooltip()"></div>
   <div class="gutter">{{line.lineNumber}}</div>
   <div class="line-text"></div>
+  <div class="line-info" ng-if="hasLineErrors()"
+       tooltips
+       tooltip-side="left"
+       tooltip-size="large"
+       tooltip-content="errMessage()"></div>
 </div>

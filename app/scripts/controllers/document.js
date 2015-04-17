@@ -231,14 +231,22 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       keysService.keys()
         .then(function (response) {
           var keys = [];
+          var keysHelpText = [];
           angular.forEach(response.data, function(v) {
             var key = lodash.keys(v)[0];
-              keys.push(key);
+            keys.push(key);
+            var desc = lodash.values(v)[0].desc;
+            var obj = {};
+            obj[key] = desc;
+            keysHelpText.push(obj);
           });
           $rootScope.validKeys = keys;
+          $rootScope.keysHelpText = keysHelpText;
         })
         .catch(function () {
           $rootScope.validKeys = [];
+          $rootScope.keysHelpText = [];
         });
     };
+
   }]);

@@ -810,7 +810,7 @@ describe('Controller: DocumentCtrl', function () {
         deferredSuccess = $q.defer();
         spyOn(keysService, 'keys').and.returnValue(deferredSuccess.promise);
         scope.getValidKeys();
-        deferredSuccess.resolve({data: [ {'image': {'desc': 'blah blah', 'required': false}}, {'build': {'desc': 'blah blah', 'required': false}}, {'command': {'desc': 'blah blah', 'required': false}}, {'ports': {'desc': 'blah blah', 'required': false}} ]});
+        deferredSuccess.resolve({data: [ {'image': {'desc': 'image help', 'required': false}}, {'build': {'desc': 'build help', 'required': false}}, {'command': {'desc': 'command help', 'required': false}}, {'ports': {'desc': 'ports help', 'required': false}} ]});
         scope.$digest();
       }));
 
@@ -821,6 +821,15 @@ describe('Controller: DocumentCtrl', function () {
       it ('sets $rootScope.validKeys with valid keys', function() {
         expect(rootScope.validKeys).toEqual(['image', 'build', 'command', 'ports']);
       });
+
+      it ('sets $rootScope.keysHelpText to be not empty', function() {
+        expect(rootScope.keysHelpText).not.toEqual([]);
+      });
+
+      it ('sets $rootScope.keysHelpText with valid help text', function() {
+        expect(rootScope.keysHelpText).toEqual([{'image': 'image help'}, {'build': 'build help'}, {'command': 'command help'}, {'ports': 'ports help'}]);
+      });
+
     });
 
     describe('when api call fails', function() {
@@ -836,6 +845,9 @@ describe('Controller: DocumentCtrl', function () {
 
       it ('sets $rootScope.validKeys to be empty', function() {
         expect(rootScope.validKeys).toEqual([]);
+      });
+      it ('sets $rootScope.keysHelpText to be empty', function() {
+        expect(rootScope.keysHelpText).toEqual([]);
       });
     });
 

@@ -633,5 +633,47 @@ describe('Directive: documentLineEdit', function () {
 
     });
 
+    describe('scope.getHelpTextForKey', function () {
+      describe('when $rootScope.keysHelpText has help text', function () {
+        beforeEach(function () {
+          rootScope.keysHelpText = [{'image': 'image help'}, {'command': 'command help'}];
+          scope.line = {name: 'image', value: 'foo:bar'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+
+        });
+        it('gets the help text for key', function () {
+          expect(element.isolateScope().getHelpTextForKey()).toEqual('image help');
+        });
+
+        it('adds the tooltip to the info div', function () {
+          expect(element.find('.info').attr('tooltip-content')).toEqual('getHelpTextForKey()');
+        });
+
+      });
+
+      describe('when $rootScope.keysHelpText', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'cmd'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('is empty, returns blank help text', function () {
+          rootScope.keysHelpText = [];
+          expect(element.isolateScope().getHelpTextForKey()).toEqual('');
+        });
+
+        it('is undefined, returns blank help text', function () {
+          rootScope.keysHelpText = undefined;
+          expect(element.isolateScope().getHelpTextForKey()).toEqual('');
+        });
+
+        it('adds the tooltip to the info div', function () {
+          expect(element.find('.info').attr('tooltip-content')).toEqual('getHelpTextForKey()');
+        });
+      });
+    });
+
   });
 });

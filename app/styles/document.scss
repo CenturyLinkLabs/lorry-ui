@@ -5,6 +5,10 @@
 ._720kb-tooltip {
   background-color: $lightest_grey;
   color: $dark_grey;
+
+  &.narrow {
+    width: 250px;
+  }
 }
 
 ._720kb-tooltip-title {
@@ -334,6 +338,7 @@
     &:hover {
       background-position: 0px -20px;
     }
+
   }
 
   .delete {

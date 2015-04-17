@@ -21,15 +21,17 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lo
           return html;
         }
 
-        function addErrorStyle() {
-          if (lodash.any(scope.line.errors)) {
-            element.addClass('warning');
-            var info = angular.element('<div class="line-info" tooltips tooltip-side="left" tooltip-size="large" ' +
-            'tooltip-title="' + scope.line.errors[0].error.message + '">' +
-            '</div>');
-            element.append($compile(info)(scope));
-          }
-        }
+        scope.lineClasses = function() {
+          return scope.hasLineErrors() ? 'warning' : null;
+        };
+
+        scope.hasLineErrors = function() {
+          return lodash.any(scope.line.errors);
+        };
+
+        scope.errMessage = function () {
+          return lodash.any(scope.line.errors) ? scope.line.errors[0].error.message : null;
+        };
 
         function imageName() {
           var imageObj = jsyaml.safeLoad(scope.line.text);
@@ -56,7 +58,6 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lo
         $lineText.css('padding-left', (20 + indentLevel * 15) + 'px');
         $lineText.html(lineHtml());
 
-        addErrorStyle();
       },
       templateUrl: '/scripts/directives/document-line.html'
     };

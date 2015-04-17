@@ -61,15 +61,21 @@ describe('Directive: documentLine', function () {
     });
 
     it('adds the warning class to the element', function () {
+      expect(element.isolateScope().lineClasses()).toEqual('warning');
       expect(element.hasClass('warning')).toBeTruthy();
     });
 
-    it('appends the line-info div to the element', function () {
+    it('shows the line-info div', function () {
+      expect(element.isolateScope().hasLineErrors()).toBeTruthy();
       expect(element.find('.line-info').length).not.toEqual(0);
     });
 
     it('adds the error message to the line-info div', function () {
-      expect(element.find('.line-info').attr('tooltip-title')).toEqual('err');
+      expect(element.find('.line-info').attr('tooltip-content')).toEqual('errMessage()');
+    });
+
+    it('error message is fetched', function () {
+      expect(element.isolateScope().errMessage()).toEqual('err');
     });
   });
 
@@ -82,12 +88,19 @@ describe('Directive: documentLine', function () {
     });
 
     it('does not add the warning class to the element', function () {
+      expect(element.isolateScope().lineClasses()).toBeNull();
       expect(element.hasClass('warning')).toBeFalsy();
     });
 
-    it('does not append the line-info div to the element', function () {
+    it('hides the line-info div', function () {
+      expect(element.isolateScope().hasLineErrors()).toBeFalsy();
       expect(element.find('.line-info').length).toEqual(0);
     });
+
+    it('error message is not fetched', function () {
+      expect(element.isolateScope().errMessage()).toBeNull();
+    });
+
   });
 
   describe('identifying attribute keys', function () {
