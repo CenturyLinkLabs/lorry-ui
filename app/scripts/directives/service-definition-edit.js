@@ -132,12 +132,13 @@ angular.module('lorryApp')
         });
 
         $scope.buildValidKeyList = function () {
-          if ($rootScope.validKeys) {
+          if (!lodash.isEmpty($rootScope.validKeys)) {
             var existingKeys = lodash.pluck($scope.editableJson, 'name');
             if (lodash.includes(existingKeys, 'image') || lodash.includes(existingKeys, 'build')) {
               existingKeys = lodash.union(existingKeys, ['image', 'build']);
             }
-            return lodash.difference($rootScope.validKeys, existingKeys);
+            var unsortedList = lodash.difference($rootScope.validKeys, existingKeys);
+            return lodash.sortBy(unsortedList);
           }
         };
 

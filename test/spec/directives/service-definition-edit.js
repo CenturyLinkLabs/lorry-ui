@@ -484,19 +484,19 @@ describe('Directive: serviceDefinitionEdit', function () {
         scope.$digest();
       });
 
-      it('returns keys not already present in the json', function () {
+      it('returns keys (sorted) not already present in the json', function () {
         element.isolateScope().editableJson = [
           {name: 'command', value: 'foo'},
           {name: 'ports', value: ['1111:2222', '3333:4444']}
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['image', 'build', 'links', 'volumes', 'environment', 'external_links']);
+        expect(result).toEqual(['build', 'environment', 'external_links', 'image', 'links', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });
 
-      it('returns keys without image or build if either is present in the json', function () {
+      it('returns keys (sorted) without image or build if either is present in the json', function () {
         element.isolateScope().editableJson = [
           {name: 'image', value: 'bar'},
           {name: 'command', value: 'foo'},
@@ -504,13 +504,20 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['links', 'volumes', 'environment', 'external_links']);
+        expect(result).toEqual(['environment', 'external_links', 'links', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });
 
       it('returns undefined if validKeys are undefined', function () {
         rootScope.validKeys = undefined;
+
+        var result = element.isolateScope().buildValidKeyList();
+        expect(result).toBeUndefined();
+      });
+
+      it('returns undefined if validKeys are empty', function () {
+        rootScope.validKeys = [];
 
         var result = element.isolateScope().buildValidKeyList();
         expect(result).toBeUndefined();
