@@ -216,6 +216,10 @@ angular.module('lorryApp')
           }
         };
 
+        $scope.doesServiceNameExists = function (serviceName) {
+          // if the service is being edited, allow the original section name to be used
+          return (serviceName === $scope.sectionName) ? false : lodash.includes($scope.$parent.serviceNames(), serviceName);
+        };
       }
     };
   }]);

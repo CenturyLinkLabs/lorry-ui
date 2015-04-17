@@ -609,6 +609,30 @@ describe('Directive: serviceDefinitionEdit', function () {
       });
 
     });
+
+    describe('$scope.doesServiceNameExists', function () {
+      beforeEach(function () {
+        scope.sectionName = 'foo';
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+        scope.$digest();
+
+        spyOn(element.isolateScope().$parent, 'serviceNames').and.returnValue(['foo', 'bar']);
+      });
+
+      it('when different service is being edited returns true', function () {
+        expect(element.isolateScope().doesServiceNameExists('bar')).toBeTruthy();
+      });
+
+      it('when same service is being edited returns false', function () {
+        expect(element.isolateScope().doesServiceNameExists('foo')).toBeFalsy();
+      });
+
+      it('when an invalid service is passed returns false', function () {
+        expect(element.isolateScope().doesServiceNameExists('invalid')).toBeFalsy();
+      });
+
+    });
+
   });
 
 });
