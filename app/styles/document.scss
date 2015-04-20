@@ -203,7 +203,9 @@
 
     .section-name {
       margin-top: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
+      width: 210px;
+      @include border-box;
     }
 
     .error {
@@ -261,7 +263,7 @@
   }
 
   input[type='text'] {
-    margin-left: 80px;
+    margin-left: 70px;
     width: 800px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -274,7 +276,7 @@
   select {
     width: 522px;
     height: 39px;
-    margin-left: 80px;
+    margin-left: 70px;
     margin-top: 5px;
     margin-bottom: 5px;
   }
