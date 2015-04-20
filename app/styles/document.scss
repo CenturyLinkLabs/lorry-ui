@@ -1,5 +1,6 @@
 @import '_colors';
 @import '_variables';
+@import '_mixins';
 @import 'icons';
 
 ._720kb-tooltip {
@@ -530,7 +531,7 @@ main footer {
     position: fixed;
     top: 200px;
     left: 45%;
-    /* bring your own prefixes */
+    /* [> bring your own prefixes <] */
     transform: translate(-35%, -10%);
   }
 
@@ -553,7 +554,12 @@ main footer {
     #homeImportPane, #homeScratchPane {
       float: left;
       margin-left: 30px;
-      width: 230px;
+      width: 260px;
+
+      a.button-primary {
+        width: 100%;
+        @include border-box;
+      }
     }
 
   }
