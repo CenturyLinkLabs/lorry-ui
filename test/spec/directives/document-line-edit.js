@@ -650,6 +650,20 @@ describe('Directive: documentLineEdit', function () {
           expect(element.find('.info').attr('tooltip-content')).toEqual('getHelpTextForKey()');
         });
 
+        describe('when key is invalid', function () {
+          beforeEach(function () {
+            rootScope.keysHelpText = [{'image': 'image help'}, {'command': 'command help'}];
+            scope.line = {name: 'blah', value: 'foo:bar'};
+            element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+            scope.$digest();
+
+          });
+
+          it('sets the help text for invalid key to invalid message', function () {
+            expect(element.isolateScope().getHelpTextForKey()).toEqual('Key is invalid.');
+          });
+        });
+
       });
 
       describe('when $rootScope.keysHelpText', function () {

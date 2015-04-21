@@ -119,7 +119,7 @@ angular.module('lorryApp')
           var helpText = '';
           if (!lodash.isEmpty($rootScope.keysHelpText)) {
             var node = lodash.find($rootScope.keysHelpText, scope.line.name);
-            helpText = node[scope.line.name];
+            helpText = node ? node[scope.line.name] : 'Key is invalid.';
           }
           return helpText;
         };
