@@ -8,7 +8,7 @@ angular.module('lorryApp')
       link: function postLink(scope) {
 
         scope.deleteServiceDefinition = function () {
-          if (!scope.$parent.inEditMode() && !scope.$parent.inNewServiceMode()) {
+          if (!scope.inEditMode() && !scope.inNewServiceMode()) {
             var serviceName = scope.serviceName();
 
             scope.confirmMessage = 'Are you sure you want to delete this block?';
@@ -20,15 +20,15 @@ angular.module('lorryApp')
                 scope: scope
               }
             ).then(function () {
-                scope.$parent.deleteService(serviceName);
+                scope.deleteService(serviceName);
               });
           }
         };
 
         scope.editServiceDefinition = function () {
-          if (!scope.$parent.inEditMode() && !scope.$parent.inNewServiceMode()) {
+          if (!scope.inEditMode() && !scope.inNewServiceMode()) {
             var serviceName = scope.serviceName();
-            scope.$parent.editService(serviceName);
+            scope.editService(serviceName);
           }
         };
 

@@ -8,9 +8,11 @@ describe('Directive: documentLine', function () {
   var element,
     compile,
     scope,
-    win;
+    win,
+    ENV;
 
-  beforeEach(inject(function ($rootScope, $compile, $window) {
+  beforeEach(inject(function ($rootScope, $compile, $window, _ENV_) {
+    ENV = _ENV_;
     win = $window;
     compile = $compile;
     scope = $rootScope.$new();
@@ -19,8 +21,8 @@ describe('Directive: documentLine', function () {
   describe('displays line information', function () {
     describe('when the line is not indented', function () {
       beforeEach(function () {
-        scope.lineObj = { text: 'blah', lineNumber: 1, errors: []};
-        element = angular.element('<document-line line="lineObj"></document-line>');
+        scope.line = { text: 'blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line></document-line>');
         element = compile(element)(scope);
         scope.$digest();
       });
@@ -40,8 +42,8 @@ describe('Directive: documentLine', function () {
 
     describe('when the line is indented', function () {
       beforeEach(function () {
-        scope.lineObj = { text: '    blah', lineNumber: 1, errors: []};
-        element = angular.element('<document-line line="lineObj"></document-line>');
+        scope.line = { text: '    blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line></document-line>');
         element = compile(element)(scope);
         scope.$digest();
       });
@@ -54,19 +56,19 @@ describe('Directive: documentLine', function () {
 
   describe('when the line has errors', function() {
     beforeEach(function () {
-      scope.lineObj = { text: 'blah', lineNumber: 1, errors: [{error:{message: 'err'}}]};
-      element = angular.element('<document-line line="lineObj"></document-line>');
+      scope.line = { text: 'blah', lineNumber: 1, errors: [{error:{message: 'err'}}]};
+      element = angular.element('<document-line></document-line>');
       element = compile(element)(scope);
       scope.$digest();
     });
 
     it('adds the warning class to the element', function () {
-      expect(element.isolateScope().lineClasses()).toEqual('warning');
+      expect(scope.lineClasses()).toEqual('warning');
       expect(element.hasClass('warning')).toBeTruthy();
     });
 
     it('shows the line-info div', function () {
-      expect(element.isolateScope().hasLineErrors()).toBeTruthy();
+      expect(scope.hasLineErrors()).toBeTruthy();
       expect(element.find('.line-info').length).not.toEqual(0);
     });
 
@@ -75,30 +77,30 @@ describe('Directive: documentLine', function () {
     });
 
     it('error message is fetched', function () {
-      expect(element.isolateScope().errMessage()).toEqual('err');
+      expect(scope.errMessage()).toEqual('err');
     });
   });
 
   describe('when the line has no errors', function () {
     beforeEach(function () {
-      scope.lineObj = { text: 'blah', lineNumber: 1, errors: []};
-      element = angular.element('<document-line line="lineObj"></document-line>');
+      scope.line = { text: 'blah', lineNumber: 1, errors: []};
+      element = angular.element('<document-line></document-line>');
       element = compile(element)(scope);
       scope.$digest();
     });
 
     it('does not add the warning class to the element', function () {
-      expect(element.isolateScope().lineClasses()).toBeNull();
+      expect(scope.lineClasses()).toBeNull();
       expect(element.hasClass('warning')).toBeFalsy();
     });
 
     it('hides the line-info div', function () {
-      expect(element.isolateScope().hasLineErrors()).toBeFalsy();
+      expect(scope.hasLineErrors()).toBeFalsy();
       expect(element.find('.line-info').length).toEqual(0);
     });
 
     it('error message is not fetched', function () {
-      expect(element.isolateScope().errMessage()).toBeNull();
+      expect(scope.errMessage()).toBeNull();
     });
 
   });
@@ -106,8 +108,8 @@ describe('Directive: documentLine', function () {
   describe('identifying attribute keys', function () {
     describe('when the line contains a service definition attribute key', function () {
       beforeEach(function () {
-        scope.lineObj = { text: 'foo: blah', lineKey: 'foo', lineValue: 'blah', lineNumber: 1, errors: []};
-        element = angular.element('<document-line line="lineObj"></document-line>');
+        scope.line = { text: 'foo: blah', lineKey: 'foo', lineValue: 'blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line></document-line>');
         element = compile(element)(scope);
         scope.$digest();
       });
@@ -118,8 +120,8 @@ describe('Directive: documentLine', function () {
     });
     describe('when the line does not contain a service definition attribute key', function () {
       beforeEach(function () {
-        scope.lineObj = { text: 'blah', lineKey: undefined, lineValue: 'blah', lineNumber: 1, errors: []};
-        element = angular.element('<document-line line="lineObj"></document-line>');
+        scope.line = { text: 'blah', lineKey: undefined, lineValue: 'blah', lineNumber: 1, errors: []};
+        element = angular.element('<document-line></document-line>');
         element = compile(element)(scope);
         scope.$digest();
       });
@@ -133,41 +135,41 @@ describe('Directive: documentLine', function () {
   describe('scope.isImageLine', function () {
     describe('when the line text does not start with "image:"', function () {
       beforeEach(function () {
-        scope.lineObj = { text: '', lineNumber: 1, errors: []};
-        element = angular.element('<document-line line="lineObj"></document-line>');
+        scope.line = { text: '', lineNumber: 1, errors: []};
+        element = angular.element('<document-line></document-line>');
         element = compile(element)(scope);
         scope.$digest();
       });
 
       it('returns false', function () {
-        expect(element.isolateScope().isImageLine()).toBeFalsy();
+        expect(scope.isImageLine()).toBeFalsy();
       });
     });
 
     describe('when the line text does start with "image:"', function () {
       describe('when the image name is not blank', function () {
         beforeEach(function () {
-          scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
-          element = angular.element('<document-line line="lineObj"></document-line>');
+          scope.line = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
+          element = angular.element('<document-line></document-line>');
           element = compile(element)(scope);
           scope.$digest();
         });
 
         it('returns true', function () {
-          expect(element.isolateScope().isImageLine()).toBeTruthy();
+          expect(scope.isImageLine()).toBeTruthy();
         });
       });
 
       describe('when the image name is blank', function () {
         beforeEach(function () {
-          scope.lineObj = { text: 'image:', lineNumber: 1, errors: []};
-          element = angular.element('<document-line line="lineObj"></document-line>');
+          scope.line = { text: 'image:', lineNumber: 1, errors: []};
+          element = angular.element('<document-line></document-line>');
           element = compile(element)(scope);
           scope.$digest();
         });
 
         it('returns false', function () {
-          expect(element.isolateScope().isImageLine()).toBeFalsy();
+          expect(scope.isImageLine()).toBeFalsy();
         });
       });
 
@@ -176,29 +178,31 @@ describe('Directive: documentLine', function () {
 
   describe('scope.showImageLayers', function () {
     beforeEach(function () {
-      scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
-      element = angular.element('<document-line line="lineObj"></document-line>');
+      scope.line = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
+      scope.yamlDocument = {json: {service1: {image: 'foo/bar:oldest'}, service2: {image: 'baz/quux:latest'}}};
+      element = angular.element('<document-line></document-line>');
       element = compile(element)(scope);
       scope.$digest();
     });
 
     it('opens the image with imagelayers in a new window', function () {
       spyOn(win, 'open');
-      element.isolateScope().showImageLayers();
-      expect(win.open).toHaveBeenCalledWith('http://8.22.8.236:9000/#/?images=foo%2Fbar%3Aoldest', '_blank');
+      scope.showImageLayers();
+      expect(win.open).toHaveBeenCalledWith(ENV.IMAGE_LAYERS_URL +
+        'images=foo%2Fbar%3Aoldest%2Cbaz%2Fquux%3Alatest&lock=foo%2Fbar%3Aoldest', '_blank');
     });
   });
 
   describe('scope.tooltip', function () {
     beforeEach(function () {
-      scope.lineObj = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
-      element = angular.element('<document-line line="lineObj"></document-line>');
+      scope.line = { text: 'image: foo/bar:oldest', lineNumber: 1, errors: []};
+      element = angular.element('<document-line></document-line>');
       element = compile(element)(scope);
       scope.$digest();
     });
 
     it('returns the image name in the tooltip', function () {
-      expect(element.isolateScope().tooltip()).toEqual('Inspect foo/bar:oldest with ImageLayers.io');
+      expect(scope.tooltip()).toEqual('Inspect foo/bar:oldest with ImageLayers.io');
     });
   });
 });

@@ -23,29 +23,29 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
       describe('when the serviceDefinition has no lines', function () {
         it('returns false', function () {
-          element.isolateScope().serviceDefinition = [];
-          expect(element.isolateScope().hasLines()).toBeFalsy();
+          scope.serviceDefinition = [];
+          expect(scope.hasLines()).toBeFalsy();
         });
       });
 
       describe('when the first line of the serviceDefinition starts with a dash', function () {
         it('returns false', function () {
-          element.isolateScope().serviceDefinition = [{text: '-test'}];
-          expect(element.isolateScope().hasLines()).toBeFalsy();
+          scope.serviceDefinition = [{text: '-test'}];
+          expect(scope.hasLines()).toBeFalsy();
         });
       });
 
       describe('when the first line of the serviceDefinition starts with whitespace', function () {
         it('returns false', function () {
-          element.isolateScope().serviceDefinition = [{text: ' test'}];
-          expect(element.isolateScope().hasLines()).toBeFalsy();
+          scope.serviceDefinition = [{text: ' test'}];
+          expect(scope.hasLines()).toBeFalsy();
         });
       });
 
       describe('when the first line of the serviceDefinition starts with a character other than whitespace or a dash', function () {
         it('returns true', function () {
-          element.isolateScope().serviceDefinition = [{text: 'test'}];
-          expect(element.isolateScope().hasLines()).toBeTruthy();
+          scope.serviceDefinition = [{text: 'test'}];
+          expect(scope.hasLines()).toBeTruthy();
         });
       });
     });
@@ -68,15 +68,15 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
           describe('when the serviceDefinition has lines', function () {
             it('should be disabled', function () {
-              element.isolateScope().serviceDefinition = [{text: 'test'}];
-              expect(element.isolateScope().classes()).toBe('disabled');
+              scope.serviceDefinition = [{text: 'test'}];
+              expect(scope.classes()).toBe('disabled');
             });
           });
 
           describe('when the serviceDefinition has no lines', function () {
             it('should be disabled', function () {
-              element.isolateScope().serviceDefinition = [];
-              expect(element.isolateScope().classes()).toBe('disabled');
+              scope.serviceDefinition = [];
+              expect(scope.classes()).toBe('disabled');
             });
           });
         });
@@ -87,15 +87,15 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
           describe('when the serviceDefinition has lines', function () {
             it('should be disabled', function () {
-              element.isolateScope().serviceDefinition = [{text: 'test'}];
-              expect(element.isolateScope().classes()).toBe('disabled');
+              scope.serviceDefinition = [{text: 'test'}];
+              expect(scope.classes()).toBe('disabled');
             });
           });
 
           describe('when the serviceDefinition has no lines', function () {
             it('should be disabled', function () {
-              element.isolateScope().serviceDefinition = [];
-              expect(element.isolateScope().classes()).toBe('disabled');
+              scope.serviceDefinition = [];
+              expect(scope.classes()).toBe('disabled');
             });
           });
         });
@@ -114,15 +114,15 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
           describe('when the serviceDefinition has lines', function () {
             it('should be disabled', function () {
-              element.isolateScope().serviceDefinition = [{text: 'test'}];
-              expect(element.isolateScope().classes()).toBe('disabled');
+              scope.serviceDefinition = [{text: 'test'}];
+              expect(scope.classes()).toBe('disabled');
             });
           });
 
           describe('when the serviceDefinition has no lines', function () {
             it('should be disabled', function () {
-              element.isolateScope().serviceDefinition = [];
-              expect(element.isolateScope().classes()).toBe('disabled');
+              scope.serviceDefinition = [];
+              expect(scope.classes()).toBe('disabled');
             });
           });
         });
@@ -134,15 +134,15 @@ describe('Directive: serviceDefinitionDisplay', function () {
 
           describe('when the serviceDefinition has lines', function () {
             it('should be highlightable', function () {
-              element.isolateScope().serviceDefinition = [{text: 'test'}];
-              expect(element.isolateScope().classes()).toBe('highlightable');
+              scope.serviceDefinition = [{text: 'test'}];
+              expect(scope.classes()).toBe('highlightable');
             });
           });
 
           describe('when the serviceDefinition has no lines', function () {
             it('should be disabled', function () {
-              element.isolateScope().serviceDefinition = [];
-              expect(element.isolateScope().classes()).toBe('disabled');
+              scope.serviceDefinition = [];
+              expect(scope.classes()).toBe('disabled');
             });
           });
         });

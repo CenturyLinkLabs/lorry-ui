@@ -3,9 +3,6 @@
 angular.module('lorryApp')
   .directive('serviceDefinitionDisplay', ['lodash', function (lodash) {
     return {
-      scope: {
-        serviceDefinition: '='
-      },
       restrict: 'E',
       replace: 'true',
       link: function postLink(scope) {
@@ -16,7 +13,7 @@ angular.module('lorryApp')
         };
 
         scope.classes = function () {
-          return scope.hasLines() && !scope.$parent.inEditMode() && !scope.$parent.inNewServiceMode() ? 'highlightable' : 'disabled';
+          return scope.hasLines() && !scope.inEditMode() && !scope.inNewServiceMode() ? 'highlightable' : 'disabled';
         };
 
         scope.serviceName = function () {

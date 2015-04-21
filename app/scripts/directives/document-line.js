@@ -3,9 +3,6 @@
 angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lodash', 'jsyaml', 'ENV',
   function ($compile, $window, lodash, jsyaml, ENV) {
     return {
-      scope: {
-        line: '='
-      },
       restrict: 'E',
       replace: true,
       link: function postLink(scope, element) {
@@ -37,12 +34,18 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lo
           return imageObj.image;
         }
 
+        function imageNames() {
+          return lodash.pluck(lodash.filter(scope.yamlDocument.json, 'image'), 'image');
+        }
+
         scope.isImageLine = function () {
           return lodash.startsWith(scope.line.text.trim(), 'image:') && !lodash.isEmpty(imageName());
         };
 
         scope.showImageLayers = function () {
-          var imageLayersUrl = ENV.IMAGE_LAYERS_URL + 'images=' + encodeURIComponent(imageName());
+          var querystring = 'images=' + encodeURIComponent(imageNames().join(',')) +
+            '&' + 'lock=' + encodeURIComponent(imageName());
+          var imageLayersUrl = ENV.IMAGE_LAYERS_URL + querystring;
           $window.open(imageLayersUrl, '_blank');
         };
 
