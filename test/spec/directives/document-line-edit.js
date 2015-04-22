@@ -689,5 +689,102 @@ describe('Directive: documentLineEdit', function () {
       });
     });
 
+    describe('scope.isExtendsLine', function () {
+      describe('when the line has extends key', function () {
+        beforeEach(function () {
+          scope.line = {name: 'extends', value: {file: 'foo.yml', service: 'bar'}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns true', function () {
+          expect(element.isolateScope().isExtendsLine()).toBeTruthy();
+        });
+      });
+
+      describe('when the line does not have extends key', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'foo'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns false', function () {
+          expect(element.isolateScope().isExtendsLine()).toBeFalsy();
+        });
+      });
+
+    });
+
+    describe('scope.getExtendsSubKey', function () {
+      describe('when the line has extends key without subkeys', function () {
+        beforeEach(function () {
+          scope.line = {name: 'extends', value: {}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns null', function () {
+          expect(element.isolateScope().getExtendsSubKey(0)).toBeNull();
+        });
+      });
+
+      describe('when the line has extends key has one subkey', function () {
+        beforeEach(function () {
+          scope.line = {name: 'extends', value: {file: 'foo.yml'}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns the first subkey', function () {
+          expect(element.isolateScope().getExtendsSubKey(0)).toBe('file');
+        });
+
+        it('returns undefined for second subkey', function () {
+          expect(element.isolateScope().getExtendsSubKey(1)).toBeUndefined();
+        });
+      });
+
+      describe('when the line has extends key with valid subkeys', function () {
+        beforeEach(function () {
+          scope.line = {name: 'extends', value: {file: 'foo.yml', service: 'bar'}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns subkey value', function () {
+          expect(element.isolateScope().getExtendsSubKey(0)).toEqual('file');
+          expect(element.isolateScope().getExtendsSubKey(1)).toEqual('service');
+        });
+      });
+
+      describe('when the line has extends key with invalid subkeys', function () {
+        beforeEach(function () {
+          scope.line = {name: 'extends', value: {blah: 'foo.yml', bleh: 'bar'}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns subkey value', function () {
+          expect(element.isolateScope().getExtendsSubKey(0)).toEqual('blah');
+          expect(element.isolateScope().getExtendsSubKey(1)).toEqual('bleh');
+        });
+      });
+
+      describe('when the line does not have extends key', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'foo'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns null', function () {
+          expect(element.isolateScope().getExtendsSubKey(0)).toBeNull();
+          expect(element.isolateScope().getExtendsSubKey(1)).toBeNull();
+        });
+      });
+
+    });
+
   });
 });

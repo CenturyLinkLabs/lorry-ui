@@ -124,6 +124,15 @@ angular.module('lorryApp')
           return helpText;
         };
 
+        scope.isExtendsLine = function () {
+          return scope.line.name === 'extends';
+        };
+
+        scope.getExtendsSubKey = function (index) {
+          var keys = scope.isExtendsLine() ? lodash.keys(scope.line.value) : [];
+          return lodash.isEmpty(keys) ? null : keys[index];
+        };
+
         scope.serviceNameList = $rootScope.serviceNameList;
 
       },

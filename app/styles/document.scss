@@ -275,17 +275,41 @@
     width: 640px;
   }
 
+  input[type='text'].link-alias-text {
+    margin-left: 10px;
+    width: 260px;
+  }
+
+
+  .extends-key {
+
+    .extends-label.label {
+      width: 193px;
+    }
+
+    .subkey-label {
+      margin-left: 26px;
+      width: auto;
+      margin-right: 10px;
+    }
+
+    input[type='text'].extends-file-text {
+      margin-left: 5px;
+      width: 360px;
+    }
+
+    input[type='text'].extends-service-text {
+      margin-left: 5px;
+      width: 274px;
+    }
+  }
+
   select {
     width: 522px;
     height: 39px;
     margin-left: 70px;
     margin-top: 5px;
     margin-bottom: 5px;
-  }
-
-  input[type='text'].link-alias-text {
-    margin-left: 10px;
-    width: 260px;
   }
 
   .add-link {

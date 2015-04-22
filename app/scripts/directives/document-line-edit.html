@@ -1,5 +1,6 @@
 <div class="line-edit">
   <div ng-show="isImageOrBuild()">
+    <!-- Show image/build key block -->
     <div class="radio-edit-group">
       <input type='radio' ng-model="line.name" value='image' ng-checked="line.name === 'image'">Image
       <input type='radio' ng-model="line.name" value='build' ng-checked="line.name === 'build'">Build
@@ -13,15 +14,29 @@
   </div>
   <div ng-hide="isImageOrBuild()">
     <div ng-hide="hasMultipleItems()">
-      <div ng-class="keyLabelClasses()">{{line.name}}</div>
-      <input type='text' ng-class="markForDeletionClasses(null)" ng-model="line.value" value='{{line.value}}' />
-      <div class="delete" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
-      <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
+      <!-- Show extends key block -->
+      <div ng-show="isExtendsLine()">
+        <div class="extends-key">
+          <div class="extends-label" ng-class="keyLabelClasses()">{{line.name}}</div>
+          <span class="subkey-label">{{getExtendsSubKey(0)}}</span><input type="text" class="extends-file-text" ng-class="markForDeletionClasses(null)" ng-model="line.value.file" />
+          <span class="subkey-label">{{getExtendsSubKey(1)}}</span><input type="text" class="extends-service-text" ng-class="markForDeletionClasses(null)" ng-model="line.value.service" />
+          <div class="delete" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
+          <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
+        </div>
+      </div>
+      <!-- Show single-value key block -->
+      <div ng-show="!isExtendsLine()">
+        <div ng-class="keyLabelClasses()">{{line.name}}</div>
+        <input type="text" ng-class="markForDeletionClasses(null)" ng-model="line.value" value='{{line.value}}' />
+        <div class="delete" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
+        <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
+      </div>
     </div>
     <div ng-show="hasMultipleItems()">
+      <!-- Show multiple-value key block -->
       <div ng-repeat="item in line.value track by $index">
-        <div ng-class="keyLabelClasses()"><div ng-show="$index == 0">{{line.name}}</div></div>
-        <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name != 'links'" ng-model="line.value[$index]" value='{{item}}' />
+        <div ng-class="keyLabelClasses()"><div ng-show="$index === 0">{{line.name}}</div></div>
+        <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name !== 'links'" ng-model="line.value[$index]" value='{{item}}' />
         <span ng-hide="true" ng-init="linkName = getLinkName(line.value[$index]); linkAlias = getLinkAlias(line.value[$index])" ></span>
         <select ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkName" ng-change="setLinkName($index, linkName)" ng-options="link as link for link in serviceNameList"></select>
         <input type='text' class="link-alias-text" placeholder="alias" ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkAlias" ng-blur="setLinkAlias($index, linkAlias)"/>
