@@ -24,10 +24,10 @@ angular.module('lorryApp').controller('DocumentExportCtrl',
 
     $scope.exportButtonStyle = function () {
       var buttonStyle;
-      if ($scope.exportable() && $scope.yamlDocument.parseErrors) {
-        buttonStyle = 'button-warning';
-      } else if ($scope.yamlDocument.loadFailure) {
+      if ($scope.yamlDocument.loadFailure) {
         buttonStyle = 'button-negative';
+      } else if ($scope.yamlDocument.parseErrors) {
+        buttonStyle = 'button-warning';
       } else {
         buttonStyle = 'button-primary';
       }

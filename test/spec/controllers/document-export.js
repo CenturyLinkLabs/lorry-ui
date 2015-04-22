@@ -53,41 +53,28 @@ describe('Controller: DocumentExportCtrl', function () {
   });
 
   describe('$scope.exportButtonStyle', function () {
-    describe('when the document is not exportable', function () {
-      beforeEach(function () {
-        spyOn(scope, 'exportable').and.returnValue(true);
-        scope.yamlDocument = {};
-      });
-
-      describe('when the document has load failures (i.e. could not be parsed)', function () {
-        it('returns "button-primary"', function () {
-          scope.yamlDocument.loadFailure = true;
-          expect(scope.exportButtonStyle()).toEqual('button-negative');
-        });
-      });
-
-      describe('if the document has no load failures', function () {
-        it('returns "button-primary"', function () {
-          scope.yamlDocument = {};
-          expect(scope.exportButtonStyle()).toEqual('button-primary');
-        });
-      });
+    beforeEach(function () {
+      scope.yamlDocument = {};
     });
 
-    describe('when the document is exportable', function () {
-      beforeEach(function () {
-        spyOn(scope, 'exportable').and.returnValue(true);
-      });
+    it('returns "button-negative" if there is a loadFailure', function () {
+      scope.yamlDocument.loadFailure = true;
+      expect(scope.exportButtonStyle()).toEqual('button-negative');
+    });
 
-      it('returns "button-primary" if there are no warnings', function () {
-        scope.yamlDocument = {};
-        expect(scope.exportButtonStyle()).toEqual('button-primary');
-      });
+    it('returns "button-negative" if there is both a loadFailure and parseErrors', function () {
+      scope.yamlDocument.loadFailure = true;
+      scope.yamlDocument.parseErrors = true;
+      expect(scope.exportButtonStyle()).toEqual('button-negative');
+    });
 
-      it('returns "button-warning" if there are warnings', function () {
-        scope.yamlDocument = {parseErrors: true};
-        expect(scope.exportButtonStyle()).toEqual('button-warning');
-      });
+    it('returns "button-warning" if there are warnings', function () {
+      scope.yamlDocument.parseErrors = true;
+      expect(scope.exportButtonStyle()).toEqual('button-warning');
+    });
+
+    it('returns "button-primary" if there are no warnings', function () {
+      expect(scope.exportButtonStyle()).toEqual('button-primary');
     });
   });
 
