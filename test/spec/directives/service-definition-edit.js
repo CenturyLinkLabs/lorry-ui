@@ -73,6 +73,106 @@ describe('Directive: serviceDefinitionEdit', function () {
         it('should add an image key to the service', function () {
           expect(element.isolateScope().editableJson[1].name).toBe('image');
         });
+      });
+
+      describe('when editableJson is undefined and editedServiceYamlDocumentJson has extends key', function () {
+        beforeEach(function () {
+          scope.sectionName = 'adapter';
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+          element.isolateScope().editableJson = undefined;
+        });
+
+        describe('and extends key value is undefined', function () {
+          beforeEach(function () {
+            element.isolateScope().$parent.editedServiceYamlDocumentJson = {
+              'build': 'foo',
+              'extends': null
+            };
+            element.isolateScope().transformToJson();
+          });
+          it('fixes the value to have empty file and service subkeys', function () {
+            expect(element.isolateScope().editableJson[1].value).toEqual({file: '', service: ''});
+          });
+        });
+
+        describe('and extends key value is empty', function () {
+          beforeEach(function () {
+            element.isolateScope().$parent.editedServiceYamlDocumentJson = {
+              'build': 'foo',
+              'extends': {}
+            };
+            element.isolateScope().transformToJson();
+          });
+          it('fixes the value to have empty file and service subkeys', function () {
+            expect(element.isolateScope().editableJson[1].value).toEqual({file: '', service: ''});
+          });
+        });
+
+        describe('and both file and service subkeys exists', function () {
+          beforeEach(function () {
+            element.isolateScope().$parent.editedServiceYamlDocumentJson = {
+              'build': 'foo',
+              'extends': {service: 'bar', file: 'foo.yml'}
+            };
+            element.isolateScope().transformToJson();
+          });
+          it('fixes the value to be in predetermined order', function () {
+            expect(element.isolateScope().editableJson[1].value).toEqual({file: 'foo.yml', service: 'bar'});
+          });
+        });
+
+        describe('and both file and service subkeys exist along with extra subkeys', function () {
+          beforeEach(function () {
+            element.isolateScope().$parent.editedServiceYamlDocumentJson = {
+              'build': 'foo',
+              'extends': {file: 'foo.yml', service: 'bar', 'blah': 'boo'}
+            };
+            element.isolateScope().transformToJson();
+          });
+          it('fixes the value to remove extra subkeys', function () {
+            expect(element.isolateScope().editableJson[1].value).toEqual({file: 'foo.yml', service: 'bar'});
+          });
+        });
+
+        describe('and both file or service subkeys does not exist', function () {
+          beforeEach(function () {
+            element.isolateScope().$parent.editedServiceYamlDocumentJson = {
+              'build': 'foo',
+              'extends': {fillllle: 'foo.yml', serviccccces: 'bar'}
+            };
+            element.isolateScope().transformToJson();
+          });
+          it('fixes the value to have empty file and service subkeys', function () {
+            expect(element.isolateScope().editableJson[1].value).toEqual({file: '', service: ''});
+          });
+        });
+
+        describe('and file exists but service does not exist', function () {
+          beforeEach(function () {
+            element.isolateScope().$parent.editedServiceYamlDocumentJson = {
+              'build': 'foo',
+              'extends': {file: 'foo.yml', serviccces: 'bar'}
+            };
+            element.isolateScope().transformToJson();
+          });
+          it('fixes the value to have original file and empty service subkeys', function () {
+            expect(element.isolateScope().editableJson[1].value).toEqual({file: 'foo.yml', service: ''});
+          });
+        });
+
+        describe('and service exists but file does not exist', function () {
+          beforeEach(function () {
+            element.isolateScope().$parent.editedServiceYamlDocumentJson = {
+              'build': 'foo',
+              'extends': {fillee: 'foo.yml', service: 'bar'}
+            };
+            element.isolateScope().transformToJson();
+          });
+          it('fixes the value to have empty file and original service subkeys', function () {
+            expect(element.isolateScope().editableJson[1].value).toEqual({file: '', service: 'bar'});
+          });
+        });
 
       });
 
