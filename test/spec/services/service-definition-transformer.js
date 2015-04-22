@@ -24,7 +24,8 @@ describe('Service: service-definition-transformer', function () {
           lineNumber: 1,
           errors: [
             { error: { message: 'error1', line: 1, column: 2} }
-          ]
+          ],
+          warnings: []
         },
         {
           text: '  image: postgres:latest\ ',
@@ -33,7 +34,8 @@ describe('Service: service-definition-transformer', function () {
           lineNumber: 2,
           errors: [
             { error: { message: 'error2', line: 2, column: 3} }
-          ]
+          ],
+          warnings: []
         }
       ],
       [
@@ -44,7 +46,8 @@ describe('Service: service-definition-transformer', function () {
           lineNumber: 3,
           errors: [
             { error: { message: 'error3', line: 3, column: 2} }
-          ]
+          ],
+          warnings: []
         },
         {
           text: '  image: apache:latest\ ',
@@ -53,7 +56,8 @@ describe('Service: service-definition-transformer', function () {
           lineNumber: 4,
           errors: [
             { error: { message: 'error4', line: 4, column: 3} }
-          ]
+          ],
+          warnings: []
         }
       ]
     ];

@@ -62,9 +62,9 @@ describe('Directive: documentLine', function () {
       scope.$digest();
     });
 
-    it('adds the warning class to the element', function () {
-      expect(scope.lineClasses()).toEqual('warning');
-      expect(element.hasClass('warning')).toBeTruthy();
+    it('adds the error class to the element', function () {
+      expect(scope.lineClasses()).toEqual('error');
+      expect(element.hasClass('error')).toBeTruthy();
     });
 
     it('shows the line-info div', function () {
@@ -89,9 +89,9 @@ describe('Directive: documentLine', function () {
       scope.$digest();
     });
 
-    it('does not add the warning class to the element', function () {
-      expect(scope.lineClasses()).toBeNull();
-      expect(element.hasClass('warning')).toBeFalsy();
+    it('does not add the error class to the element', function () {
+      expect(scope.lineClasses()).toBeUndefined();
+      expect(element.hasClass('error')).toBeFalsy();
     });
 
     it('hides the line-info div', function () {
@@ -101,6 +101,47 @@ describe('Directive: documentLine', function () {
 
     it('error message is not fetched', function () {
       expect(scope.errMessage()).toBeNull();
+    });
+
+  });
+
+  describe('when the line has warnings', function() {
+    beforeEach(function () {
+      scope.line = { text: 'blah', lineNumber: 1, warnings: [{warning:{message: 'warn'}}]};
+      element = angular.element('<document-line></document-line>');
+      element = compile(element)(scope);
+      scope.$digest();
+    });
+
+    it('adds the warning class to the element', function () {
+      expect(scope.lineClasses()).toEqual('warning');
+      expect(element.hasClass('warning')).toBeTruthy();
+    });
+
+    it('adds the warning message to the line text wrapper', function () {
+      expect(element.find('.line-text > .service-value').attr('tooltip-content')).toEqual('warningMessage()');
+    });
+
+    it('scope.warningMessage returns the warning message', function () {
+      expect(scope.warningMessage()).toEqual('warn');
+    });
+  });
+
+  describe('when the line has no warnings', function () {
+    beforeEach(function () {
+      scope.line = { text: 'blah', lineNumber: 1, warnings: []};
+      element = angular.element('<document-line></document-line>');
+      element = compile(element)(scope);
+      scope.$digest();
+    });
+
+    it('does not add the warning class to the element', function () {
+      expect(scope.lineClasses()).toBeUndefined();
+      expect(element.hasClass('warning')).toBeFalsy();
+    });
+
+    it('does not add the warning message to the line text wrapper', function () {
+      expect(element.find('.line-text > .service-value').attr('tooltip-content')).toBeUndefined();
     });
 
   });

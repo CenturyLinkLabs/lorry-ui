@@ -82,13 +82,13 @@
 #documentAlertsPane {
   margin-right: 210px;
 
-  &.error {
+  &.fatal {
     padding: 12px;
     background-color: $dark_red;
     color: $white;
   }
 
-  &.warning {
+  &.error {
     padding: 12px;
     background-color: $orange;
     color: $white;
@@ -145,12 +145,12 @@
         }
       }
 
-      .line:not(.warning),
+      .line:not(.error),
       .action-menu {
         background-color: $darker_grey;
       }
 
-      .line:not(.warning) .line-text {
+      .line:not(.error) .line-text {
         background-color: $darkest_grey;
       }
     }
@@ -254,7 +254,7 @@
     width: 150px;
   }
 
-  .error {
+  .fatal {
     color: red;
   }
 
@@ -395,6 +395,21 @@
     text-align: right
   }
 
+  &.warning {
+    .gutter {
+      color: $orange;
+    }
+
+    .line-text .service-value {
+      display: inline-block;
+      margin-left: 5px;
+      background-image: url('../images/icon_checkmark.svg');
+      background-repeat: repeat-x;
+      background-position: 0 20px;
+      @include background-size(4px, 10px);
+    }
+  }
+
   .imagelayers {
     width: 40px;
     height: 20px;
@@ -429,7 +444,7 @@
     }
   }
 
-  &.warning {
+  &.error {
     margin-right: 120px;
     background-color: $orange;
     color: $white;
@@ -511,7 +526,7 @@ main footer {
   }
 
   .button-primary,
-  .button-warning,
+  .button-error,
   .button-negative {
     float: right;
     margin-left: 15px;

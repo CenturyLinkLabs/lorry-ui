@@ -44,7 +44,8 @@ angular.module('lorryApp').factory('serviceDefTransformer', ['$log', 'lodash', '
             lineKey: parsedLine[0],
             lineValue: parsedLine[1],
             lineNumber: lineNumber,
-            errors: lodash.select(yamlDocument.errors, { error: { line: lineNumber } })
+            errors: lodash.select(yamlDocument.errors, { error: { line: lineNumber } }),
+            warnings: lodash.select(yamlDocument.warnings, { warning: { line: lineNumber } })
           };
 
           if (/^(?:\s|-)/i.test(line)) {

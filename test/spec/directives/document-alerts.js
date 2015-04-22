@@ -22,18 +22,18 @@ describe('Directive: documentAlerts', function () {
       scope.yamlDocument.parseErrors = true;
     });
 
-    it('the warning class is added', function () {
+    it('the error class is added', function () {
       element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
       element = compile(element)(scope);
       scope.$digest();
-      expect(element.hasClass('warning')).toBeTruthy();
+      expect(element.hasClass('error')).toBeTruthy();
     });
 
-    it('the error class is removed', function () {
+    it('the fatal class is removed', function () {
       element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
       element = compile(element)(scope);
       scope.$digest();
-      expect(element.hasClass('error')).toBeFalsy();
+      expect(element.hasClass('fatal')).toBeFalsy();
     });
 
     it('the valid class is removed', function () {
@@ -86,12 +86,12 @@ describe('Directive: documentAlerts', function () {
       scope.$digest();
     });
 
-    it('the error class is added', function () {
-      expect(element.hasClass('error')).toBeTruthy();
+    it('the fatal class is added', function () {
+      expect(element.hasClass('fatal')).toBeTruthy();
     });
 
-    it('the warning class is removed', function () {
-      expect(element.hasClass('warning')).toBeFalsy();
+    it('the error class is removed', function () {
+      expect(element.hasClass('error')).toBeFalsy();
     });
 
     it('the valid class is removed', function () {

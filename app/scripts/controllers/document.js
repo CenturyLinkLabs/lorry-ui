@@ -84,6 +84,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
         .then(function (response) {
           $scope.yamlDocument.lines = response.data.lines;
           $scope.yamlDocument.errors = response.data.errors;
+          $scope.yamlDocument.warnings = response.data.warnings;
           if (lodash.any(response.data.errors)) {
             $scope.yamlDocument.parseErrors = true;
             $scope.yamlDocument.loadFailure = false;

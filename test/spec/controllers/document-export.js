@@ -68,12 +68,13 @@ describe('Controller: DocumentExportCtrl', function () {
       expect(scope.exportButtonStyle()).toEqual('button-negative');
     });
 
-    it('returns "button-warning" if there are warnings', function () {
+    it('returns "button-error" if there are errors', function () {
       scope.yamlDocument.parseErrors = true;
-      expect(scope.exportButtonStyle()).toEqual('button-warning');
+      expect(scope.exportButtonStyle()).toEqual('button-error');
     });
 
-    it('returns "button-primary" if there are no warnings', function () {
+    it('returns "button-primary" if there are no errors', function () {
+      scope.yamlDocument = {};
       expect(scope.exportButtonStyle()).toEqual('button-primary');
     });
   });

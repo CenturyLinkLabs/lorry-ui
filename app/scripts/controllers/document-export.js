@@ -27,7 +27,7 @@ angular.module('lorryApp').controller('DocumentExportCtrl',
       if ($scope.yamlDocument.loadFailure) {
         buttonStyle = 'button-negative';
       } else if ($scope.yamlDocument.parseErrors) {
-        buttonStyle = 'button-warning';
+        buttonStyle = 'button-error';
       } else {
         buttonStyle = 'button-primary';
       }
