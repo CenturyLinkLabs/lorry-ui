@@ -7,11 +7,13 @@ describe('Directive: actionMenu', function () {
   var scope,
     compile,
     ngDialog,
+    win,
     element;
 
-  beforeEach(inject(function($compile, $rootScope, _ngDialog_){
+  beforeEach(inject(function($compile, $rootScope, _ngDialog_, _$window_){
     scope = $rootScope.$new();
     compile = $compile;
+    win = _$window_;
     ngDialog = _ngDialog_;
   }));
 
@@ -19,7 +21,7 @@ describe('Directive: actionMenu', function () {
     scope.serviceName = jasmine.createSpy('serviceName').and.returnValue('someService');
     scope.hasLines = jasmine.createSpy('hasLines').and.returnValue(true);
     scope.classes = jasmine.createSpy('classes');
-    element = compile('<action-menu></action-menu>')(scope);
+    element = compile(angular.element('<action-menu></action-menu>'))(scope);
     scope.$digest();
   });
 
@@ -107,6 +109,18 @@ describe('Directive: actionMenu', function () {
   });
 
   describe('scope.editServiceDefinition', function () {
+    var fake$;
+
+    beforeEach(function() {
+      var fakeParentEl = {
+        offset: function() {
+          return { top: 0 };
+        }
+      };
+      spyOn(win.$.fn, 'closest').and.returnValue(fakeParentEl);
+      fake$ = jasmine.createSpyObj('fake$', ['animate']);
+      spyOn(win, '$').and.returnValue(fake$);
+    });
 
     it('is triggered when the edit icon is clicked', function () {
       spyOn(scope, 'editServiceDefinition');
@@ -116,44 +130,73 @@ describe('Directive: actionMenu', function () {
     });
 
     describe('when any of the services are not in edit mode and new service is not being added', function () {
-      it('calls editService on the parent with the name of the service definition to be edited', function () {
+      beforeEach(function() {
         scope.editService = jasmine.createSpy('editService');
         scope.inEditMode = jasmine.createSpy('inEditMode');
         scope.inNewServiceMode = jasmine.createSpy('inNewServiceMode');
+      });
 
+      it('calls editService on the parent with the name of the service definition to be edited', function () {
         scope.editServiceDefinition();
         expect(scope.editService).toHaveBeenCalledWith('someService');
+      });
+
+      it('scrolls to the edit block', function() {
+        scope.editServiceDefinition();
+        expect(fake$.animate).toHaveBeenCalledWith({scrollTop:0}, 500);
       });
     });
 
     describe('when any of the services are not in edit mode and new service is being added', function () {
-      it('does not call editService on the parent', function () {
+      beforeEach(function() {
         scope.editService = jasmine.createSpy('editService');
         scope.inEditMode = jasmine.createSpy('inEditMode');
         scope.inNewServiceMode = jasmine.createSpy('inNewServiceMode').and.returnValue(true);
 
+      });
+
+      it('does not call editService on the parent', function () {
         scope.editServiceDefinition();
         expect(scope.editService).not.toHaveBeenCalled();
+      });
+
+      it('does not scroll to the edit block', function() {
+        scope.editServiceDefinition();
+        expect(fake$.animate).not.toHaveBeenCalled();
       });
     });
     describe('when any of the services are in edit mode and new service is not being added', function () {
-      it('does not call editService on the parent', function () {
+      beforeEach(function() {
         scope.editService = jasmine.createSpy('editService');
         scope.inEditMode = jasmine.createSpy('inEditMode').and.returnValue(true);
         scope.inNewServiceMode = jasmine.createSpy('inNewServiceMode');
+      });
 
+      it('does not call editService on the parent', function () {
         scope.editServiceDefinition();
         expect(scope.editService).not.toHaveBeenCalled();
       });
+
+      it('does not scroll to the edit block', function() {
+        scope.editServiceDefinition();
+        expect(fake$.animate).not.toHaveBeenCalled();
+      });
     });
     describe('when any of the services are in edit mode and new service is being added', function () {
-      it('does not call editService on the parent', function () {
+      beforeEach(function() {
         scope.editService = jasmine.createSpy('editService');
         scope.inEditMode = jasmine.createSpy('inEditMode').and.returnValue(true);
         scope.inNewServiceMode = jasmine.createSpy('inNewServiceMode').and.returnValue(true);
+      });
 
+      it('does not call editService on the parent', function () {
         scope.editServiceDefinition();
         expect(scope.editService).not.toHaveBeenCalled();
+      });
+
+      it('does not scroll to the edit block', function() {
+        scope.editServiceDefinition();
+        expect(fake$.animate).not.toHaveBeenCalled();
       });
     });
 

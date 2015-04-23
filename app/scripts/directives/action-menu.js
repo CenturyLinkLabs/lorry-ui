@@ -1,11 +1,18 @@
 'use strict';
 
 angular.module('lorryApp')
-  .directive('actionMenu', ['ngDialog', function (ngDialog) {
+  .directive('actionMenu', ['ngDialog', '$window', function (ngDialog, $window) {
     return {
       restrict: 'E',
       replace: true,
-      link: function postLink(scope) {
+      link: function postLink(scope, $element) {
+
+        function scrollIntoFocus() {
+          var $el = $element.closest('.service-definition');
+          $window.$('html, body').animate({
+            scrollTop: $el.offset().top
+          }, 500);
+        }
 
         scope.deleteServiceDefinition = function () {
           if (!scope.inEditMode() && !scope.inNewServiceMode()) {
@@ -27,6 +34,7 @@ angular.module('lorryApp')
 
         scope.editServiceDefinition = function () {
           if (!scope.inEditMode() && !scope.inNewServiceMode()) {
+            scrollIntoFocus();
             var serviceName = scope.serviceName();
             scope.editService(serviceName);
           }
