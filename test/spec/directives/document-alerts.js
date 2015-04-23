@@ -52,7 +52,7 @@ describe('Directive: documentAlerts', function () {
       });
 
       it('the singular form of the error message is displayed', function () {
-        expect(element.text()).toContain('An error was possibly detected');
+        expect(element.text()).toContain('A possible error was detected');
       });
     });
 
@@ -68,11 +68,11 @@ describe('Directive: documentAlerts', function () {
       });
 
       it('the plural form of the error message is displayed', function () {
-        expect(element.text()).toContain('errors were possibly detected');
+        expect(element.text()).toContain('possible errors were detected');
       });
 
       it('includes the error count in the error message', function () {
-        expect(element.text()).toContain(scope.yamlDocument.errors.length + ' errors');
+        expect(element.text()).toContain(scope.yamlDocument.errors.length + ' possible errors');
       });
     });
   });
