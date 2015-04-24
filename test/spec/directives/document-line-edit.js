@@ -277,10 +277,6 @@ describe('Directive: documentLineEdit', function () {
         expect(element.isolateScope().$emit).toHaveBeenCalledWith('markKeyForDeletion', element.isolateScope().line.name);
       });
 
-      it('should mark the line for deletion', function () {
-        element.isolateScope().markLineForDeletion();
-        expect(rootScope.markAsDeletedTracker).hasOwnProperty('command');
-      });
     });
 
     describe('scope.markLineItemForDeletion', function () {
@@ -301,11 +297,6 @@ describe('Directive: documentLineEdit', function () {
       it('emits markKeyItemForDeletion with line item to be deleted', function () {
         element.isolateScope().markLineItemForDeletion(0);
         expect(element.isolateScope().$emit).toHaveBeenCalledWith('markKeyItemForDeletion', element.isolateScope().line.name, 0);
-      });
-
-      it('should mark the line item for deletion', function () {
-        element.isolateScope().markLineItemForDeletion(0);
-        expect(rootScope.markAsDeletedTracker).hasOwnProperty('ports');
       });
 
     });

@@ -340,14 +340,9 @@ describe('Directive: serviceDefinitionEdit', function () {
 
     describe('$scope.addNewKey', function () {
       beforeEach(function () {
-        scope.validKeys = ['command', 'volumes', 'ports', 'links', 'environment', 'external_links'];
+        scope.validKeys = ['command', 'extends', 'volumes', 'ports', 'links', 'environment', 'external_links'];
         scope.sectionName = 'adapter';
-        scope.fullJson = {
-          'adapter': {
-            'build': 'foo',
-            'ports': ['1111:2222', '3333:4444']
-          }};
-
+        scope.editedServiceYamlDocumentJson = {};
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
       });
@@ -359,7 +354,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         expect(element.isolateScope().addNewKey).toHaveBeenCalled();
       });
 
-      describe('when a invalid', function () {
+      describe('when an invalid', function () {
         beforeEach(function () {
           spyOn(lodash, 'includes').and.returnValue(false);
         });
@@ -373,7 +368,7 @@ describe('Directive: serviceDefinitionEdit', function () {
             expect(element.isolateScope().editableJson).not.toContain({'name': 'invalid', 'value': ''});
           });
           it('should not add the invalid key to the edited service', function () {
-            expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('invalid');
+            expect(scope.editedServiceYamlDocumentJson.invalid).toBeUndefined();
           });
 
         });
@@ -387,7 +382,7 @@ describe('Directive: serviceDefinitionEdit', function () {
             expect(element.isolateScope().editableJson).not.toContain({'name': 'volumes', 'value': ['']});
           });
           it('should add the invalid key to the edited service', function () {
-            expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('invalid');
+            expect(scope.editedServiceYamlDocumentJson.invalid).toBeUndefined();
           });
         });
 
@@ -407,7 +402,7 @@ describe('Directive: serviceDefinitionEdit', function () {
             expect(element.isolateScope().editableJson).toContain({'name': 'command', 'value': ''});
           });
           it('should add a new key to the edited service with empty value', function () {
-            expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('command');
+            expect(scope.editedServiceYamlDocumentJson.command).toBeDefined();
             expect(scope.editedServiceYamlDocumentJson.command).toBe('');
           });
 
@@ -422,10 +417,25 @@ describe('Directive: serviceDefinitionEdit', function () {
             expect(element.isolateScope().editableJson).toContain({'name': 'volumes', 'value': ['']});
           });
           it('should add a new key to the edited service with empty sequence', function () {
-            expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('volumes');
+            expect(scope.editedServiceYamlDocumentJson.volumes).toBeDefined();
             expect(scope.editedServiceYamlDocumentJson.volumes).toEqual(['']);
           });
         });
+
+        describe('extends key is added', function () {
+          beforeEach(function () {
+            element.isolateScope().addNewKey('extends');
+          });
+
+          it('should add a new key to the editable json with empty subkeys', function () {
+            expect(element.isolateScope().editableJson).toContain({'name': 'extends', 'value': {file: '', service: ''}});
+          });
+          it('should add a new key to the edited service with empty subkeys', function () {
+            expect(scope.editedServiceYamlDocumentJson.extends).toBeDefined();
+            expect(scope.editedServiceYamlDocumentJson.extends).toEqual({file: '', service: ''});
+          });
+        });
+
       });
     });
 
@@ -459,7 +469,18 @@ describe('Directive: serviceDefinitionEdit', function () {
 
         it('should not add a new key value', function () {
           expect(element.isolateScope().editableJson).not.toContain({'name': 'command', 'value': ''});
-          expect(scope.editedServiceYamlDocumentJson).not.hasOwnProperty('command');
+          expect(scope.editedServiceYamlDocumentJson.command).toBeUndefined();
+        });
+      });
+
+      describe('when an extends key value is added', function () {
+        beforeEach(function () {
+          element.isolateScope().$emit('addNewValueForExistingKey', 'extends');
+        });
+
+        it('should not add a new key value', function () {
+          expect(element.isolateScope().editableJson).not.toContain({'name': 'extends', 'value': {file: '', service: ''}});
+          expect(scope.editedServiceYamlDocumentJson.extends).toBeUndefined();
         });
       });
 
@@ -470,7 +491,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
         it('should add a new key value to the service with empty sequence', function () {
           expect(element.isolateScope().editableJson[1]).toEqual({'name': 'ports', 'value': ['1111:2222', '3333:4444', '']});
-          expect(scope.editedServiceYamlDocumentJson).hasOwnProperty('ports');
+          expect(scope.editedServiceYamlDocumentJson.ports).toBeDefined();
           expect(scope.editedServiceYamlDocumentJson.ports).toEqual(['1111:2222', '3333:4444', '']);
         });
       });
@@ -650,6 +671,13 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
       });
 
+      describe('when the extends key represents a mapping value', function () {
+        it('returns a mapping with empty subkeys', function () {
+          var result = element.isolateScope().createNewEmptyValueForKey('extends');
+          expect(result).toEqual({file: '', service: ''});
+        });
+      });
+
     });
 
     describe('#markItemForDeletion', function () {
@@ -665,7 +693,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
 
         it('should add the key name to delete tracker', function () {
-          expect(scope.markAsDeletedTracker).hasOwnProperty('key1');
+          expect(scope.markAsDeletedTracker.key1).toBeDefined();
           expect(scope.markAsDeletedTracker.key1).toEqual(['delete me']);
         });
       });
@@ -678,7 +706,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         it('should remove the key name from the delete tracker', function () {
           // undelete key
           element.isolateScope().markItemForDeletion('key1', null);
-          expect(scope.markAsDeletedTracker).not.hasOwnProperty('key1');
+          expect(scope.markAsDeletedTracker.key1).toBeUndefined();
         });
       });
 
@@ -689,7 +717,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
 
         it('should add the key item indexes to the delete tracker', function () {
-          expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
+          expect(scope.markAsDeletedTracker.key2).toBeDefined();
           expect(scope.markAsDeletedTracker.key2).toEqual([0,1]);
         });
       });
@@ -703,7 +731,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         it('should remove the key item index from the delete tracker', function () {
           // undelete only one item
           element.isolateScope().markItemForDeletion('key2', 1);
-          expect(scope.markAsDeletedTracker).hasOwnProperty('key2');
+          expect(scope.markAsDeletedTracker.key2).toBeDefined();
           expect(scope.markAsDeletedTracker.key2).toEqual([0]);
         });
       });

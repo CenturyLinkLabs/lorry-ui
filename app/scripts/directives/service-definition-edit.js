@@ -179,6 +179,9 @@ angular.module('lorryApp')
             case 'cpu_shares':
               keyValue = '';
               break;
+            case 'extends':
+              keyValue = {file: '', service: ''};
+              break;
             default:
               keyValue = '';
           }
