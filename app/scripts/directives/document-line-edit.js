@@ -34,7 +34,7 @@ angular.module('lorryApp')
           var tracker = $rootScope.markAsDeletedTracker;
           var key = scope.line.name;
 
-          if (index === null) {
+          if (!index) {
             return (tracker.hasOwnProperty(key)) ? 'mark-for-deletion' : '';
           } else {
             if (tracker.hasOwnProperty(key)) {
@@ -59,7 +59,7 @@ angular.module('lorryApp')
           var tracker = $rootScope.markAsDeletedTracker;
           var key = scope.line.name;
 
-          if (index === null) {
+          if (!index) {
             return (tracker.hasOwnProperty(key)) ? 'marked' : '';
           } else {
             if (tracker.hasOwnProperty(key)) {

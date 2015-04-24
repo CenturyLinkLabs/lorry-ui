@@ -188,7 +188,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that includes mark-for-deletion', function () {
-          expect(element.isolateScope().markForDeletionClasses(null)).toContain('mark-for-deletion');
+          expect(element.isolateScope().markForDeletionClasses()).toContain('mark-for-deletion');
         });
       });
 
@@ -202,7 +202,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that does not include mark-for-deletion', function () {
-          expect(element.isolateScope().markForDeletionClasses(null)).not.toContain('mark-for-deletion');
+          expect(element.isolateScope().markForDeletionClasses()).not.toContain('mark-for-deletion');
         });
       });
 
@@ -216,7 +216,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that includes mark-for-deletion', function () {
-          expect(element.isolateScope().markForDeletionClasses(null)).toContain('mark-for-deletion');
+          expect(element.isolateScope().markForDeletionClasses()).toContain('mark-for-deletion');
         });
       });
 
@@ -230,7 +230,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that does not include mark-for-deletion', function () {
-          expect(element.isolateScope().markForDeletionClasses(null)).not.toContain('mark-for-deletion');
+          expect(element.isolateScope().markForDeletionClasses()).not.toContain('mark-for-deletion');
         });
       });
 
@@ -321,7 +321,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that includes marked', function () {
-          expect(element.isolateScope().deleteIconClasses(null)).toContain('marked');
+          expect(element.isolateScope().deleteIconClasses()).toContain('marked');
         });
       });
 
@@ -335,7 +335,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that does not include marked', function () {
-          expect(element.isolateScope().deleteIconClasses(null)).not.toContain('marked');
+          expect(element.isolateScope().deleteIconClasses()).not.toContain('marked');
         });
       });
 
@@ -349,7 +349,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that includes marked', function () {
-          expect(element.isolateScope().deleteIconClasses(null)).toContain('marked');
+          expect(element.isolateScope().deleteIconClasses()).toContain('marked');
         });
       });
 
@@ -363,7 +363,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('returns classes that does not include marked', function () {
-          expect(element.isolateScope().deleteIconClasses(null)).not.toContain('marked');
+          expect(element.isolateScope().deleteIconClasses()).not.toContain('marked');
         });
       });
 

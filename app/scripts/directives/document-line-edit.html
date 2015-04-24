@@ -5,10 +5,10 @@
       <input type='radio' ng-model="line.name" value='image' ng-checked="line.name === 'image'">Image
       <input type='radio' ng-model="line.name" value='build' ng-checked="line.name === 'build'">Build
     </div>
-    <input type='text' class="build-image-text" ng-class="markForDeletionClasses(null)" ng-if="selectedImageName == null" ng-model="line.value"/>
-    <input type='text' class="build-image-text" ng-class="markForDeletionClasses(null)" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
+    <input type='text' class="build-image-text" ng-class="markForDeletionClasses()" ng-if="selectedImageName == null" ng-model="line.value"/>
+    <input type='text' class="build-image-text" ng-class="markForDeletionClasses()" ng-if="selectedImageName != null" ng-init="line.value = (line.name === 'image') ? selectedImageName: line.value" ng-model="line.value"/>
     <div class="spacer" ng-hide="serviceHasMultipleLines()" ></div>
-    <div class="delete" ng-show="serviceHasMultipleLines()" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
+    <div class="delete" ng-show="serviceHasMultipleLines()" ng-class="deleteIconClasses()" ng-click="markLineForDeletion()"></div>
     <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
     <div class="search-link">Or <a ng-class="searchLinkClasses()" href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></div>
   </div>
@@ -18,17 +18,17 @@
       <div ng-show="isExtendsLine()">
         <div class="extends-key">
           <div class="extends-label" ng-class="keyLabelClasses()">{{line.name}}</div>
-          <span class="subkey-label">{{getExtendsSubKey(0)}}</span><input type="text" class="extends-file-text" ng-class="markForDeletionClasses(null)" ng-model="line.value.file" />
-          <span class="subkey-label">{{getExtendsSubKey(1)}}</span><input type="text" class="extends-service-text" ng-class="markForDeletionClasses(null)" ng-model="line.value.service" />
-          <div class="delete" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
+          <span class="subkey-label">{{getExtendsSubKey(0)}}</span><input type="text" class="extends-file-text" ng-class="markForDeletionClasses()" ng-model="line.value.file" />
+          <span class="subkey-label">{{getExtendsSubKey(1)}}</span><input type="text" class="extends-service-text" ng-class="markForDeletionClasses()" ng-model="line.value.service" />
+          <div class="delete" ng-class="deleteIconClasses()" ng-click="markLineForDeletion()"></div>
           <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
         </div>
       </div>
       <!-- Show single-value key block -->
       <div ng-show="!isExtendsLine()">
         <div ng-class="keyLabelClasses()">{{line.name}}</div>
-        <input type="text" ng-class="markForDeletionClasses(null)" ng-model="line.value" value='{{line.value}}' />
-        <div class="delete" ng-class="deleteIconClasses(null)" ng-click="markLineForDeletion()"></div>
+        <input type="text" ng-class="markForDeletionClasses()" ng-model="line.value" value='{{line.value}}' />
+        <div class="delete" ng-class="deleteIconClasses()" ng-click="markLineForDeletion()"></div>
         <div class="info" tooltips tooltip-class="narrow" tooltip-side="bottom" tooltip-size="large" tooltip-content="getHelpTextForKey()"></div>
       </div>
     </div>
