@@ -21,9 +21,9 @@ angular.module('lorryApp')
             element.removeClass('warning fatal valid');
 
             if (errorCount > 1) {
-              scope.message = errorCount + ' errors were possibly detected.';
+              scope.message = errorCount + ' possible errors were detected.';
             } else {
-              scope.message = 'An error was possibly detected.';
+              scope.message = 'A possible error was detected.';
             }
           } else if (scope.yamlDocument.loadFailure) {
             element.addClass('fatal');
