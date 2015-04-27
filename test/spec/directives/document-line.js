@@ -230,7 +230,7 @@ describe('Directive: documentLine', function () {
       spyOn(win, 'open');
       scope.showImageLayers();
       expect(win.open).toHaveBeenCalledWith(ENV.IMAGE_LAYERS_URL +
-        'images=foo%2Fbar%3Aoldest%2Cbaz%2Fquux%3Alatest&lock=foo%2Fbar%3Aoldest', '_blank');
+        '/?images=foo%2Fbar%3Aoldest%2Cbaz%2Fquux%3Alatest&lock=foo%2Fbar%3Aoldest', '_blank');
     });
   });
 

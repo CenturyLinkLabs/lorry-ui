@@ -88,7 +88,7 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lo
         scope.showImageLayers = function () {
           var querystring = 'images=' + encodeURIComponent(imageNames().join(',')) +
             '&' + 'lock=' + encodeURIComponent(imageName());
-          var imageLayersUrl = ENV.IMAGE_LAYERS_URL + querystring;
+          var imageLayersUrl = ENV.IMAGE_LAYERS_URL + '/?' + querystring;
           $window.open(imageLayersUrl, '_blank');
         };
 
