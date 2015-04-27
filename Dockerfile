@@ -1,14 +1,7 @@
-FROM progrium/busybox
+FROM centurylink/nginx:1.6.2
 
-MAINTAINER CenturyLink Labs
+MAINTAINER CenturyLink Labs <clt-labs-futuretech@centurylink.com>
+EXPOSE 80
 
-RUN opkg-install nginx bash
-
-RUN mkdir /var/lib/nginx
 ADD nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 80 443
-
 ADD /dist /data/dist
-
-CMD ["/usr/sbin/nginx"]
