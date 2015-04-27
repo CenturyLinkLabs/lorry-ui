@@ -21,7 +21,7 @@ describe('Directive: serviceDefinitionEdit', function () {
       return ['foo', 'bar'];
     };
     rootScope.markAsDeletedTracker = {};
-    rootScope.validKeys = ['image', 'build', 'command', 'links', 'ports', 'volumes', 'environment', 'external_links'];
+    rootScope.validKeys = ['image', 'build', 'extends', 'command', 'links', 'ports', 'volumes', 'environment', 'external_links'];
   }));
 
   describe('Controller: serviceDefinitionEdit', function () {
@@ -340,7 +340,6 @@ describe('Directive: serviceDefinitionEdit', function () {
 
     describe('$scope.addNewKey', function () {
       beforeEach(function () {
-        scope.validKeys = ['command', 'extends', 'volumes', 'ports', 'links', 'environment', 'external_links'];
         scope.sectionName = 'adapter';
         scope.editedServiceYamlDocumentJson = {};
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
@@ -389,9 +388,6 @@ describe('Directive: serviceDefinitionEdit', function () {
       });
 
       describe('when a valid', function () {
-        beforeEach(function () {
-          spyOn(lodash, 'includes').and.returnValue(true);
-        });
 
         describe('string key is added', function () {
           beforeEach(function () {
@@ -612,7 +608,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['build', 'environment', 'external_links', 'image', 'links', 'volumes']);
+        expect(result).toEqual(['build', 'environment', 'extends', 'external_links', 'image', 'links', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });
@@ -625,7 +621,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['environment', 'external_links', 'links', 'volumes']);
+        expect(result).toEqual(['environment', 'extends', 'external_links', 'links', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });

@@ -40,7 +40,6 @@ angular.module('lorryApp')
             // or the array has objects in it
             // if [{"foo": "bar"}] the length is undefined
             // if ["foo", "bar"] the length is 2
-            //if (Array.isArray(svalue) && svalue.length === 'undefined') {
             if (Array.isArray(svalue) && svalue.length === 'undefined') {
               angular.forEach(svalue,  function(lvalue, lkey) {
                 var lineObj = {
@@ -147,43 +146,14 @@ angular.module('lorryApp')
         $scope.createNewEmptyValueForKey = function(key) {
           var keyValue;
 
-          switch (key) {
-            case 'links':
-            case 'external_links':
-            case 'ports':
-            case 'expose':
-            case 'volumes':
-            case 'volumes_from':
-            case 'environment':
-            case 'env_file':
-            case 'dns':
-            case 'cap_add':
-            case 'cap_drop':
-            case 'dns_search':
-              keyValue = [''];
-              break;
-            case 'command':
-            case 'image':
-            case 'build':
-            case 'net':
-            case 'working_dir':
-            case 'entrypoint':
-            case 'user':
-            case 'hostname':
-            case 'domainname':
-            case 'mem_limit':
-            case 'privileged':
-            case 'restart':
-            case 'stdin_open':
-            case 'tty':
-            case 'cpu_shares':
-              keyValue = '';
-              break;
-            case 'extends':
-              keyValue = {file: '', service: ''};
-              break;
-            default:
-              keyValue = '';
+          if (self.isKeyTypeSequence(key)) {
+            keyValue = [''];
+          } else if (self.isKeyTypeString(key)) {
+            keyValue = '';
+          } else if (key === 'extends') {
+            keyValue = {file: '', service: ''};
+          } else {
+            keyValue = '';
           }
           return keyValue;
         };
@@ -235,6 +205,16 @@ angular.module('lorryApp')
             obj.service = node.value.service ? node.value.service : '';
             node.value = obj;
           }
+        };
+
+        self.isKeyTypeSequence = function (skey) {
+          var seqKeys = ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search' ];
+          return lodash.includes(seqKeys, skey) ? true : false;
+        };
+
+        self.isKeyTypeString = function (skey) {
+          var stringKeys = ['command', 'image', 'build', 'net', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'];
+          return lodash.includes(stringKeys, skey) ? true : false;
         };
 
       }
