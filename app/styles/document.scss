@@ -50,10 +50,8 @@
     a {
       &[disabled=disabled] {
         cursor: not-allowed !important;
-        pointer-events: none; // http://caniuse.com/#search=pointer-events
         &:hover {
           cursor: not-allowed !important;
-          pointer-events: none; // http://caniuse.com/#search=pointer-events
         }
       }
     }
