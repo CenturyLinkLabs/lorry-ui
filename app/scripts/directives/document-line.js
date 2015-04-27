@@ -13,7 +13,8 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lo
 
         function lineValueWrapper() {
           if (scope.hasLineWarnings()) {
-            return '<span class="service-value titip-right titip-default titip-large" data-title="' + scope.warningMessage() + '">';
+            return '<span class="service-value titip-right titip-default titip-large">' +
+                   '<span class="titip-content">' + scope.warningMessage() + '</span>';
           } else {
             return '<span class="service-value">';
           }

@@ -73,7 +73,7 @@ describe('Directive: documentLine', function () {
     });
 
     it('adds the error message to the line-info div', function () {
-      expect(element.find('.line-info').attr('data-title')).toEqual(scope.errMessage());
+      expect(element.find('.line-info .titip-content').html()).toEqual(scope.errMessage());
     });
 
     it('error message is fetched', function () {
@@ -119,7 +119,7 @@ describe('Directive: documentLine', function () {
     });
 
     it('adds the warning message to the line text wrapper', function () {
-      expect(element.find('.line-text > .service-value').attr('data-title')).toEqual(scope.warningMessage());
+      expect(element.find('.service-value .titip-content').html()).toEqual(scope.warningMessage());
     });
 
     it('scope.warningMessage returns the warning message', function () {

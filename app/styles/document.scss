@@ -3,6 +3,11 @@
 @import '_mixins';
 @import 'icons';
 
+[class*='titip']
+{
+  cursor: inherit;
+}
+
 #documentPane {
   float: left;
   width: 100%;
@@ -397,7 +402,7 @@
     display: inline-block;
     width: 40px;
     margin-right: 15px;
-    padding-right: 20px;
+    padding-right: 15px;
     text-align: right
   }
 
@@ -408,7 +413,6 @@
 
     .line-text .service-value {
       display: inline-block;
-      margin-left: 5px;
       background-image: url('../images/icon_checkmark.svg');
       background-repeat: repeat-x;
       background-position: 0 20px;
