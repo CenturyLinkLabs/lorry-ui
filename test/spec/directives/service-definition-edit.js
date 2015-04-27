@@ -219,6 +219,52 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
       });
 
+      describe('when yaml json has sequence keys with string values', function () {
+        var editableJson = [
+          { name: 'dns', value: ['foo']},
+          { name: 'dns_search', value: ['bar']},
+          { name: 'env_file', value: ['blah']}
+        ];
+        beforeEach(function () {
+          scope.sectionName = 'adapter';
+          scope.fullJson = {
+            'adapter': {
+              'dns': 'foo',
+              'dns_search': 'bar',
+              'env_file': 'blah'
+            }};
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+        });
+
+        it ('converts sequence key values to arrays', function () {
+          var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
+          expect(result).toEqual(editableJson);
+        });
+      });
+
+      describe('when yaml json has string keys', function () {
+        var editableJson = [
+          { name: 'command', value: 'foo'},
+          { name: 'build', value: 'bar'}
+        ];
+        beforeEach(function () {
+          scope.sectionName = 'adapter';
+          scope.fullJson = {
+            'adapter': {
+              'command': 'foo',
+              'build': 'bar'
+            }};
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+        });
+
+        it ('returns the string value as is', function () {
+          var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
+          expect(result).toEqual(editableJson);
+        });
+      });
+
     });
 
     describe('$scope.transformToYamlDocumentFragment', function () {
