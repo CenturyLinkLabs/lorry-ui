@@ -34,7 +34,7 @@ angular.module('lorryApp')
           var tracker = $rootScope.markAsDeletedTracker;
           var key = scope.line.name;
 
-          if (index === null) {
+          if (!index) {
             return (tracker.hasOwnProperty(key)) ? 'mark-for-deletion' : '';
           } else {
             if (tracker.hasOwnProperty(key)) {
@@ -59,7 +59,7 @@ angular.module('lorryApp')
           var tracker = $rootScope.markAsDeletedTracker;
           var key = scope.line.name;
 
-          if (index === null) {
+          if (!index) {
             return (tracker.hasOwnProperty(key)) ? 'marked' : '';
           } else {
             if (tracker.hasOwnProperty(key)) {
@@ -122,6 +122,15 @@ angular.module('lorryApp')
             helpText = node ? node[scope.line.name] : 'Key is invalid.';
           }
           return helpText;
+        };
+
+        scope.isExtendsLine = function () {
+          return scope.line.name === 'extends';
+        };
+
+        scope.getExtendsSubKey = function (index) {
+          var keys = scope.isExtendsLine() ? lodash.keys(scope.line.value) : [];
+          return lodash.isEmpty(keys) ? null : keys[index];
         };
 
         scope.serviceNameList = $rootScope.serviceNameList;

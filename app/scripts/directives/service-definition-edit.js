@@ -26,6 +26,8 @@ angular.module('lorryApp')
               !lodash.findWhere($scope.editableJson, {name: 'build'})) {
               $scope.editableJson.push({name: 'image', value: ''});
             }
+            // since extends section should always have subkeys file & service, add it to the json if not present
+            self.fixExtendsKeyStructure();
           }
         };
 
@@ -220,6 +222,18 @@ angular.module('lorryApp')
           // if the service is being edited, allow the original section name to be used
           return (serviceName === $scope.sectionName) ? false : lodash.includes($scope.$parent.serviceNames(), serviceName);
         };
+
+        self.fixExtendsKeyStructure = function () {
+          var node = lodash.findWhere($scope.editableJson, {name: 'extends'});
+          if (node) {
+            node.value = node.value ? node.value : { value: '' };
+            var obj = {};
+            obj.file = node.value.file ? node.value.file : '';
+            obj.service = node.value.service ? node.value.service : '';
+            node.value = obj;
+          }
+        };
+
       }
     };
   }]);
