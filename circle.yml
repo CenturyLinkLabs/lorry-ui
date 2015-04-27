@@ -18,4 +18,3 @@ deployment:
       - docker build -t centurylink/lorry-ui:latest .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push centurylink/lorry-ui:latest
-      - ssh root@$PRO_SERVER_IP "./lorry_ui.sh"
