@@ -638,7 +638,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('adds the tooltip to the info div', function () {
-          expect(element.find('.info').attr('tooltip-content')).toEqual('getHelpTextForKey()');
+          expect(element.find('.info .titip-content').html()).toEqual(element.isolateScope().getHelpTextForKey());
         });
 
         describe('when key is invalid', function () {
@@ -675,7 +675,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('adds the tooltip to the info div', function () {
-          expect(element.find('.info').attr('tooltip-content')).toEqual('getHelpTextForKey()');
+          expect(element.find('.info .titip-content').html()).toEqual(element.isolateScope().getHelpTextForKey());
         });
       });
     });

@@ -12,7 +12,6 @@ angular
     'config',
     'directive-templates',
     'angular.filter',
-    '720kb.tooltips',
     'ngClipboard'
   ])
   .config(['ngClipProvider', function(ngClipProvider) {

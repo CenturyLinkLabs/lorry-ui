@@ -3,23 +3,6 @@
 @import '_mixins';
 @import 'icons';
 
-._720kb-tooltip {
-  background-color: $lightest_grey;
-  color: $dark_grey;
-
-  &.narrow {
-    width: 250px;
-  }
-}
-
-._720kb-tooltip-title {
-  color: $dark_grey;
-}
-
-._720kb-tooltip-caret:before {
-  border: 6px solid $lightest_grey;
-}
-
 #documentPane {
   float: left;
   width: 100%;

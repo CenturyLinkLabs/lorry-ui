@@ -13,9 +13,9 @@
     "jquery": "~2.1.3",
     "ngDialog": "~0.3.11",
     "js-yaml": "~3.2.7",
-    "angular-tooltips": "git@github.com:marudor/angular-tooltips.git#f81178d9b4f24576f5d9bf5607fe3e9ce0cd093b",
     "zeroclipboard": "~2.2.0",
-    "ng-clip": "~0.2.6"
+    "ng-clip": "~0.2.6",
+    "titip": "*"
   },
   "devDependencies": {
     "angular-mocks": "^1.3.0"
@@ -27,10 +27,9 @@
         "css/ngDialog.css"
       ]
     },
-    "angular-tooltips": {
+    "titip": {
       "main": [
-        "src/js/angular-tooltips.js",
-        "src/css/angular-tooltips.css"
+        "dist/css/titip.css"
       ]
     }
   },
