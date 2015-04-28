@@ -21,7 +21,7 @@ describe('Directive: serviceDefinitionEdit', function () {
       return ['foo', 'bar'];
     };
     rootScope.markAsDeletedTracker = {};
-    rootScope.validKeys = ['image', 'build', 'command', 'links', 'ports', 'volumes', 'environment', 'external_links'];
+    rootScope.validKeys = ['image', 'build', 'extends', 'command', 'links', 'ports', 'volumes', 'environment', 'external_links'];
   }));
 
   describe('Controller: serviceDefinitionEdit', function () {
@@ -219,6 +219,52 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
       });
 
+      describe('when yaml json has sequence keys with string values', function () {
+        var editableJson = [
+          { name: 'dns', value: ['foo']},
+          { name: 'dns_search', value: ['bar']},
+          { name: 'env_file', value: ['blah']}
+        ];
+        beforeEach(function () {
+          scope.sectionName = 'adapter';
+          scope.fullJson = {
+            'adapter': {
+              'dns': 'foo',
+              'dns_search': 'bar',
+              'env_file': 'blah'
+            }};
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+        });
+
+        it ('converts sequence key values to arrays', function () {
+          var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
+          expect(result).toEqual(editableJson);
+        });
+      });
+
+      describe('when yaml json has string keys', function () {
+        var editableJson = [
+          { name: 'command', value: 'foo'},
+          { name: 'build', value: 'bar'}
+        ];
+        beforeEach(function () {
+          scope.sectionName = 'adapter';
+          scope.fullJson = {
+            'adapter': {
+              'command': 'foo',
+              'build': 'bar'
+            }};
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+        });
+
+        it ('returns the string value as is', function () {
+          var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
+          expect(result).toEqual(editableJson);
+        });
+      });
+
     });
 
     describe('$scope.transformToYamlDocumentFragment', function () {
@@ -340,7 +386,6 @@ describe('Directive: serviceDefinitionEdit', function () {
 
     describe('$scope.addNewKey', function () {
       beforeEach(function () {
-        scope.validKeys = ['command', 'extends', 'volumes', 'ports', 'links', 'environment', 'external_links'];
         scope.sectionName = 'adapter';
         scope.editedServiceYamlDocumentJson = {};
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
@@ -389,9 +434,6 @@ describe('Directive: serviceDefinitionEdit', function () {
       });
 
       describe('when a valid', function () {
-        beforeEach(function () {
-          spyOn(lodash, 'includes').and.returnValue(true);
-        });
 
         describe('string key is added', function () {
           beforeEach(function () {
@@ -612,7 +654,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['build', 'environment', 'external_links', 'image', 'links', 'volumes']);
+        expect(result).toEqual(['build', 'environment', 'extends', 'external_links', 'image', 'links', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });
@@ -625,7 +667,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['environment', 'external_links', 'links', 'volumes']);
+        expect(result).toEqual(['environment', 'extends', 'external_links', 'links', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });

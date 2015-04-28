@@ -36,11 +36,14 @@ angular.module('lorryApp')
           angular.forEach(json, function(svalue, skey) {
             var sectionObj = {};
             var lines = [];
+
+            // if sequence type keys have string value, convert them to array
+            svalue = self.convertSeqKeyValueToArray(svalue, skey);
+
             // weird way to check if the array is a real array
             // or the array has objects in it
             // if [{"foo": "bar"}] the length is undefined
             // if ["foo", "bar"] the length is 2
-            //if (Array.isArray(svalue) && svalue.length === 'undefined') {
             if (Array.isArray(svalue) && svalue.length === 'undefined') {
               angular.forEach(svalue,  function(lvalue, lkey) {
                 var lineObj = {
@@ -147,43 +150,14 @@ angular.module('lorryApp')
         $scope.createNewEmptyValueForKey = function(key) {
           var keyValue;
 
-          switch (key) {
-            case 'links':
-            case 'external_links':
-            case 'ports':
-            case 'expose':
-            case 'volumes':
-            case 'volumes_from':
-            case 'environment':
-            case 'env_file':
-            case 'dns':
-            case 'cap_add':
-            case 'cap_drop':
-            case 'dns_search':
-              keyValue = [''];
-              break;
-            case 'command':
-            case 'image':
-            case 'build':
-            case 'net':
-            case 'working_dir':
-            case 'entrypoint':
-            case 'user':
-            case 'hostname':
-            case 'domainname':
-            case 'mem_limit':
-            case 'privileged':
-            case 'restart':
-            case 'stdin_open':
-            case 'tty':
-            case 'cpu_shares':
-              keyValue = '';
-              break;
-            case 'extends':
-              keyValue = {file: '', service: ''};
-              break;
-            default:
-              keyValue = '';
+          if (self.isKeyTypeSequence(key)) {
+            keyValue = [''];
+          } else if (self.isKeyTypeString(key)) {
+            keyValue = '';
+          } else if (key === 'extends') {
+            keyValue = {file: '', service: ''};
+          } else {
+            keyValue = '';
           }
           return keyValue;
         };
@@ -235,6 +209,28 @@ angular.module('lorryApp')
             obj.service = node.value.service ? node.value.service : '';
             node.value = obj;
           }
+        };
+
+        self.convertSeqKeyValueToArray = function (svalue, skey) {
+          // if sequence type keys have string value, convert them to array
+          if (self.isKeyTypeSequence(skey)) {
+            if (!Array.isArray(svalue)) {
+              var temp = svalue;
+              svalue = [];
+              svalue.push(temp);
+            }
+          }
+          return svalue;
+        };
+
+        self.isKeyTypeSequence = function (skey) {
+          var seqKeys = ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search' ];
+          return lodash.includes(seqKeys, skey);
+        };
+
+        self.isKeyTypeString = function (skey) {
+          var stringKeys = ['command', 'image', 'build', 'net', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'];
+          return lodash.includes(stringKeys, skey);
         };
 
       }
