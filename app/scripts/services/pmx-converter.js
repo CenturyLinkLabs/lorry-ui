@@ -53,7 +53,13 @@ angular.module('lorryApp').factory('PMXConverter', ['jsyaml',
 
     var linkFlags = function (links) {
       return links.map(function (link) {
-        return link.service; // TODO: handle link_alias "service:alias"
+        var linkString = '';
+
+        linkString += link.service;
+        if (link.alias) {
+          linkString += ':' + link.alias;
+        }
+        return linkString;
       });
     };
 

@@ -60,6 +60,13 @@ describe('Service: PMXConverter', function () {
     expect(compose.foo.links).toContain('bar');
   });
 
+  it('converts the panamax image links with aliases to service definition link attributes', function () {
+    var pmx = '---\nimages:\n- name: foo\n  source: foo/bar\n  links:\n  - service: bar\n    alias: baz\n';
+    var compose = jsyaml.safeLoad(PMXConverter.convert(pmx));
+    expect(angular.isArray(compose.foo.links)).toBeTruthy();
+    expect(compose.foo.links).toContain('bar:baz');
+  });
+
   it('converts the panamax image exposed ports to service definition expose attributes', function () {
     var pmx = '---\nimages:\n- name: foo\n  source: foo/bar\n  expose:\n  - "3306"\n';
     var compose = jsyaml.safeLoad(PMXConverter.convert(pmx));
