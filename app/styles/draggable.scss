@@ -1,0 +1,24 @@
+.draggable {
+  width: 100%;
+  height: 12px;
+  padding-top: 3px;
+
+  &.dragging {
+    .drag-handle {
+      background-position: 0 -9px;
+    }
+  }
+
+  .drag-handle {
+    cursor: move;
+    width: 30px;
+    height: 8px;
+    background: url(../images/icon_drag.svg) 0 -2px  no-repeat;
+    background-size: 30px 20px;
+    margin: 0 auto;
+
+    &:hover {
+      background-position: 0 -9px;
+    }
+  }
+}
