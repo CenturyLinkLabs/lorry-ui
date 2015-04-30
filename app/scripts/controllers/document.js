@@ -12,6 +12,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     $scope.newServiceBlock = false;
     $rootScope.serviceNameList = [];
     $rootScope.markAsDeletedTracker = {};
+    $scope.sandbox = {
+      display: false
+    };
 
     $scope.hasErrors = function () {
       return lodash.any($scope.yamlDocument.errors);
@@ -254,6 +257,9 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       return $scope.yamlDocument.loadFailure;
     };
 
+    $scope.toggleSandboxDisplay = function () {
+      return $scope.sandbox.display;
+    };
 
     this.initialize = function () {
       var gistUri = $location.search().gist;

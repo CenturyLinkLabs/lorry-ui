@@ -49,5 +49,14 @@
       <a href="" class="footer-link" ng-if="exportable()" clip-copy="doc" clip-click="confirmCopy()">{{copyText}}</a>
       <a href="" class="footer-link" ng-if="!exportable()" disabled="disabled">{{copyText}}</a>
     </div>
+    <div id="sandboxToggle">
+      <input type="checkbox" id="cbSandbox" class="tgl tgl-light" ng-model="sandbox.display">
+      <label class="tgl-btn" for="cbSandbox"></label><span>Toggle Sandbox</span>
+    </div>
   </footer>
+</div>
+
+<div id="testingSandboxPane" ng-show="!isNewSession() && toggleSandboxDisplay()">
+  <!--<draggable></draggable>-->
+  <iframe width="100%" height="300" scrolling="yes" seamless="seamless" src="http://dockerhost:7000"></iframe>
 </div>
