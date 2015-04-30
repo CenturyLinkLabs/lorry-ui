@@ -10,13 +10,13 @@ describe('Service: registry-service', function () {
   }));
 
   // Image factory
-  describe('Factory: Image', function () {
+  describe('Factory: ImageSearch', function () {
 
-    var Image, httpBackend, ENV;
+    var ImageSearch, httpBackend, ENV;
 
     // Initialize the service and a mock scope
-    beforeEach(inject(function (_Image_, _ENV_, _$httpBackend_) {
-      Image = _Image_;
+    beforeEach(inject(function (_ImageSearch_, _ENV_, _$httpBackend_) {
+      ImageSearch = _ImageSearch_;
       ENV = _ENV_;
       httpBackend = _$httpBackend_;
     }));
@@ -38,21 +38,21 @@ describe('Service: registry-service', function () {
       });
 
         it('should search for image repositories', function () {
-          var results = Image.query({searchTerm: 'foo'});
+          var results = ImageSearch.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].name).toEqual('baruser/foo');
         });
 
         it('should insert username into search results', function () {
-          var results = Image.query({searchTerm: 'foo'});
+          var results = ImageSearch.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].username).toEqual('baruser');
         });
 
         it('should insert reponame into search results', function () {
-          var results = Image.query({searchTerm: 'foo'});
+          var results = ImageSearch.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].reponame).toEqual('foo');
@@ -75,21 +75,21 @@ describe('Service: registry-service', function () {
         });
 
         it('should search for image repositories', function () {
-          var results = Image.query({searchTerm: 'foo'});
+          var results = ImageSearch.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].name).toEqual('foo');
         });
 
         it('should insert username into search results', function () {
-          var results = Image.query({searchTerm: 'foo'});
+          var results = ImageSearch.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].username).toEqual('');
         });
 
         it('should insert reponame into search results', function () {
-          var results = Image.query({searchTerm: 'foo'});
+          var results = ImageSearch.query({searchTerm: 'foo'});
           httpBackend.flush();
 
           expect(results[0].reponame).toEqual('foo');
@@ -108,7 +108,7 @@ describe('Service: registry-service', function () {
 
       it('should get tags for repository', function () {
         httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + '/images/tags/baruser/foo').respond(tagsResults);
-        var results = Image.tags({
+        var results = ImageSearch.tags({
           repoUser: 'baruser',
           repoName: 'foo'
         });
@@ -129,7 +129,7 @@ describe('Service: registry-service', function () {
 
       it('should get tags for repository', function () {
         httpBackend.expectGET(ENV.LORRY_API_ENDPOINT + '/images/tags/foo').respond(tagsResults);
-        var results = Image.tagsWithoutUsername({
+        var results = ImageSearch.tagsWithoutUsername({
           repoName: 'foo'
         });
         httpBackend.flush();

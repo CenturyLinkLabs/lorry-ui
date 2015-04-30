@@ -1,7 +1,11 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .directive('documentAlerts', function () {
+  angular
+    .module('lorryApp')
+    .directive('documentAlerts', documentAlerts);
+
+  function documentAlerts() {
     return {
       restrict: 'E',
       replace: true,
@@ -40,4 +44,5 @@ angular.module('lorryApp')
       },
       templateUrl: '/scripts/directives/document-alerts.html'
     };
-  });
+  }
+})();

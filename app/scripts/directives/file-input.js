@@ -1,7 +1,11 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .directive('fileInput', function () {
+  angular
+    .module('lorryApp')
+    .directive('fileInput', fileInput);
+
+  function fileInput() {
     return {
       restrict: 'A',
       link: function(scope, element) {
@@ -13,4 +17,7 @@ angular.module('lorryApp')
         });
       }
     };
-  });
+  }
+
+})();
+

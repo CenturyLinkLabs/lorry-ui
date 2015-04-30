@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp').factory('cookiesService', ['$cookies',
-  function ($cookies) {
+  angular
+    .module('lorryApp')
+    .factory('cookiesService', cookiesService);
+
+  cookiesService.$inject = ['$cookies'];
+
+  function cookiesService($cookies) {
 
     // As per 1.3.x Angular API
     var get = function (key) {
@@ -45,4 +51,5 @@ angular.module('lorryApp').factory('cookiesService', ['$cookies',
       put: put,
       remove: remove
     };
-  }]);
+  }
+})();

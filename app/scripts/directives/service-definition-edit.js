@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .directive('serviceDefinitionEdit', [ '$rootScope', '$document', function ($rootScope, $document) {
+  angular
+    .module('lorryApp')
+    .directive('serviceDefinitionEdit', serviceDefinitionEdit);
+
+  serviceDefinitionEdit.$inject = ['$rootScope', '$document', 'lodash'];
+
+  function serviceDefinitionEdit($rootScope, $document, lodash) {
     return {
       scope: {
         sectionName: '='
@@ -9,7 +15,7 @@ angular.module('lorryApp')
       restrict: 'E',
       replace: 'true',
       templateUrl: '/scripts/directives/service-definition-edit.html',
-      controller: function ($scope, lodash) {
+      controller: function ($scope) {
 
         var self = this;
 
@@ -233,6 +239,13 @@ angular.module('lorryApp')
           return lodash.includes(stringKeys, skey);
         };
 
+        function initialize() {
+          $scope.transformToJson();
+        }
+
+        initialize();
+
       }
     };
-  }]);
+  }
+})();

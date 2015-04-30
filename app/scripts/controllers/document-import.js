@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '$http', 'lodash', 'ngDialog', 'PMXConverter',
-  function ($log, $scope, $http, lodash, ngDialog, PMXConverter) {
+  angular
+    .module('lorryApp')
+    .controller('DocumentImportCtrl', DocumentImportCtrl);
+
+  DocumentImportCtrl.$inject = ['$log', '$scope', '$http', 'lodash', 'ngDialog', 'PMXConverter'];
+
+  function DocumentImportCtrl($log, $scope, $http, lodash, ngDialog, PMXConverter) {
     var self = this;
 
     $scope.dialogOptions = {};
@@ -86,4 +92,5 @@ angular.module('lorryApp').controller('DocumentImportCtrl', ['$log', '$scope', '
       });
       fr.readAsText($scope.files[0]);
     };
-  }]);
+  }
+})();

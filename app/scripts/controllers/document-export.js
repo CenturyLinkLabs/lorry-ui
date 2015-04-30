@@ -1,8 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp').controller('DocumentExportCtrl',
-  ['$scope', '$http', '$timeout', 'jsyaml', 'ngDialog', 'fileSaver', 'ENV', 'cfgData',
-  function ($scope, $http, $timeout, jsyaml, ngDialog, fileSaver, ENV, cfgData) {
+  angular
+    .module('lorryApp')
+    .controller('DocumentExportCtrl', DocumentExportCtrl);
+
+  DocumentExportCtrl.$inject =  ['$scope', '$http', '$timeout', 'jsyaml', 'ngDialog', 'fileSaver', 'ENV', 'cfgData'];
+
+  function DocumentExportCtrl($scope, $http, $timeout, jsyaml, ngDialog, fileSaver, ENV, cfgData) {
 
     var self = this;
     var defaultCopyText = 'Copy to Clipboard';
@@ -93,4 +98,4 @@ angular.module('lorryApp').controller('DocumentExportCtrl',
       }
     };
   }
-]);
+})();

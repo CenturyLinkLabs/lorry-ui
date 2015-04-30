@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp').factory('serviceDefTransformer', ['$log', 'lodash', 'jsyaml',
-  function($log, lodash, jsyaml) {
+  angular
+    .module('lorryApp')
+    .factory('serviceDefTransformer', serviceDefTransformer);
+
+  serviceDefTransformer.$inject = ['$log', 'lodash', 'jsyaml'];
+
+  function serviceDefTransformer($log, lodash, jsyaml) {
     function parseLine(line) {
       var lineKey, lineValue, lineYaml, keys, values;
 
@@ -65,4 +71,5 @@ angular.module('lorryApp').factory('serviceDefTransformer', ['$log', 'lodash', '
         return serviceDefinitions;
       }
     };
-  }]);
+  }
+})();

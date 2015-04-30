@@ -1,22 +1,32 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular
-  .module('lorryApp', [
-    'ngAnimate',
-    'ngCookies',
-    'ngMessages',
-    'ngResource',
-    'ngSanitize',
-    'ngLodash',
-    'ngDialog',
-    'config',
-    'directive-templates',
-    'angular.filter',
-    'ngClipboard'
-  ])
-  .config(['ngClipProvider', function(ngClipProvider) {
+  angular
+    .module('lorryApp', [
+      'ngAnimate',
+      'ngCookies',
+      'ngMessages',
+      'ngResource',
+      'ngSanitize',
+      'ngLodash',
+      'ngDialog',
+      'config',
+      'directive-templates',
+      'angular.filter',
+      'ngClipboard'
+    ])
+    .config(configure)
+    .service('cfgData', cfgData);
+
+  configure.$inject = ['ngClipProvider'];
+  function configure(ngClipProvider) {
     ngClipProvider.setPath('images/ZeroClipboard.swf');
-  }])
-  .service('cfgData', ['$location', function ($location) {
-     this.baseUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port();
-  }]);
+  }
+
+  cfgData.$inject = ['$location'];
+  function cfgData($location) {
+    /*jshint validthis: true */
+    this.baseUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port();
+  }
+
+})();

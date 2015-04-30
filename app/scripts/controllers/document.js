@@ -1,7 +1,15 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '$log', '$http', '$location', 'lodash', 'jsyaml', 'ngDialog', 'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService',
-  function ($rootScope, $scope, $log, $http, $location, lodash, jsyaml, ngDialog, yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService) {
+  angular
+    .module('lorryApp')
+    .controller('DocumentCtrl', DocumentCtrl);
+
+  DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', 'lodash', 'jsyaml', 'ngDialog',
+    'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService'];
+
+  function DocumentCtrl($rootScope, $scope, $log, $http, $location, lodash, jsyaml, ngDialog,
+                        yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService) {
 
     var self = this;
 
@@ -39,9 +47,11 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       }
     };
 
-    $scope.$watchCollection('yamlDocument.raw', function() {
+    $scope.$watchCollection('yamlDocument.raw', function () {
       var documentDefined = (angular.isDefined($scope.yamlDocument) && angular.isDefined($scope.yamlDocument.raw));
-      if (documentDefined) { self.failFastOrValidateYaml(); }
+      if (documentDefined) {
+        self.failFastOrValidateYaml();
+      }
       $scope.resettable = documentDefined;
       $scope.importable = !documentDefined;
     });
@@ -54,7 +64,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     };
 
     this.validateJson = function () {
-      if(lodash.isEmpty($scope.yamlDocument.json)) {
+      if (lodash.isEmpty($scope.yamlDocument.json)) {
         this.reset();
       } else {
         $scope.yamlDocument.parseErrors = false;
@@ -69,7 +79,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       try {
         $scope.yamlDocument.json = jsyaml.safeLoad(yaml);
         self.validateYaml();
-      } catch(YamlException) {
+      } catch (YamlException) {
         // if jsyaml can't load the document, don't bother calling the server
         $scope.yamlDocument.errors = [{error: {message: YamlException.message}}];
         $scope.yamlDocument.parseErrors = false;
@@ -77,7 +87,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       }
     };
 
-    this.validateYaml = function() {
+    this.validateYaml = function () {
       var yaml = $scope.yamlDocument.raw;
 
       yamlValidator.validate(yaml)
@@ -170,10 +180,10 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       }
     });
 
-    this.deleteItemsMarkedForDeletion = function(data) {
+    this.deleteItemsMarkedForDeletion = function (data) {
       var tracker = $rootScope.markAsDeletedTracker;
 
-      angular.forEach(tracker, function(v, k) {
+      angular.forEach(tracker, function (v, k) {
         if (v[0] === 'delete me') {
           delete data[k];
         } else {
@@ -199,8 +209,8 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       return lodash.some($scope.yamlDocument.json, 'editMode', true);
     };
 
-    $scope.triggerClickForElement = function(elementId) {
-      $timeout(function() {
+    $scope.triggerClickForElement = function (elementId) {
+      $timeout(function () {
         angular.element(elementId).triggerHandler('click');
       }, 0);
     };
@@ -213,17 +223,17 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
       cookiesService.put('lorry-started', 'true');
     };
 
-    $scope.addNewServiceDef = function() {
+    $scope.addNewServiceDef = function () {
       if (!$scope.inEditMode()) {
         $scope.newServiceBlock = true;
       }
     };
 
-    $scope.inNewServiceMode = function() {
+    $scope.inNewServiceMode = function () {
       return $scope.newServiceBlock;
     };
 
-    $scope.showAddServiceBlockOrBtn = function() {
+    $scope.showAddServiceBlockOrBtn = function () {
       // the inverse is: !$scope.serviceDefinitions || $scope.serviceDefinitions.length == 0 || $scope.newServiceBlock
       return $scope.serviceDefinitions && $scope.serviceDefinitions.length > 0 && !$scope.newServiceBlock ? true : false;
     };
@@ -233,7 +243,7 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
         .then(function (response) {
           var keys = [];
           var keysHelpText = [];
-          angular.forEach(response.data, function(v) {
+          angular.forEach(response.data, function (v) {
             var key = lodash.keys(v)[0];
             keys.push(key);
             var desc = lodash.values(v)[0].desc;
@@ -272,4 +282,5 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
 
     self.initialize();
 
-  }]);
+  }
+})();

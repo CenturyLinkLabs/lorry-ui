@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .directive('serviceDefinitionDisplay', ['lodash', function (lodash) {
+  angular
+    .module('lorryApp')
+    .directive('serviceDefinitionDisplay', serviceDefinitionDisplay);
+
+  serviceDefinitionDisplay.$inject = ['lodash'];
+
+  function serviceDefinitionDisplay(lodash) {
     return {
       restrict: 'E',
       replace: 'true',
@@ -22,4 +28,6 @@ angular.module('lorryApp')
       },
       templateUrl: '/scripts/directives/service-definition-display.html'
     };
-  }]);
+  }
+
+})();

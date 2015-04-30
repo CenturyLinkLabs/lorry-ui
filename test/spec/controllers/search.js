@@ -9,7 +9,7 @@ describe('Controller: SearchCtrl', function () {
     $provide.constant('ENV', {'LORRY_API_ENDPOINT': 'https://foobar.io'});
   }));
 
-  var controller, scope, Image, httpBackend, SearchCtrl;
+  var controller, scope, ImageSearch, httpBackend, SearchCtrl;
   var searchResponse = {
     'results': [
       {
@@ -45,13 +45,13 @@ describe('Controller: SearchCtrl', function () {
   ];
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $rootScope, _Image_, $httpBackend) {
+  beforeEach(inject(function (_$controller_, $rootScope, _ImageSearch_, $httpBackend) {
     scope = $rootScope.$new();
     controller = _$controller_;
     httpBackend = $httpBackend;
-    Image = _Image_;
+    ImageSearch = _ImageSearch_;
     SearchCtrl = controller('SearchCtrl', {
-      $scope: scope, Image: _Image_
+      $scope: scope, ImageSearch: _ImageSearch_
     });
   }));
 
@@ -66,12 +66,12 @@ describe('Controller: SearchCtrl', function () {
       expect(scope.searchResults[0].reponame).toBe('foo');
     });
 
-    it('should call Image query', function () {
-      spyOn(Image, 'query');
+    it('should call ImageSearch query', function () {
+      spyOn(ImageSearch, 'query');
 
       scope.performSearch('foo');
 
-      expect(Image.query).toHaveBeenCalled();
+      expect(ImageSearch.query).toHaveBeenCalled();
     });
 
     it('should get no results on empty search term', function () {
@@ -80,12 +80,12 @@ describe('Controller: SearchCtrl', function () {
       expect(scope.searchResults).toBeUndefined();
     });
 
-    it('should not call Image query with empty search term', function () {
-      spyOn(Image, 'query');
+    it('should not call ImageSearch query with empty search term', function () {
+      spyOn(ImageSearch, 'query');
 
       scope.performSearch('');
 
-      expect(Image.query).not.toHaveBeenCalled();
+      expect(ImageSearch.query).not.toHaveBeenCalled();
     });
   });
 
@@ -101,12 +101,12 @@ describe('Controller: SearchCtrl', function () {
         expect(tagsResponse[0].layer).toBe('11111111');
     });
 
-      it('should call Image tags', function () {
-        spyOn(Image, 'tags');
+      it('should call ImageSearch tags', function () {
+        spyOn(ImageSearch, 'tags');
 
         scope.getTags('baruser', 'foo');
 
-        expect(Image.tags).toHaveBeenCalledWith({repoUser: 'baruser', repoName: 'foo'});
+        expect(ImageSearch.tags).toHaveBeenCalledWith({repoUser: 'baruser', repoName: 'foo'});
       });
     });
 
@@ -120,12 +120,12 @@ describe('Controller: SearchCtrl', function () {
         expect(tagsResponse[0].layer).toBe('11111111');
       });
 
-      it('should call Image tagsWithoutUsername', function () {
-        spyOn(Image, 'tagsWithoutUsername');
+      it('should call ImageSearch tagsWithoutUsername', function () {
+        spyOn(ImageSearch, 'tagsWithoutUsername');
 
         scope.getTags('', 'foo');
 
-        expect(Image.tagsWithoutUsername).toHaveBeenCalledWith({repoName: 'foo'});
+        expect(ImageSearch.tagsWithoutUsername).toHaveBeenCalledWith({repoName: 'foo'});
       });
     });
 

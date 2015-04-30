@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp').factory('PMXConverter', ['jsyaml',
-  function (jsyaml) {
+  angular
+    .module('lorryApp')
+    .factory('PMXConverter', PMXConverter);
+
+  PMXConverter.$inject = ['jsyaml'];
+
+  function PMXConverter(jsyaml) {
 
     var convert = function (pmxYaml) {
       var pmxJson, images, newJson;
@@ -96,4 +102,5 @@ angular.module('lorryApp').factory('PMXConverter', ['jsyaml',
     return {
       convert: convert
     };
-  }]);
+  }
+})();

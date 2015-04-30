@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lodash', 'jsyaml', 'ENV',
-  function ($compile, $window, lodash, jsyaml, ENV) {
+  angular
+    .module('lorryApp')
+    .directive('documentLine', documentLine);
+
+  documentLine.$inject = ['$compile', '$window', 'lodash', 'jsyaml', 'ENV'];
+
+  function documentLine($compile, $window, lodash, jsyaml, ENV) {
     return {
       restrict: 'E',
       replace: true,
@@ -102,4 +108,5 @@ angular.module('lorryApp').directive('documentLine', ['$compile', '$window', 'lo
       },
       templateUrl: '/scripts/directives/document-line.html'
     };
-  }]);
+  }
+})();

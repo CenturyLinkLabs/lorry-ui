@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .controller('SearchCtrl', ['$scope' , 'ngDialog', 'lodash', 'Image', function($scope, ngDialog, lodash, Image) {
+  angular
+    .module('lorryApp')
+    .controller('SearchCtrl', SearchCtrl);
+
+  SearchCtrl.$inject = ['$scope' , 'ngDialog', 'lodash', 'ImageSearch'];
+
+  function SearchCtrl($scope, ngDialog, lodash, ImageSearch) {
     $scope.searchResults = undefined;
     $scope.tagResults = [];
     $scope.selectedImageName = '';
@@ -32,7 +38,7 @@ angular.module('lorryApp')
       $scope.$parent.selectedImageName = null;
       $scope.resetSearch();
       if (qterm) {
-        $scope.searchResults = Image.query({searchTerm:qterm});
+        $scope.searchResults = ImageSearch.query({searchTerm:qterm});
       }
     };
 
@@ -50,11 +56,11 @@ angular.module('lorryApp')
 
     $scope.getTags = function(username, reponame) {
       if (username === '') {
-        $scope.tagResults = Image.tagsWithoutUsername({
+        $scope.tagResults = ImageSearch.tagsWithoutUsername({
           repoName: reponame
         });
       } else {
-        $scope.tagResults = Image.tags({
+        $scope.tagResults = ImageSearch.tags({
           repoUser: username,
           repoName: reponame
         });
@@ -67,4 +73,5 @@ angular.module('lorryApp')
       $scope.tagResults = [];
     };
 
-  }]);
+  }
+})();

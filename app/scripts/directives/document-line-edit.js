@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .directive('documentLineEdit', ['$rootScope', '$log', 'lodash', function ($rootScope, $log, lodash) {
+  angular
+    .module('lorryApp')
+    .directive('documentLineEdit', documentLineEdit);
+
+  documentLineEdit.$inject = ['$rootScope', '$log', 'lodash'];
+
+  function documentLineEdit($rootScope, $log, lodash) {
     return {
       scope: {
         line: '=',
@@ -138,5 +144,5 @@ angular.module('lorryApp')
       },
       templateUrl: '/scripts/directives/document-line-edit.html'
     };
-  }]);
-
+  }
+})();

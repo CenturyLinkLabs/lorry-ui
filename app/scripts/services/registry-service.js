@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .factory('Image', ['$resource', 'ENV', function($resource, ENV){
+  angular
+    .module('lorryApp')
+    .factory('ImageSearch', ImageSearch);
+
+  ImageSearch.$inject = ['$resource', 'ENV'];
+
+  function ImageSearch($resource, ENV){
     return $resource(ENV.LORRY_API_ENDPOINT + '/images?q=:searchTerm', {searchTerm:'@term'}, {
       'query': {
         method:'GET',
@@ -40,4 +46,5 @@ angular.module('lorryApp')
         }
       }
     });
-  }]);
+  }
+})();

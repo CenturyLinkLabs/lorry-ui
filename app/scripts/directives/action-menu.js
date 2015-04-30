@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .directive('actionMenu', ['ngDialog', '$window', function (ngDialog, $window) {
+  angular
+    .module('lorryApp')
+    .directive('actionMenu', actionMenu);
+
+  actionMenu.$inject = ['ngDialog', '$window'];
+
+  function actionMenu(ngDialog, $window) {
     return {
       restrict: 'E',
       replace: true,
@@ -43,4 +49,5 @@ angular.module('lorryApp')
       },
       templateUrl: '/scripts/directives/action-menu.html'
     };
-  }]);
+  }
+})();

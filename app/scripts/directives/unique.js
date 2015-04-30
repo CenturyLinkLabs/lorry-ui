@@ -1,7 +1,11 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular.module('lorryApp')
-  .directive('uniqueServiceName', function () {
+  angular
+    .module('lorryApp')
+    .directive('uniqueServiceName', uniqueServiceName);
+
+  function uniqueServiceName() {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -15,4 +19,6 @@ angular.module('lorryApp')
         };
       }
     };
-  });
+  }
+})();
+
