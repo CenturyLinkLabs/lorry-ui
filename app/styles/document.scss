@@ -598,10 +598,10 @@ main footer {
 #testingSandboxPane {
   position: fixed;
   z-index: 2;
-  bottom: 80px;
+  bottom: 75px;
   width: 100%;
   height: 300px;
-  background-color: $white;
+  background-color: #000000;
 }
 
 #sandboxToggle {

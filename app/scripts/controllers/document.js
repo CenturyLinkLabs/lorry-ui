@@ -258,6 +258,11 @@ angular.module('lorryApp').controller('DocumentCtrl', ['$rootScope', '$scope', '
     };
 
     $scope.toggleSandboxDisplay = function () {
+      if ($scope.sandbox.display) {
+        $('#documentPane').css('margin-bottom', 380 + 'px');
+      } else {
+        $('#documentPane').css('margin-bottom', 75 + 'px');
+      }
       return $scope.sandbox.display;
     };
 

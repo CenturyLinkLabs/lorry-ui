@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc directive
- * @name iLayers.directive:draggable
- * @description
- * # draggable
- */
 angular.module('lorryApp')
   .directive('draggable', [ '$window', function ($window) {
     return {
@@ -13,7 +7,7 @@ angular.module('lorryApp')
       restrict: 'E',
       scope: {},
       replace: true,
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope, element) {
         var handle = element.find('.drag-handle'),
           offset = 0;
 
