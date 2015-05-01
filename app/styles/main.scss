@@ -43,7 +43,7 @@ header {
   }
 
   #ctlLogo {
-    margin-top: 7px;
+    margin-top: 10px;
     position: relative;
     float: right;
     background-image: url(../images/ctl_logo_base_grey.svg);
@@ -55,6 +55,27 @@ header {
     text-indent: 100%;
     white-space: nowrap;
     overflow: hidden;
+  }
+
+  #ctlHosted {
+    position: relative;
+    float: right;
+    width: 117px;
+    padding-left: 20px;
+    border-left: 1px solid #a0a0a0;
+    margin: 10px 10px 0 20px;
+    a {
+      text-decoration: none;
+      font-style: normal;
+      color: #a0a0a0;
+      font-size: 14px;
+      span {
+        position: relative;
+        top: -2px;
+        display: inline-block;
+        color: #777;
+      }
+    }
   }
 }
 
