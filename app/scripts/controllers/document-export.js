@@ -5,9 +5,9 @@
     .module('lorryApp')
     .controller('DocumentExportCtrl', DocumentExportCtrl);
 
-  DocumentExportCtrl.$inject =  ['$scope', '$http', '$timeout', 'jsyaml', 'ngDialog', 'fileSaver', 'ENV', 'cfgData'];
+  DocumentExportCtrl.$inject =  ['$scope', '$http', '$timeout', 'jsyaml', 'ngDialog', 'fileSaver', 'ENV', 'cfgData', 'analyticsService'];
 
-  function DocumentExportCtrl($scope, $http, $timeout, jsyaml, ngDialog, fileSaver, ENV, cfgData) {
+  function DocumentExportCtrl($scope, $http, $timeout, jsyaml, ngDialog, fileSaver, ENV, cfgData, analyticsService) {
 
     var self = this;
     var defaultCopyText = 'Copy to Clipboard';
@@ -44,6 +44,9 @@
         var yamlDocument = jsyaml.safeDump($scope.yamlDocument.json, {skipInvalid: true});
         var blob = new Blob([yamlDocument], {type: 'text/plain;charset=utf-8'});
         fileSaver.saveFile(blob, 'docker-compose.yml');
+
+        // GA click tracking for save on first scratch block
+        analyticsService.trackEvent('Save', 'document', '');
       }
     };
 
@@ -53,6 +56,9 @@
         $timeout(function () {
           $scope.copyText = defaultCopyText;
         }, 3000);
+
+        // GA click tracking for save on first scratch block
+        analyticsService.trackEvent('Save', 'clipboard', '');
       }
     };
 
@@ -91,6 +97,9 @@
           .then(function (response) {
             var gist = response.data.links.gist;
             self.showGistConfirmationDialog(gist);
+
+            // GA click tracking for save on first scratch block
+            analyticsService.trackEvent('Save', 'gist', '');
           })
           .catch(function () {
             self.showGistConfirmationDialog();
