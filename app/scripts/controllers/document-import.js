@@ -5,9 +5,9 @@
     .module('lorryApp')
     .controller('DocumentImportCtrl', DocumentImportCtrl);
 
-  DocumentImportCtrl.$inject = ['$log', '$scope', '$http', 'lodash', 'ngDialog', 'PMXConverter'];
+  DocumentImportCtrl.$inject = ['$log', '$scope', '$http', 'lodash', 'ngDialog', 'PMXConverter', 'analyticsService'];
 
-  function DocumentImportCtrl($log, $scope, $http, lodash, ngDialog, PMXConverter) {
+  function DocumentImportCtrl($log, $scope, $http, lodash, ngDialog, PMXConverter, analyticsService) {
     var self = this;
 
     $scope.dialogOptions = {};
@@ -59,8 +59,12 @@
         .then(function (response) {
           if ($scope.dialogOptions.dialogTab === 'pmx') {
             $scope.yamlDocument.raw = PMXConverter.convert(response.data);
+            // GA click tracking
+            analyticsService.trackEvent('create', 'PMX', 'via url');
           } else {
             $scope.yamlDocument.raw = response.data;
+            // GA click tracking
+            analyticsService.trackEvent('create', 'docker-compose.yml', 'via url');
           }
         })
         .catch(function (response) {
@@ -74,8 +78,12 @@
     this.importPastedContent = function (content) {
       if ($scope.dialogOptions.dialogTab === 'pmx') {
         $scope.yamlDocument.raw = PMXConverter.convert(content);
+        // GA click tracking
+        analyticsService.trackEvent('create', 'PMX', 'via paste');
       } else {
         $scope.yamlDocument.raw = content;
+        // GA click tracking
+        analyticsService.trackEvent('create', 'docker-compose.yml', 'via paste');
       }
     };
 
@@ -85,8 +93,12 @@
         $scope.$apply(function(){
           if ($scope.dialogOptions.dialogTab === 'pmx') {
             $scope.yamlDocument.raw = PMXConverter.convert(e.target.result);
+            // GA click tracking
+            analyticsService.trackEvent('create', 'PMX', 'via upload');
           } else {
             $scope.yamlDocument.raw = e.target.result;
+            // GA click tracking
+            analyticsService.trackEvent('create', 'docker-compose.yml', 'via upload');
           }
         });
       });
