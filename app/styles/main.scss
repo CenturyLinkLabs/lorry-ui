@@ -1,9 +1,10 @@
 // bower:scss
 // endbower
 
-@import '_colors';
-@import '_variables';
-@import '_mixins';
+@import 'colors';
+@import 'variables';
+@import 'mixins';
+@import 'icons';
 
 html {
   position: relative;
@@ -20,15 +21,21 @@ body {
 
 header {
   position: relative;
-  overflow: auto;
-  padding: 15px 15px;
   background-color: $white;
+  height: 80px;
+
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
 
   h1 {
     color: $darker_grey;
   }
 
   #lorryLogo {
+    margin: 15px;
     position: relative;
     float: left;
     background-image: url(../images/logo_lorry.svg);
@@ -43,7 +50,7 @@ header {
   }
 
   #ctlLogo {
-    margin-top: 10px;
+    margin-top: 25px;
     position: relative;
     float: right;
     background-image: url(../images/ctl_logo_base_grey.svg);
@@ -63,7 +70,7 @@ header {
     width: 117px;
     padding-left: 20px;
     border-left: 1px solid #a0a0a0;
-    margin: 10px 10px 0 20px;
+    margin: 30px 25px 0 20px;
     a {
       text-decoration: none;
       font-style: normal;
@@ -80,6 +87,8 @@ header {
 }
 
 a {
+  color: $light_grey;
+
   &:hover {
     text-decoration: none;
   }
@@ -96,6 +105,8 @@ main {
   min-height: 100%;
   margin-bottom: 75px;
 }
+
+.clear { clear: both; }
 
 .titip-default .titip-content {
   font-family: $base_font_family;
