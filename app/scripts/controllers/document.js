@@ -48,12 +48,14 @@
     };
 
     $scope.$watchCollection('yamlDocument.raw', function () {
-      var documentDefined = (angular.isDefined($scope.yamlDocument) && angular.isDefined($scope.yamlDocument.raw));
+      var documentDefined = (angular.isDefined($scope.yamlDocument) &&
+                             angular.isDefined($scope.yamlDocument.raw) &&
+                             !$scope.yamlDocument.loadFailure);
       if (documentDefined) {
         self.failFastOrValidateYaml();
       }
-      $scope.resettable = documentDefined;
-      $scope.importable = !documentDefined;
+      $scope.resettable = documentDefined || !!$scope.yamlDocument.loadFailure;
+      $scope.importable = !$scope.resettable;
     });
 
     this.reset = function () {

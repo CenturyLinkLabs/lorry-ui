@@ -313,6 +313,20 @@ describe('Controller: DocumentCtrl', function () {
       it('sets $scope.importable true', function () {
         expect(scope.importable).toBe(true);
       });
+
+      describe('and there are fatal loadFailure errors', function () {
+        beforeEach(function () {
+          scope.yamlDocument.loadFailure = true;
+        });
+
+        it('sets $scope.resettable false', function () {
+          expect(scope.resettable).toBe(false);
+        });
+
+        it('sets $scope.importable true', function () {
+          expect(scope.importable).toBe(true);
+        });
+      });
     });
 
     describe('when $scope.yamlDocument.raw is defined', function () {
@@ -327,6 +341,20 @@ describe('Controller: DocumentCtrl', function () {
 
       it('sets $scope.importable false', function () {
         expect(scope.importable).toBe(false);
+      });
+
+      describe('and there are fatal loadFailure errors', function () {
+        beforeEach(function () {
+          scope.yamlDocument.loadFailure = true;
+        });
+
+        it('sets $scope.resettable false', function () {
+          expect(scope.resettable).toBe(true);
+        });
+
+        it('sets $scope.importable true', function () {
+          expect(scope.importable).toBe(false);
+        });
       });
     });
   });

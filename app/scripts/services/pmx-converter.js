@@ -9,7 +9,7 @@
 
   function PMXConverter(jsyaml) {
 
-    var convert = function (pmxYaml) {
+    function convert(pmxYaml) {
       var pmxJson, images, newJson;
 
       try {
@@ -25,9 +25,9 @@
       });
 
       return jsyaml.safeDump(newJson);
-    };
+    }
 
-    var imageToServiceDefinition = function (image) {
+    function imageToServiceDefinition(image) {
       var serviceDefinition = {};
 
       serviceDefinition.image = image.source;
@@ -40,9 +40,9 @@
       if (image.command) { serviceDefinition.command = image.command; }
 
       return serviceDefinition;
-    };
+    }
 
-    var portFlags = function (ports) {
+    function portFlags(ports) {
       return ports.map(function (port) {
         var portString = '';
 
@@ -55,9 +55,9 @@
 
         return portString;
       });
-    };
+    }
 
-    var linkFlags = function (links) {
+    function linkFlags(links) {
       return links.map(function (link) {
         var linkString = '';
 
@@ -67,21 +67,21 @@
         }
         return linkString;
       });
-    };
+    }
 
-    var exposeFlags = function (expose) {
+    function exposeFlags(expose) {
       return expose.map(function (port) {
         return port;
       });
-    };
+    }
 
-    var environmentFlags = function (environment) {
+    function environmentFlags(environment) {
       return environment.map(function (env) {
         return env.variable + '=' + env.value;
       });
-    };
+    }
 
-    var volumesFlags = function (volumes) {
+    function volumesFlags(volumes) {
       return volumes.map(function (volume) {
         var volumeString = '';
 
@@ -90,13 +90,13 @@
 
         return volumeString;
       });
-    };
+    }
 
-    var volumesFromFlags = function (volumesFrom) {
+    function volumesFromFlags(volumesFrom) {
       return volumesFrom.map(function (from) {
         return from;
       });
-    };
+    }
 
     // Public API here
     return {
