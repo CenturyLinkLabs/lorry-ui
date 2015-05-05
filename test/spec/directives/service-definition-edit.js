@@ -2,21 +2,33 @@
 
 describe('Directive: serviceDefinitionEdit', function () {
 
-  beforeEach(module('lorryApp'));
+  beforeEach(function() {
+    module('lorryApp');
+
+    module(function($provide) {
+      $provide.factory('viewHelpers', function() {
+        return {
+          animatedScrollTo: jasmine.createSpy('animatedScrollTo')
+        };
+      });
+    });
+  });
 
   var scope,
     rootScope,
     lodash,
     compile,
     $document,
-    element;
+    element,
+    viewHelpers;
 
-  beforeEach(inject(function($compile, $rootScope, _$document_, _lodash_){
+  beforeEach(inject(function($compile, $rootScope, _$document_, _lodash_, _viewHelpers_){
     scope = $rootScope.$new();
     lodash = _lodash_;
     compile = $compile;
     rootScope = $rootScope;
     $document = _$document_;
+    viewHelpers = _viewHelpers_;
     rootScope.serviceNames = function() {
       return ['foo', 'bar'];
     };
@@ -307,7 +319,6 @@ describe('Directive: serviceDefinitionEdit', function () {
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
         scope.$digest();
 
-        spyOn($document, 'scrollTop');
         spyOn(element.isolateScope(), '$emit');
       });
 
@@ -328,7 +339,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       it('scrolls back to the top of the document', function() {
         element.isolateScope().saveServiceDefinition(true);
-        expect($document.scrollTop).toHaveBeenCalledWith(0);
+        expect(viewHelpers.animatedScrollTo).toHaveBeenCalled();
       });
 
       it('resets editable json after successfully saved', function () {
@@ -344,6 +355,8 @@ describe('Directive: serviceDefinitionEdit', function () {
     });
 
     describe('$scope.cancelEditing', function () {
+      var element;
+
       beforeEach(function () {
         scope.sectionName = 'adapter';
         element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
@@ -354,7 +367,6 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         spyOn(element.isolateScope(), '$emit');
-        spyOn($document, 'scrollTop');
       });
 
       it('is triggered when cancel button is clicked', function () {
@@ -365,7 +377,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       it('scrolls back to the top of the document', function() {
         element.isolateScope().cancelEditing();
-        expect($document.scrollTop).toHaveBeenCalledWith(0);
+        expect(viewHelpers.animatedScrollTo).toHaveBeenCalled();
       });
 
       it('resets the section name', function () {

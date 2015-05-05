@@ -5,9 +5,9 @@
     .module('lorryApp')
     .directive('serviceDefinitionEdit', serviceDefinitionEdit);
 
-  serviceDefinitionEdit.$inject = ['$rootScope', '$document', 'lodash'];
+  serviceDefinitionEdit.$inject = ['$rootScope', '$document', 'lodash', 'viewHelpers'];
 
-  function serviceDefinitionEdit($rootScope, $document, lodash) {
+  function serviceDefinitionEdit($rootScope, $document, lodash, viewHelpers) {
     return {
       scope: {
         sectionName: '='
@@ -15,7 +15,7 @@
       restrict: 'E',
       replace: 'true',
       templateUrl: '/scripts/directives/service-definition-edit.html',
-      link: function (scope) {
+      link: function (scope, element) {
 
         scope.transformToJson = function () {
           if (!scope.newSectionName) {
@@ -104,7 +104,7 @@
         };
 
         var editCompleted = function() {
-          $document.scrollTop(0);
+          viewHelpers.animatedScrollTo(element);
         };
 
         scope.addNewKey = function (key) {

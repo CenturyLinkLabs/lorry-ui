@@ -2,19 +2,31 @@
 
 describe('Directive: actionMenu', function () {
 
-  beforeEach(module('lorryApp'));
+  beforeEach(function() {
+    module('lorryApp');
+
+    module(function($provide) {
+      $provide.factory('viewHelpers', function() {
+        return {
+          animatedScrollTo: jasmine.createSpy('animatedScrollTo')
+        };
+      });
+    });
+  });
 
   var scope,
     compile,
     ngDialog,
     win,
-    element;
+    element,
+    viewHelpers;
 
-  beforeEach(inject(function($compile, $rootScope, _ngDialog_, _$window_){
+  beforeEach(inject(function($compile, $rootScope, _ngDialog_, _$window_, _viewHelpers_){
     scope = $rootScope.$new();
     compile = $compile;
     win = _$window_;
     ngDialog = _ngDialog_;
+    viewHelpers = _viewHelpers_;
   }));
 
   beforeEach(function () {
@@ -143,7 +155,7 @@ describe('Directive: actionMenu', function () {
 
       it('scrolls to the edit block', function() {
         scope.editServiceDefinition();
-        expect(fake$.animate).toHaveBeenCalledWith({scrollTop:0}, 500);
+        expect(viewHelpers.animatedScrollTo).toHaveBeenCalled();
       });
     });
 
