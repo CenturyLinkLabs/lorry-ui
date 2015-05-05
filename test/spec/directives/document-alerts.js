@@ -22,25 +22,28 @@ describe('Directive: documentAlerts', function () {
       scope.yamlDocument.parseErrors = true;
     });
 
-    it('the error class is added', function () {
-      element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
-      element = compile(element)(scope);
-      scope.$digest();
-      expect(element.hasClass('error')).toBeTruthy();
-    });
+    describe('always', function () {
+      beforeEach(function () {
+        element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
 
-    it('the fatal class is removed', function () {
-      element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
-      element = compile(element)(scope);
-      scope.$digest();
-      expect(element.hasClass('fatal')).toBeFalsy();
-    });
+      it('the error class is added', function () {
+        expect(element.hasClass('error')).toBeTruthy();
+      });
 
-    it('the valid class is removed', function () {
-      element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
-      element = compile(element)(scope);
-      scope.$digest();
-      expect(element.hasClass('valid')).toBeFalsy();
+      it('the fatal class is removed', function () {
+        expect(element.hasClass('fatal')).toBeFalsy();
+      });
+
+      it('the valid class is removed', function () {
+        expect(element.hasClass('valid')).toBeFalsy();
+      });
+
+      it('sets dismissible to true', function () {
+        expect(scope.dismissible).toBe(true);
+      });
     });
 
     describe('when there is a single error message', function () {
@@ -100,6 +103,10 @@ describe('Directive: documentAlerts', function () {
 
     it('removes the "file: ," portion of the error message', function () {
       expect(element.text()).not.toContain('file: ,');
+    });
+
+    it('sets dismissible to false', function () {
+      expect(scope.dismissible).toBe(false);
     });
   });
 

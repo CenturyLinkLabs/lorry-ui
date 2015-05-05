@@ -13,6 +13,8 @@
         scope.$watch('yamlDocument', function () {
           var errorCount = scope.yamlDocument.errors ? scope.yamlDocument.errors.length : 0;
 
+          scope.dismissible = true;
+
           if (errorCount === 0) {
             element.addClass('valid');
             element.removeClass('fatal error warning');
@@ -33,6 +35,7 @@
             element.addClass('fatal');
             element.removeClass('error warning valid');
 
+            scope.dismissible = false;
             scope.message = 'The document supplied could not be parsed.  ';
             scope.message += scope.yamlDocument.errors[0].error.message.replace('file: ,', 'On ');
           }
