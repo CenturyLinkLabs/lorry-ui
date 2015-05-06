@@ -5,9 +5,9 @@
     .module('lorryApp')
     .directive('serviceDefinitionEdit', serviceDefinitionEdit);
 
-  serviceDefinitionEdit.$inject = ['$rootScope', '$document', 'lodash'];
+  serviceDefinitionEdit.$inject = ['$rootScope', '$document', 'lodash', 'viewHelpers'];
 
-  function serviceDefinitionEdit($rootScope, $document, lodash) {
+  function serviceDefinitionEdit($rootScope, $document, lodash, viewHelpers) {
     return {
       scope: {
         sectionName: '='
@@ -15,36 +15,34 @@
       restrict: 'E',
       replace: 'true',
       templateUrl: '/scripts/directives/service-definition-edit.html',
-      controller: function ($scope) {
+      link: function (scope, element) {
 
-        var self = this;
-
-        $scope.transformToJson = function () {
-          if (!$scope.newSectionName) {
-            $scope.newSectionName = $scope.sectionName;
+        scope.transformToJson = function () {
+          if (!scope.newSectionName) {
+            scope.newSectionName = scope.sectionName;
           }
-          if ($scope.editableJson) {
-            $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
+          if (scope.editableJson) {
+            scope.$parent.editedServiceYamlDocumentJson = scope.transformToYamlDocumentFragment(scope.editableJson);
           } else {
-            $scope.editableJson = $scope.transformToEditableJson($scope.$parent.editedServiceYamlDocumentJson);
+            scope.editableJson = scope.transformToEditableJson(scope.$parent.editedServiceYamlDocumentJson);
             // since image/build section is mandatory, add it to the json if not present
-            if (!lodash.findWhere($scope.editableJson, {name: 'image'}) &&
-              !lodash.findWhere($scope.editableJson, {name: 'build'})) {
-              $scope.editableJson.push({name: 'image', value: ''});
+            if (!lodash.findWhere(scope.editableJson, {name: 'image'}) &&
+              !lodash.findWhere(scope.editableJson, {name: 'build'})) {
+              scope.editableJson.push({name: 'image', value: ''});
             }
             // since extends section should always have subkeys file & service, add it to the json if not present
-            self.fixExtendsKeyStructure();
+            fixExtendsKeyStructure();
           }
         };
 
-        $scope.transformToEditableJson = function (json) {
+        scope.transformToEditableJson = function (json) {
           var fixedJson = [];
           angular.forEach(json, function(svalue, skey) {
             var sectionObj = {};
             var lines = [];
 
             // if sequence type keys have string value, convert them to array
-            svalue = self.convertSeqKeyValueToArray(svalue, skey);
+            svalue = convertSeqKeyValueToArray(svalue, skey);
 
             // weird way to check if the array is a real array
             // or the array has objects in it
@@ -73,7 +71,7 @@
           return fixedJson;
         };
 
-        $scope.transformToYamlDocumentFragment = function (editedJson) {
+        scope.transformToYamlDocumentFragment = function (editedJson) {
           var yamlFrag = {};
           angular.forEach(editedJson, function(svalue) {
             yamlFrag[svalue.name] = svalue.value;
@@ -81,70 +79,70 @@
           return yamlFrag;
         };
 
-        $scope.saveServiceDefinition = function (isFormValid) {
+        scope.saveServiceDefinition = function (isFormValid) {
           if (isFormValid) {
-            $scope.$parent.editedServiceYamlDocumentJson = $scope.transformToYamlDocumentFragment($scope.editableJson);
-            $scope.$emit('saveService', $scope.sectionName, $scope.newSectionName, $scope.$parent.editedServiceYamlDocumentJson);
+            scope.$parent.editedServiceYamlDocumentJson = scope.transformToYamlDocumentFragment(scope.editableJson);
+            scope.$emit('saveService', scope.sectionName, scope.newSectionName, scope.$parent.editedServiceYamlDocumentJson);
             // reset edited json
-            $scope.editableJson = [];
+            scope.editableJson = [];
           }
-          self.editCompleted();
+          editCompleted();
         };
 
-        $scope.cancelEditing = function () {
+        scope.cancelEditing = function () {
           // reset scratch form values
-          $scope.newSectionName = '';
-          $scope.editableJson = [];
+          scope.newSectionName = '';
+          scope.editableJson = [];
           // since image/build section is mandatory, add it to the json if not present
-          if (!lodash.findWhere($scope.editableJson, {name: 'image'}) &&
-            !lodash.findWhere($scope.editableJson, {name: 'build'})) {
-            $scope.editableJson.push({name: 'image', value: ''});
+          if (!lodash.findWhere(scope.editableJson, {name: 'image'}) &&
+            !lodash.findWhere(scope.editableJson, {name: 'build'})) {
+            scope.editableJson.push({name: 'image', value: ''});
           }
 
-          $scope.$emit('cancelEditing', $scope.sectionName);
-          self.editCompleted();
+          scope.$emit('cancelEditing', scope.sectionName);
+          editCompleted();
         };
 
-        self.editCompleted = function() {
-          $document.scrollTop(0);
+        var editCompleted = function() {
+          viewHelpers.animatedScrollTo(element);
         };
 
-        $scope.addNewKey = function (key) {
+        scope.addNewKey = function (key) {
           if (lodash.includes($rootScope.validKeys, key)) {
-            var keyValue = $scope.createNewEmptyValueForKey(key);
-            $scope.editableJson.push({name: key, value: keyValue});
-            $scope.transformToJson();
+            var keyValue = scope.createNewEmptyValueForKey(key);
+            scope.editableJson.push({name: key, value: keyValue});
+            scope.transformToJson();
           }
         };
 
-        $scope.$on('addNewValueForExistingKey', function (e, key) {
-          var node = lodash.findWhere($scope.editableJson, {name: key});
+        scope.$on('addNewValueForExistingKey', function (e, key) {
+          var node = lodash.findWhere(scope.editableJson, {name: key});
           if (node) {
-            var keyValue = $scope.createNewEmptyValueForKey(key);
+            var keyValue = scope.createNewEmptyValueForKey(key);
             if (Array.isArray(keyValue)) {
               node.value.push(keyValue[0]);
-              $scope.transformToJson();
+              scope.transformToJson();
             }
           }
         });
 
-        $scope.$on('markKeyForDeletion', function (e, key) {
-          var node = lodash.findWhere($scope.editableJson, {name: key});
+        scope.$on('markKeyForDeletion', function (e, key) {
+          var node = lodash.findWhere(scope.editableJson, {name: key});
           if (node) {
-            $scope.markItemForDeletion(key, null);
+            scope.markItemForDeletion(key, null);
           }
         });
 
-        $scope.$on('markKeyItemForDeletion', function (e, key, index) {
-          var node = lodash.findWhere($scope.editableJson, {name: key});
+        scope.$on('markKeyItemForDeletion', function (e, key, index) {
+          var node = lodash.findWhere(scope.editableJson, {name: key});
           if (node) {
-            $scope.markItemForDeletion(key, index);
+            scope.markItemForDeletion(key, index);
           }
         });
 
-        $scope.buildValidKeyList = function () {
+        scope.buildValidKeyList = function () {
           if (!lodash.isEmpty($rootScope.validKeys)) {
-            var existingKeys = lodash.pluck($scope.editableJson, 'name');
+            var existingKeys = lodash.pluck(scope.editableJson, 'name');
             if (lodash.includes(existingKeys, 'image') || lodash.includes(existingKeys, 'build')) {
               existingKeys = lodash.union(existingKeys, ['image', 'build']);
             }
@@ -153,12 +151,12 @@
           }
         };
 
-        $scope.createNewEmptyValueForKey = function(key) {
+        scope.createNewEmptyValueForKey = function(key) {
           var keyValue;
 
-          if (self.isKeyTypeSequence(key)) {
+          if (isKeyTypeSequence(key)) {
             keyValue = [''];
-          } else if (self.isKeyTypeString(key)) {
+          } else if (isKeyTypeString(key)) {
             keyValue = '';
           } else if (key === 'extends') {
             keyValue = {file: '', service: ''};
@@ -168,7 +166,7 @@
           return keyValue;
         };
 
-        $scope.markItemForDeletion = function(key, index) {
+        scope.markItemForDeletion = function(key, index) {
           var tracker = $rootScope.markAsDeletedTracker;
 
           // toggle add/remove items from the delete marker
@@ -201,13 +199,13 @@
           }
         };
 
-        $scope.doesServiceNameExists = function (serviceName) {
+        scope.doesServiceNameExists = function (serviceName) {
           // if the service is being edited, allow the original section name to be used
-          return (serviceName === $scope.sectionName) ? false : lodash.includes($scope.$parent.serviceNames(), serviceName);
+          return (serviceName === scope.sectionName) ? false : lodash.includes(scope.$parent.serviceNames(), serviceName);
         };
 
-        self.fixExtendsKeyStructure = function () {
-          var node = lodash.findWhere($scope.editableJson, {name: 'extends'});
+        var fixExtendsKeyStructure = function () {
+          var node = lodash.findWhere(scope.editableJson, {name: 'extends'});
           if (node) {
             node.value = node.value ? node.value : { value: '' };
             var obj = {};
@@ -217,9 +215,9 @@
           }
         };
 
-        self.convertSeqKeyValueToArray = function (svalue, skey) {
+        var convertSeqKeyValueToArray = function (svalue, skey) {
           // if sequence type keys have string value, convert them to array
-          if (self.isKeyTypeSequence(skey)) {
+          if (isKeyTypeSequence(skey)) {
             if (!Array.isArray(svalue)) {
               var temp = svalue;
               svalue = [];
@@ -229,18 +227,18 @@
           return svalue;
         };
 
-        self.isKeyTypeSequence = function (skey) {
+        var isKeyTypeSequence = function (skey) {
           var seqKeys = ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search' ];
           return lodash.includes(seqKeys, skey);
         };
 
-        self.isKeyTypeString = function (skey) {
+        var isKeyTypeString = function (skey) {
           var stringKeys = ['command', 'image', 'build', 'net', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'];
           return lodash.includes(stringKeys, skey);
         };
 
         function initialize() {
-          $scope.transformToJson();
+          scope.transformToJson();
         }
 
         initialize();

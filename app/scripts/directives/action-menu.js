@@ -5,20 +5,13 @@
     .module('lorryApp')
     .directive('actionMenu', actionMenu);
 
-  actionMenu.$inject = ['ngDialog', '$window'];
+  actionMenu.$inject = ['ngDialog', 'viewHelpers'];
 
-  function actionMenu(ngDialog, $window) {
+  function actionMenu(ngDialog, viewHelpers) {
     return {
       restrict: 'E',
       replace: true,
-      link: function postLink(scope, $element) {
-
-        function scrollIntoFocus() {
-          var $el = $element.closest('.service-definition');
-          $window.$('html, body').animate({
-            scrollTop: $el.offset().top
-          }, 500);
-        }
+      link: function postLink(scope, element) {
 
         scope.deleteServiceDefinition = function () {
           if (!scope.inEditMode() && !scope.inNewServiceMode()) {
@@ -45,6 +38,11 @@
             scope.editService(serviceName);
           }
         };
+
+        function scrollIntoFocus() {
+          var el = element.closest('.service-definition');
+          viewHelpers.animatedScrollTo(el);
+        }
 
       },
       templateUrl: '/scripts/directives/action-menu.html'
