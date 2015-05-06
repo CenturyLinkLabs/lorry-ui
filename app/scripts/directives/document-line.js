@@ -5,9 +5,9 @@
     .module('lorryApp')
     .directive('documentLine', documentLine);
 
-  documentLine.$inject = ['$compile', '$window', 'lodash', 'jsyaml', 'ENV'];
+  documentLine.$inject = ['$compile', '$window', 'lodash', 'jsyaml', 'ENV', 'analyticsService'];
 
-  function documentLine($compile, $window, lodash, jsyaml, ENV) {
+  function documentLine($compile, $window, lodash, jsyaml, ENV, analyticsService) {
     return {
       restrict: 'E',
       replace: true,
@@ -96,6 +96,8 @@
           var querystring = 'images=' + encodeURIComponent(imageNames().join(',')) +
             '&' + 'lock=' + encodeURIComponent(imageName());
           var imageLayersUrl = ENV.IMAGE_LAYERS_URL + '/?' + querystring;
+          // GA click tracking
+          analyticsService.trackEvent('outbound', 'imagelayers.io', imageName());
           $window.open(imageLayersUrl, '_blank');
         };
 

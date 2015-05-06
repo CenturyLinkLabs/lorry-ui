@@ -6,10 +6,10 @@
     .controller('DocumentCtrl', DocumentCtrl);
 
   DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', 'lodash', 'jsyaml', 'ngDialog',
-    'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService'];
+    'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService', 'analyticsService'];
 
   function DocumentCtrl($rootScope, $scope, $log, $http, $location, lodash, jsyaml, ngDialog,
-                        yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService) {
+                        yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService, analyticsService) {
 
     var self = this;
 
@@ -151,13 +151,24 @@
         $scope.yamlDocument.json[newServiceName] = updatedSectionData;
         delete $scope.yamlDocument.json[newServiceName].editMode;
       } else {
+        var scratchDoc = false;
         // add a new service block either to an existing yaml doc or an empty one
         if (!$scope.yamlDocument.json) {
+          scratchDoc = true;
           $scope.yamlDocument.json = {};
         }
         $scope.yamlDocument.json[newServiceName] = updatedSectionData;
         $scope.newServiceBlock = false;
+
+        if (scratchDoc) {
+          // GA click tracking for save on first scratch block
+          analyticsService.trackEvent('create', 'scratch', '');
+        }
       }
+
+      // GA click tracking for image added per service block
+      var imageName = updatedSectionData.image;
+      analyticsService.trackEvent('image', 'add', imageName);
 
       // reset the edited service yaml
       $scope.editedServiceYamlDocumentJson = {};
