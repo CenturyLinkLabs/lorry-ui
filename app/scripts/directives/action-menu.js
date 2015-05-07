@@ -18,6 +18,7 @@
             var serviceName = scope.serviceName();
 
             scope.confirmMessage = 'Are you sure you want to delete this block?';
+            scope.buttonText = 'Yes, Delete';
             ngDialog.openConfirm(
               {
                 template: '/views/confirm-dialog.html',

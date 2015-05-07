@@ -28,6 +28,7 @@
     $scope.resetWorkspace = function () {
 
       $scope.confirmMessage = 'Are you sure you want to clear the workspace?';
+      $scope.buttonText = 'Yes, Clear';
       ngDialog.openConfirm(
         {
           template: '/views/confirm-dialog.html',
