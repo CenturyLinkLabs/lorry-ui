@@ -340,7 +340,7 @@
     float: right;
     background-image: url('../images/icon_info.svg');
     background-repeat: no-repeat;
-    @include background-size(40px, 40px);
+    @include background-size(40px, 60px);
     background-position: 0 0;
     width: 30px;
     height: 20px;
@@ -391,7 +391,7 @@
 .line {
   font-family: $monospace_font_family;
   position: relative;
-  margin-right: 60px;
+  margin-right: 50px;
   background-color: $dark_grey;
   line-height: 1.5em;
 
@@ -438,6 +438,8 @@
   }
 
   .line-text {
+    background-image: image-url('document_line_bg.png');
+    background-position-x: 20px;
     background-color: $darker_grey;
     margin-left: 55px;
     padding-left: 20px;
@@ -455,7 +457,6 @@
   }
 
   &.error {
-    margin-right: 120px;
     background-color: $orange;
     color: $white;
 
@@ -466,6 +467,7 @@
 
 
     .line-text {
+      background-image: image-url('document_line_error_bg.png');
       background-color: $orange;
       .service-key {
         color: $white;
@@ -477,15 +479,15 @@
       height: 20px;
       background-image: url('../images/icon_info.svg');
       background-repeat: no-repeat;
-      @include background-size(40px, 40px);
-      background-position: 0 0;
+      @include background-size(40px, 60px);
+      background-position: 0 -20px;
       position: absolute;
       display: inline-block;
-      right: -55px;
+      right: 0;
       top: 2px;
       &:hover {
         cursor: pointer;
-        background-position: 0 -20px;
+        background-position: 0 -40px;
       }
     }
   }
