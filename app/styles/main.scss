@@ -111,3 +111,29 @@ main {
 .titip-default .titip-content {
   font-family: $base_font_family;
 }
+
+#fourOhFour #homeAdventurePane {
+  #homeWrapper {
+    background: none;
+
+    h1 {
+      color: $light_grey;
+      text-align: center;
+      font-size: 100px;
+      font-weight: bold;
+      padding-bottom: 0;
+    }
+
+    h4 {
+      color: $light_grey;
+      margin-bottom: 50px;
+    }
+
+    #homeImportPane, #homeScratchPane {
+      float: none;
+      display: inline-block;
+      margin: 0 20px;
+      text-align: left;
+    }
+  }
+}

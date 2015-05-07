@@ -279,8 +279,16 @@
 
 
     this.initialize = function () {
-      var gistUri = $location.search().gist;
-      if (angular.isDefined(gistUri)) {
+      var gistUri = $location.search().gist,
+        newSession = $location.search().newSession,
+        startImport = $location.search().startImport;
+      if (angular.isDefined(newSession) && newSession) {
+        $scope.setNewSession();
+      }
+      if (angular.isDefined(startImport)) {
+        $scope.setNewSession();
+        $scope.startImport = startImport;
+      } else if (angular.isDefined(gistUri)) {
         $scope.setNewSession();
         $http.get(gistUri)
           .then(function (response) {

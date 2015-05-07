@@ -8,19 +8,46 @@ describe('Controller: DocumentImportCtrl', function () {
   var DocumentImportCtrl,
     PMXConverter,
     $httpBackend,
+    loc,
     scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _PMXConverter_) {
+  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _$location_, _PMXConverter_) {
     $rootScope.validateYaml = function(){}; // mock the parent scope validateYaml()
     $rootScope.yamlDocument = {}; // mock the parent scope yamlDocument
     scope = $rootScope.$new();
     PMXConverter = _PMXConverter_;
     $httpBackend = _$httpBackend_;
+    loc = _$location_;
     DocumentImportCtrl = $controller('DocumentImportCtrl', {
       $scope: scope
     });
   }));
+
+  describe('initialization', function () {
+    describe('when startImport exists within scope', function () {
+      beforeEach(function () {
+        scope.startImport = 'compose';
+      });
+
+      it('shows the import dialog', function () {
+        spyOn(scope, 'showImportDialog') ;
+        DocumentImportCtrl.initialize();
+        expect(scope.showImportDialog).toHaveBeenCalled();
+      });
+
+      it('shows the import dialog showing the specified tab', function () {
+        spyOn(scope, 'showImportDialog') ;
+        DocumentImportCtrl.initialize();
+        expect(scope.showImportDialog).toHaveBeenCalledWith('compose');
+      });
+
+      it('drops the querystring from the browser address', function () {
+        DocumentImportCtrl.initialize();
+        expect(loc.search()).toEqual({});
+      });
+    });
+  });
 
   describe('$scope.showImportDialog', function () {
     beforeEach(function () {

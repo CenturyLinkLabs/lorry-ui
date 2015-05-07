@@ -5,9 +5,9 @@
     .module('lorryApp')
     .controller('DocumentImportCtrl', DocumentImportCtrl);
 
-  DocumentImportCtrl.$inject = ['$log', '$scope', '$http', 'lodash', 'ngDialog', 'PMXConverter', 'analyticsService'];
+  DocumentImportCtrl.$inject = ['$log', '$scope', '$http', '$location', 'lodash', 'ngDialog', 'PMXConverter', 'analyticsService'];
 
-  function DocumentImportCtrl($log, $scope, $http, lodash, ngDialog, PMXConverter, analyticsService) {
+  function DocumentImportCtrl($log, $scope, $http, $location, lodash, ngDialog, PMXConverter, analyticsService) {
     var self = this;
 
     $scope.dialogOptions = {};
@@ -104,5 +104,14 @@
       });
       fr.readAsText($scope.files[0]);
     };
+
+    this.initialize = function () {
+      if(angular.isDefined($scope.startImport)) {
+        $scope.showImportDialog($scope.startImport);
+        $location.search({});
+      }
+    };
+
+    self.initialize();
   }
 })();

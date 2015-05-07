@@ -45,6 +45,36 @@ describe('Controller: DocumentCtrl', function () {
       remoteGistHandler = $httpBackend.when('GET', uri);
     });
 
+    describe('when newSession is true in the querystring', function () {
+      it('starts a new session', function () {
+        loc.search({newSession: true});
+        DocumentCtrl.initialize();
+        expect(scope.setNewSession).toHaveBeenCalled();
+      });
+    });
+
+    describe('when newSession is false in the querystring', function () {
+      it('does not start a new session', function () {
+        loc.search({newSession: false});
+        DocumentCtrl.initialize();
+        expect(scope.setNewSession).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when startImport is in the querystring', function () {
+      it('adds a scope variable', function () {
+        loc.search({startImport: 'compose'});
+        DocumentCtrl.initialize();
+        expect(scope.startImport).toEqual('compose');
+      });
+
+      it('starts a new session', function () {
+        loc.search({startImport: 'compose'});
+        DocumentCtrl.initialize();
+        expect(scope.setNewSession).toHaveBeenCalled();
+      });
+    });
+
     describe('when a gist url is not in the querystring', function () {
       it ('does not create a new session', function () {
         DocumentCtrl.initialize();
