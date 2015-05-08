@@ -5,7 +5,15 @@
     .module('lorryApp')
     .controller('MainCtrl', MainCtrl);
 
-  function MainCtrl() {}
+  MainCtrl.$inject = ['$scope', 'viewHelpers'];
+
+  function MainCtrl($scope, viewHelpers) {
+
+    $scope.swoosh = function () {
+      viewHelpers.animateLogo();
+    };
+
+  }
 
 })();
 
