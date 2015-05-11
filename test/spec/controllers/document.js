@@ -12,23 +12,25 @@ describe('Controller: DocumentCtrl', function () {
     jsyaml,
     ngDialog,
     timeout,
-    cookiesService,
     keysService,
     loc,
-    $httpBackend;
+    $httpBackend,
+    win;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, $location, _$httpBackend_, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _cookiesService_, _keysService_) {
+  beforeEach(inject(function ($controller, $rootScope, $location, _$httpBackend_, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _keysService_) {
     scope = $rootScope.$new();
     rootScope = $rootScope;
+    scope.yamlDocument = {};
+    win = { location: { href: '' } };
     DocumentCtrl = $controller('DocumentCtrl', {
-      $scope: scope
+      $scope: scope,
+      $window: win
     });
     yamlValidator = _yamlValidator_;
     jsyaml = _jsyaml_;
     ngDialog = _ngDialog_;
     timeout = $timeout;
-    cookiesService = _cookiesService_;
     keysService = _keysService_;
     loc = $location;
     $httpBackend = _$httpBackend_;
@@ -265,32 +267,15 @@ describe('Controller: DocumentCtrl', function () {
   });
 
   describe('DocumentCtrl.reset', function () {
-    beforeEach(function () {
-      spyOn(DocumentCtrl, 'buildServiceDefinitions');
+    it('destroys the scope', function () {
+      spyOn(scope, '$destroy');
+      DocumentCtrl.reset();
+      expect(scope.$destroy).toHaveBeenCalled();
     });
 
-    it('resets the $scope.yamlDocument to an empty object', function () {
-      scope.yamlDocument = { foo: 'bar' };
-      expect(scope.yamlDocument).toEqual({ foo: 'bar' });
+    it('redirects to the home page', function () {
       DocumentCtrl.reset();
-      expect(scope.yamlDocument).toEqual({});
-    });
-
-    it('rebuilds the service definitions', function () {
-      DocumentCtrl.reset();
-      expect(DocumentCtrl.buildServiceDefinitions).toHaveBeenCalled();
-    });
-
-    it('resets the $scope.editedServiceYamlDocumentJson to an empty object', function () {
-      scope.editedServiceYamlDocumentJson = { foo: 'bar' };
-      expect(scope.editedServiceYamlDocumentJson).toEqual({ foo: 'bar' });
-      DocumentCtrl.reset();
-      expect(scope.editedServiceYamlDocumentJson).toEqual({});
-    });
-
-    it('resets the $scope.newServiceBlock flag to false', function () {
-      DocumentCtrl.reset();
-      expect(scope.newServiceBlock).toBeFalsy();
+      expect(win.location.href).toEqual('/');
     });
   });
 
@@ -419,13 +404,31 @@ describe('Controller: DocumentCtrl', function () {
   describe('#validateJson', function () {
     describe('when the yamlDocument has no/empty json', function () {
       beforeEach(function () {
-        spyOn(DocumentCtrl, 'reset');
+        spyOn(DocumentCtrl, 'buildServiceDefinitions');
       });
 
-      it('resets the workspace', function () {
-        scope.yamlDocument.json = {};
+      it('resets the $scope.yamlDocument to an empty object', function () {
+        scope.yamlDocument = { foo: 'bar' };
+        expect(scope.yamlDocument).toEqual({ foo: 'bar' });
         DocumentCtrl.validateJson();
-        expect(DocumentCtrl.reset).toHaveBeenCalled();
+        expect(scope.yamlDocument).toEqual({});
+      });
+
+      it('rebuilds the service definitions', function () {
+        DocumentCtrl.validateJson();
+        expect(DocumentCtrl.buildServiceDefinitions).toHaveBeenCalled();
+      });
+
+      it('resets the $scope.editedServiceYamlDocumentJson to an empty object', function () {
+        scope.editedServiceYamlDocumentJson = { foo: 'bar' };
+        expect(scope.editedServiceYamlDocumentJson).toEqual({ foo: 'bar' });
+        DocumentCtrl.validateJson();
+        expect(scope.editedServiceYamlDocumentJson).toEqual({});
+      });
+
+      it('resets the $scope.newServiceBlock flag to false', function () {
+        DocumentCtrl.validateJson();
+        expect(scope.newServiceBlock).toBeFalsy();
       });
     });
 
@@ -824,17 +827,17 @@ describe('Controller: DocumentCtrl', function () {
   //});
 
   describe('$scope.isNewSession', function () {
-    describe('when new session cookie is set', function () {
-      beforeEach(function () {
-        cookiesService.put('lorry-started', 'true');
-      });
-
+    describe('when yamlDocument is defined', function () {
       it('returns false', function () {
         expect(scope.isNewSession()).toBeFalsy();
       });
     });
 
-    describe('when new session cookie is not set', function () {
+    describe('when yamlDocument is undefined', function () {
+      beforeEach(function () {
+        delete scope.yamlDocument;
+      });
+
       it('returns true', function () {
         expect(scope.isNewSession()).toBeTruthy();
       });
@@ -843,11 +846,12 @@ describe('Controller: DocumentCtrl', function () {
 
   describe('$scope.setNewSession', function () {
     beforeEach(function () {
+      delete scope.yamlDocument;
       scope.setNewSession();
     });
 
-    it('should set the new session cookie', function () {
-      expect(cookiesService.get('lorry-started')).toBe('true');
+    it('should set the yamlDocument in scope', function () {
+      expect(angular.isDefined(scope.yamlDocument)).toBe(true);
     });
   });
 

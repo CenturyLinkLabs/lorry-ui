@@ -5,15 +5,14 @@
     .module('lorryApp')
     .controller('DocumentCtrl', DocumentCtrl);
 
-  DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', 'lodash', 'jsyaml', 'ngDialog',
-    'yamlValidator', 'serviceDefTransformer', '$timeout', 'cookiesService', 'keysService', 'analyticsService'];
+  DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', '$window', 'lodash', 'jsyaml', 'ngDialog',
+    'yamlValidator', 'serviceDefTransformer', '$timeout', 'keysService', 'analyticsService'];
 
-  function DocumentCtrl($rootScope, $scope, $log, $http, $location, lodash, jsyaml, ngDialog,
-                        yamlValidator, serviceDefTransformer, $timeout, cookiesService, keysService, analyticsService) {
+  function DocumentCtrl($rootScope, $scope, $log, $http, $location, $window, lodash, jsyaml, ngDialog,
+                        yamlValidator, serviceDefTransformer, $timeout, keysService, analyticsService) {
 
     var self = this;
 
-    $scope.yamlDocument = {};
     $scope.resettable = false;
     $scope.importable = true;
     $scope.editedServiceYamlDocumentJson = {};
@@ -27,8 +26,8 @@
 
     $scope.resetWorkspace = function () {
 
-      $scope.confirmMessage = 'Are you sure you want to clear the workspace?';
-      $scope.buttonText = 'Yes, Clear';
+      $scope.confirmMessage = 'Are you sure you want to reset the workspace?';
+      $scope.buttonText = 'Yes, Reset';
       ngDialog.openConfirm(
         {
           template: '/views/confirm-dialog.html',
@@ -55,20 +54,22 @@
       if (documentDefined) {
         self.failFastOrValidateYaml();
       }
-      $scope.resettable = documentDefined || !!$scope.yamlDocument.loadFailure;
+      $scope.resettable = documentDefined ||
+                          (angular.isDefined($scope.yamlDocument) && !!$scope.yamlDocument.loadFailure);
       $scope.importable = !$scope.resettable;
     });
 
     this.reset = function () {
-      $scope.yamlDocument = {};
-      $scope.editedServiceYamlDocumentJson = {};
-      $scope.newServiceBlock = false;
-      this.buildServiceDefinitions();
+      $scope.$destroy();
+      $window.location.href = '/';
     };
 
     this.validateJson = function () {
       if (lodash.isEmpty($scope.yamlDocument.json)) {
-        this.reset();
+        $scope.yamlDocument = {};
+        $scope.editedServiceYamlDocumentJson = {};
+        $scope.newServiceBlock = false;
+        this.buildServiceDefinitions();
       } else {
         $scope.yamlDocument.parseErrors = false;
         $scope.yamlDocument.loadFailure = false;
@@ -230,11 +231,11 @@
     };
 
     $scope.isNewSession = function () {
-      return cookiesService.get('lorry-started') ? false : true;
+      return angular.isUndefined($scope.yamlDocument);
     };
 
     $scope.setNewSession = function () {
-      cookiesService.put('lorry-started', 'true');
+      $scope.yamlDocument = {};
     };
 
     $scope.addNewServiceDef = function () {
@@ -275,7 +276,7 @@
     };
 
     $scope.hasLoadFailure = function () {
-      return $scope.yamlDocument.loadFailure;
+      return angular.isDefined($scope.yamlDocument) && $scope.yamlDocument.loadFailure;
     };
 
 

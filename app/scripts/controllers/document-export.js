@@ -16,8 +16,10 @@
     $scope.copyText = defaultCopyText;
 
     $scope.$watch('yamlDocument.json', function () {
-      $scope.doc = jsyaml.safeDump($scope.yamlDocument.json, { skipInvalid: true });
-      $scope.copyText = defaultCopyText;
+      if (angular.isDefined($scope.yamlDocument)) {
+        $scope.doc = jsyaml.safeDump($scope.yamlDocument.json, {skipInvalid: true});
+        $scope.copyText = defaultCopyText;
+      }
     });
 
     $scope.exportable = function () {
@@ -29,9 +31,9 @@
 
     $scope.exportButtonStyle = function () {
       var buttonStyle;
-      if ($scope.yamlDocument.loadFailure) {
+      if (angular.isDefined($scope.yamlDocument) && $scope.yamlDocument.loadFailure) {
         buttonStyle = 'button-negative';
-      } else if ($scope.yamlDocument.parseErrors) {
+      } else if (angular.isDefined($scope.yamlDocument) && $scope.yamlDocument.parseErrors) {
         buttonStyle = 'button-error';
       } else {
         buttonStyle = 'button-primary';
