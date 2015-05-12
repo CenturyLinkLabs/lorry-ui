@@ -39,12 +39,8 @@ describe('Controller: DocumentCtrl', function () {
   }));
 
   describe('initialization', function () {
-    var remoteGistHandler;
-    var uri = encodeURIComponent('http://www.example.com');
-
     beforeEach(function () {
       spyOn(scope, 'setNewSession');
-      remoteGistHandler = $httpBackend.when('GET', uri);
     });
 
     describe('when newSession is true in the querystring', function () {
@@ -78,57 +74,83 @@ describe('Controller: DocumentCtrl', function () {
     });
 
     describe('when a gist url is not in the querystring', function () {
-      it ('does not create a new session', function () {
+      beforeEach(function () {
+        spyOn(scope, 'displayGist');
+      });
+
+      it('does not create a new session', function () {
         DocumentCtrl.initialize();
         expect(scope.setNewSession).not.toHaveBeenCalled();
       });
 
-      it ('does not call the http get', function () {
+      it('does not display the gist', function () {
         DocumentCtrl.initialize();
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        expect(scope.displayGist).not.toHaveBeenCalled();
       });
     });
 
     describe('when a gist url is in the querystring', function () {
+      var uri = encodeURIComponent('http://www.example.com');
 
       beforeEach(function () {
-        spyOn(DocumentCtrl, 'failFastOrValidateYaml');  // ignore validation when gist is imported for these tests
+        spyOn(scope, 'displayGist');
         loc.search({gist: uri});
-        remoteGistHandler.respond('raw gist content');
+      });
+
+      it('displays the gist', function () {
+        DocumentCtrl.initialize();
+        expect(scope.displayGist).toHaveBeenCalledWith(uri);
+      });
+    });
+  });
+
+  describe('$scope.displayGist', function () {
+    var remoteGistHandler;
+    var uri = encodeURIComponent('https://gist.githubusercontent.com/centurylinklabs/');
+
+    beforeEach(function () {
+      spyOn(scope, 'setNewSession');
+      remoteGistHandler = $httpBackend.when('GET', uri);
+      spyOn(DocumentCtrl, 'failFastOrValidateYaml');  // ignore validation when gist is imported for these tests
+      remoteGistHandler.respond('raw gist content');
+    });
+
+    it('starts a new session', function () {
+      scope.displayGist(uri);
+      $httpBackend.flush();
+      expect(scope.setNewSession).toHaveBeenCalled();
+    });
+
+    it('fetches the gist', function () {
+      $httpBackend.expectGET(uri);
+      scope.displayGist(uri);
+      $httpBackend.flush();
+    });
+
+    describe('when the gist can be retrieved', function () {
+      it('assigns the response to yamlDocument.raw', function () {
+        scope.displayGist(uri);
+        $httpBackend.flush();
+        expect(scope.yamlDocument.raw).toEqual('raw gist content');
+      });
+    });
+
+    describe('when the gist cannot be retrieved', function () {
+      beforeEach(function () {
+        remoteGistHandler.respond(404, 'NOT FOUND');
+      });
+
+      it('sets the yamlDocument.raw to null', function () {
+        scope.displayGist(uri);
+        $httpBackend.flush();
+        expect(scope.yamlDocument.raw).toBeNull();
       });
 
       it('starts a new session', function () {
-        DocumentCtrl.initialize();
+        scope.displayGist(uri);
         $httpBackend.flush();
         expect(scope.setNewSession).toHaveBeenCalled();
       });
-
-      it('fetches the gist', function () {
-        $httpBackend.expectGET(uri);
-        DocumentCtrl.initialize();
-        $httpBackend.flush();
-      });
-
-      describe('when the gist can be retrieved', function () {
-        it('assigns the response to yamlDocument.raw', function () {
-          DocumentCtrl.initialize();
-          $httpBackend.flush();
-          expect(scope.yamlDocument.raw).toEqual('raw gist content');
-        });
-      });
-
-      describe('when the gist cannot be retrieved', function () {
-        beforeEach(function () {
-          remoteGistHandler.respond(404, 'NOT FOUND');
-        });
-        it('sets the yamlDocument.raw to null', function () {
-          DocumentCtrl.initialize();
-          $httpBackend.flush();
-          expect(scope.yamlDocument.raw).toBeNull();
-        });
-      });
-
     });
   });
 

@@ -1,18 +1,5 @@
 <!--Screen for the adventure flow only when we have a new session-->
-<div ng-if="isNewSession()" id="homeAdventurePane">
-  <div class="separator"></div>
-  <div id="homeWrapper" class="horz-centered">
-    <h3>Lorry is a docker-compose.yml validator and composer.</h3>
-    <div id="homeImportPane">
-      <a class="button-primary" href="" ng-click="setNewSession(); triggerClickForElement('#importComposeBtn');">Import existing Compose YAML</a>
-      <p>We'll validate your yml and then you can edit or add to it using our composer.</p>
-    </div>
-    <div id="homeScratchPane">
-      <a class="button-primary" href="" ng-click="setNewSession();">Compose YAML from Scratch</a>
-      <p>Build your docker-compose.yml file service by service.</p>
-    </div>
-  </div>
-</div>
+<div ng-if="isNewSession()" id="homeAdventurePane" ng-include="'views/home.html'"></div>
 
 <!--Screen for the normal flow-->
 <div ng-show="!isNewSession()" >

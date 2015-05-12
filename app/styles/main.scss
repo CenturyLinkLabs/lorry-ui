@@ -70,7 +70,7 @@ header {
     width: 117px;
     padding-left: 20px;
     border-left: 1px solid #a0a0a0;
-    margin: 30px 25px 0 20px;
+    margin: 25px 25px 0 20px;
     a {
       text-decoration: none;
       font-style: normal;
@@ -122,18 +122,14 @@ main {
       font-size: 100px;
       font-weight: bold;
       padding-bottom: 0;
+      margin-top: 75px;
+      margin-bottom: 30px;
     }
 
     h4 {
       color: $light_grey;
-      margin-bottom: 50px;
-    }
-
-    #homeImportPane, #homeScratchPane {
-      float: none;
-      display: inline-block;
-      margin: 0 20px;
-      text-align: left;
+      text-align: center;
+      margin-bottom: 40px;
     }
   }
 }

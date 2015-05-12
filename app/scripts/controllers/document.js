@@ -279,6 +279,20 @@
       return angular.isDefined($scope.yamlDocument) && $scope.yamlDocument.loadFailure;
     };
 
+    $scope.displayGist = function (gistUri) {
+      if (decodeURIComponent(gistUri).match(/^https:\/\/gist\.githubusercontent\.com/i)) {
+        $http.get(gistUri)
+          .then(function (response) {
+            $scope.setNewSession();
+            $scope.yamlDocument.raw = response.data;
+          })
+          .catch(function (response) {
+            $scope.setNewSession();
+            $log.error(response);
+            $scope.yamlDocument.raw = null;
+          });
+      }
+    };
 
     this.initialize = function () {
       var gistUri = $location.search().gist,
@@ -291,15 +305,7 @@
         $scope.setNewSession();
         $scope.startImport = startImport;
       } else if (angular.isDefined(gistUri)) {
-        $scope.setNewSession();
-        $http.get(gistUri)
-          .then(function (response) {
-            $scope.yamlDocument.raw = response.data;
-          })
-          .catch(function (response) {
-            $log.error(response);
-            $scope.yamlDocument.raw = null;
-          });
+        $scope.displayGist(gistUri);
       }
     };
 

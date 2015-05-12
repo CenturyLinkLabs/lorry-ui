@@ -43,8 +43,8 @@ a.button-primary {
 
   &:hover {
     @extend .button-primary;
-    @include box-shadow(0, 0, 5px, rgba( $dark_grey, 0.6 ));
-    background-color: darken( $medium_grey, 15% );
+    @include box-shadow(0, 0, 0px, rgba( $medium_grey, 0.6 ));
+    background-color: darken( $medium_grey, 5% );
   }
 }
 

@@ -1,6 +1,6 @@
-@import '_colors';
-@import '_variables';
-@import '_mixins';
+@import 'colors';
+@import 'variables';
+@import 'mixins';
 @import 'icons';
 
 [class*='titip']
@@ -171,8 +171,8 @@
 
   .gutter {
     position: absolute;
-    top: 0px;
-    bottom: 0px;
+    top: 0;
+    bottom: 0;
     display: inline-block;
     background-color: $darker_grey;
     color: $light_grey;
@@ -559,42 +559,121 @@ main footer {
   }
 
   .horz-centered {
-    position: fixed;
-    top: 200px;
-    left: 45%;
-    /* [> bring your own prefixes <] */
-    transform: translate(-35%, -10%);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   #homeWrapper {
-    background: url('../images/bg_lorry_blank.png') no-repeat 0 10px;
+    width: 870px;
+    background: url('../images/bg_lorry_blank.png') no-repeat center 10px;
     margin-top: 30px;
-    height: 400px;
 
     h3 {
+      font-weight: normal;
+      text-align: center;
       margin-bottom: 40px;
     }
 
-    p {
-      font-size: .8em;
-      color: $lightest_grey;
-      padding: 15px 5px;
-      width: 90%;
-    }
+    #buttonWrapper {
+      text-align: center;
+      overflow: auto;
+      width: 660px;
+      margin-right: auto;
+      margin-left: auto;
 
-    #homeImportPane, #homeScratchPane {
-      float: left;
-      margin-left: 30px;
-      width: 260px;
+      p {
+        font-size: .8em;
+        color: $lightest_grey;
+        padding: 15px 5px;
+        font-weight: normal;
+        line-height: 1.3em;
+      }
 
       a.button-primary {
-        width: 100%;
+        display: block;
+        height: 60px;
+        font-size: 1.1em;
+        font-weight: normal;
+        line-height: 1.5em;
         @include border-box;
+      }
+
+      #homeImportPane, #homeScratchPane {
+        float: left;
+        margin: 0 20px;
+        text-align: left;
+        width: 290px;
       }
     }
 
+    #divider {
+      margin: 50px auto 60px;
+      width: 740px;
+      overflow: auto;
+      color: $lighter_grey;
+      font-size: 0.8em;
+      font-weight: bold;
+
+      div:first-child,
+      div:last-child {
+        float: left;
+        width: 300px;
+      }
+      div:nth-child(2) {
+        float: left;
+        width: 140px;
+      }
+
+      hr {
+        border: 0;
+        border-bottom: 1px solid $light_grey;
+      }
+    }
   }
 
+  #samples {
+    width: 855px;
+    margin: 0 auto;
+    overflow: visible;
+
+    .button-secondary {
+      float: left;
+      font-size: 0.8em;
+      line-height: 3em;
+      height: 60px;
+      font-weight: normal;
+      width: 155px;
+      margin-right: 20px;
+      @include border-box;
+    }
+
+    .button-secondary:last-child {
+      line-height: 1.4em;
+      margin-right: 0;
+      padding-left: 40px;
+      text-align: left;
+      color: $medium_grey;
+      background-color: $lightest_grey;
+      position: relative;
+      overflow: visible;
+
+      &:hover {
+        @include box-shadow(0, 0, 0px, rgba( $lightest_grey, 0.6 ));
+        background-color: lighten( $lightest_grey, 15% );
+      }
+
+      &:before {
+        position: absolute;
+        display: block;
+        content: '';
+        height: 54px;
+        width: 60px;
+        top: -20px;
+        left: -10px;
+        background-image: image-url('chaos_monkey.png');
+      }
+    }
+  }
 
 }
 
