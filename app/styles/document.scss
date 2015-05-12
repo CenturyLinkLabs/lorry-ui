@@ -183,6 +183,7 @@
   }
 
   .section {
+    min-width: 1115px;
     font-family: $monospace_font_family;
     font-size: 0.85em;
     display: inline-block;
@@ -226,8 +227,6 @@
 }
 
 .line-edit {
-  display: inline-block;
-
   .radio-edit-group {
     display: inline-block;
     height: 14px;
@@ -310,6 +309,7 @@
   }
 
   .separator {
+    clear: both;
     border-bottom: solid 1px $dark_grey;
     margin-top: 5px;
     margin-bottom: 5px;
