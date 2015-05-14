@@ -125,19 +125,9 @@ describe('Controller: DocumentImportCtrl', function () {
   describe('$scope.importYaml', function () {
     beforeEach(function () {
       scope.dialog = jasmine.createSpyObj('dialog', ['close']);
-      spyOn(DocumentImportCtrl, 'fetchRemoteContent');
       spyOn(DocumentImportCtrl, 'importPastedContent');
       spyOn(scope, 'validateYaml');
       spyOn(scope, 'upload');
-    });
-
-    describe('when the dialogPane ends with "remote"', function () {
-      it('triggers DocumentImportCtrl.fetchRemoteContent to fetch from the remote address', function () {
-        var docImport = { remote: 'http://www.example.com' };
-        scope.dialogOptions.dialogPane = 'remote';
-        scope.importYaml(docImport);
-        expect(DocumentImportCtrl.fetchRemoteContent).toHaveBeenCalledWith(docImport.remote);
-      });
     });
 
     describe('when the dialogPane ends with "paste"', function () {
@@ -180,53 +170,6 @@ describe('Controller: DocumentImportCtrl', function () {
         scope.dialogOptions.dialogTab = 'pmx';
         DocumentImportCtrl.importPastedContent(docImport.raw);
         expect(scope.yamlDocument.raw).toEqual(PMXConverter.convert(docImport.raw));
-      });
-    });
-  });
-
-  describe('fetchRemoteContent', function () {
-    var uri ='http://www.example.com';
-    var remoteYamlHandler;
-
-    beforeEach(function () {
-      remoteYamlHandler = $httpBackend.when('GET', uri);
-    });
-
-    describe('when the remote content can be fetched', function () {
-      beforeEach(function () {
-        remoteYamlHandler.respond('test response');
-      });
-
-      it('fetches the remote content', function () {
-        $httpBackend.expectGET(uri);
-        DocumentImportCtrl.fetchRemoteContent(uri);
-        $httpBackend.flush();
-      });
-
-      it('sets the response into the yamlDocument.raw', function () {
-        DocumentImportCtrl.fetchRemoteContent(uri);
-        $httpBackend.flush();
-        expect(scope.yamlDocument.raw).toBe('test response');
-      });
-    });
-
-    describe('when the remote content cannot be fetched', function () {
-      beforeEach(function () {
-        remoteYamlHandler.respond(404, 'Not Found');
-        DocumentImportCtrl.fetchRemoteContent(uri);
-        $httpBackend.flush();
-      });
-
-      it('sets the yamlDocument.raw to an empty string', function () {
-        expect(scope.yamlDocument.raw).toBe('');
-      });
-
-      it('sets the yamlDocument.errors with an error message', function () {
-        expect(scope.yamlDocument.errors).toContain({error: {message: 'The remote document could not be retrieved.'}});
-      });
-
-      it('sets the yamlDocument.loadFailure to true', function () {
-        expect(scope.yamlDocument.loadFailure).toBeTruthy();
       });
     });
   });

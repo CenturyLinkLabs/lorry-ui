@@ -38,11 +38,7 @@
     };
 
     $scope.importYaml = function(docImport) {
-      if (lodash.endsWith($scope.dialogOptions.dialogPane, 'remote')) {
-        if (docImport && !lodash.isEmpty(docImport.remote)) {
-          self.fetchRemoteContent(docImport.remote);
-        }
-      } else if (lodash.endsWith($scope.dialogOptions.dialogPane, 'paste')) {
+      if (lodash.endsWith($scope.dialogOptions.dialogPane, 'paste')) {
         if (docImport && !lodash.isEmpty(docImport.raw)) {
           self.importPastedContent(docImport.raw);
         }
@@ -52,27 +48,6 @@
         }
       }
       $scope.dialog.close();
-    };
-
-    this.fetchRemoteContent = function (uri) {
-      $http.get(uri)
-        .then(function (response) {
-          if ($scope.dialogOptions.dialogTab === 'pmx') {
-            $scope.yamlDocument.raw = PMXConverter.convert(response.data);
-            // GA click tracking
-            analyticsService.trackEvent('create', 'PMX', 'via url');
-          } else {
-            $scope.yamlDocument.raw = response.data;
-            // GA click tracking
-            analyticsService.trackEvent('create', 'docker-compose.yml', 'via url');
-          }
-        })
-        .catch(function (response) {
-          $log.error(response);
-          $scope.yamlDocument.raw = '';
-          $scope.yamlDocument.errors = [{error: {message: 'The remote document could not be retrieved.'}}];
-          $scope.yamlDocument.loadFailure = true;
-        });
     };
 
     this.importPastedContent = function (content) {
