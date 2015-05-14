@@ -151,6 +151,101 @@ describe('Directive: documentLineEdit', function () {
       });
     });
 
+    describe('scope.classesForSubLine', function () {
+      describe('when line has no subErrors or subWarnings', function () {
+        beforeEach(function () {
+          scope.line = {name: 'linkes', value: ['bla:bla']};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns classes that does not include error', function () {
+          expect(element.isolateScope().classesForSubLine(0)).not.toContain('error');
+          expect(element.isolateScope().classesForSubLine(0)).not.toContain('warning');
+        });
+      });
+
+      describe('when line has subErrors and subWarnings', function () {
+        beforeEach(function () {
+          scope.line = {name: 'linkes', value: ['bla:bla'], subErrors: [1], subWarnings: [1]};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns classes that does not include error', function () {
+          expect(element.isolateScope().classesForSubLine(0)).toContain('error');
+          expect(element.isolateScope().classesForSubLine(0)).toContain('warning');
+        });
+      });
+
+      describe('when line has subErrors on the 2nd child', function () {
+        beforeEach(function () {
+          scope.line = {name: 'linkes', value: ['bla:bla'], subErrors: [2], subWarnings: []};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns classes that does not include error', function () {
+          expect(element.isolateScope().classesForSubLine(1)).toContain('error');
+          expect(element.isolateScope().classesForSubLine(1)).not.toContain('warning');
+        });
+      });
+    });
+
+    describe('scope.lineClasses', function () {
+      describe('when line has valid key, no warnings, and no errors', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'bar'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns classes that does not include error', function () {
+          expect(element.isolateScope().lineClasses()).not.toContain('error');
+          expect(element.isolateScope().lineClasses()).not.toContain('warning');
+        });
+      });
+
+      describe('when line has invalid key', function () {
+        beforeEach(function () {
+          scope.line = {name: 'blah', value: 'bar'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns classes that include error', function () {
+          expect(element.isolateScope().lineClasses()).toContain('error');
+          expect(element.isolateScope().lineClasses()).not.toContain('warning');
+        });
+      });
+
+      describe('when line has errors, but with valid keys', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'bar', hasErrors: true};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns classes that include error', function () {
+          expect(element.isolateScope().lineClasses()).toContain('error');
+          expect(element.isolateScope().lineClasses()).not.toContain('warning');
+        });
+      });
+
+      describe('when line has warnings', function () {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'bar', hasWarnings: true};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('returns classes that include the warning', function () {
+          expect(element.isolateScope().lineClasses()).toContain('warning');
+          expect(element.isolateScope().lineClasses()).not.toContain('error');
+        });
+      });
+    });
+
     describe('scope.keyLabelClasses', function () {
       describe('when line has valid key', function () {
         beforeEach(function () {

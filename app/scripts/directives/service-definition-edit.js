@@ -10,7 +10,8 @@
   function serviceDefinitionEdit($rootScope, $document, lodash, viewHelpers) {
     return {
       scope: {
-        sectionName: '='
+        sectionName: '=',
+        serviceDefinition: '='
       },
       restrict: 'E',
       replace: 'true',
@@ -33,6 +34,7 @@
             // since extends section should always have subkeys file & service, add it to the json if not present
             fixExtendsKeyStructure();
           }
+          interweaveWithErrors(scope.editableJson);
         };
 
         scope.transformToEditableJson = function (json) {
@@ -236,6 +238,48 @@
           var stringKeys = ['command', 'image', 'build', 'net', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'];
           return lodash.includes(stringKeys, skey);
         };
+
+        function interweaveWithErrors(editableJson) {
+          var currentKey,
+          count = 0;
+
+          lodash.forEach(scope.serviceDefinition, function(line) {
+            var key = line.lineKey;
+
+            if (lodash.isEmpty(key)) {
+              count += 1;
+            } else {
+              currentKey = key;
+              count = 0;
+            }
+
+            checkFor('Errors', line, count, key, currentKey);
+            checkFor('Warnings', line, count, key, currentKey);
+          });
+
+          function checkFor(type, line, count, key, currentKey) {
+            var collectionType = type.toLowerCase();
+            if (line[collectionType] && line[collectionType].length > 0) {
+              var lineWithErrors = {};
+              if (lodash.isEmpty(key)) {
+                lineWithErrors = lodash.findWhere(editableJson, { name: currentKey }) || {};
+                var s = 'sub' + type;
+                if (lineWithErrors[s]) {
+                  lineWithErrors[s].push(count);
+                } else {
+                  lineWithErrors[s] = [count];
+                }
+              } else {
+                lineWithErrors = lodash.findWhere(editableJson, { name: key });
+                if (!lineWithErrors) {
+                  lineWithErrors = lodash.findWhere(editableJson, { name: 'image' }) || {};
+                }
+                lineWithErrors['has' + type] = true;
+              }
+            }
+          }
+        }
+
 
         function initialize() {
           scope.transformToJson();

@@ -32,6 +32,34 @@
           return scope.line.name === 'image' ? 'active' : 'not-active';
         };
 
+        scope.classesForSubLine = function(i) {
+          var classes = [];
+          if (has('Error', i)) {
+            classes.push('error');
+          }
+          if (has('Warning', i)) {
+            classes.push('warning');
+          }
+          return classes;
+
+          function has(type, index) {
+            return lodash.contains(scope.line['sub' + type + 's'], index + 1);
+          }
+        };
+
+        scope.lineClasses = function() {
+          var classes = [];
+          if (!scope.isValidKey(scope.line.name)) {
+            classes.push('error');
+          } else if (scope.line.hasErrors) {
+            classes.push('error');
+          }
+          if (scope.line.hasWarnings) {
+            classes.push('warning');
+          }
+          return classes;
+        };
+
         scope.keyLabelClasses = function() {
           return scope.isValidKey(scope.line.name) ? 'label' : 'label error';
         };

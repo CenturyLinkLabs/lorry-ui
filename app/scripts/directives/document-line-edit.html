@@ -1,4 +1,4 @@
-<div class="line-edit">
+<div class="line-edit" ng-class="lineClasses()">
   <div ng-show="isImageOrBuild()">
     <!-- Show image/build key block -->
     <div class="radio-edit-group">
@@ -39,7 +39,7 @@
     </div>
     <div ng-show="hasMultipleItems()">
       <!-- Show multiple-value key block -->
-      <div ng-repeat="item in line.value track by $index">
+      <div ng-repeat="item in line.value track by $index" ng-class="classesForSubLine($index)">
         <div ng-class="keyLabelClasses()"><div ng-show="$index === 0">{{line.name}}</div></div>
         <input type='text' ng-class="markForDeletionClasses($index)" ng-if="line.name !== 'links'" ng-model="line.value[$index]" value='{{item}}' />
         <span ng-hide="true" ng-init="linkName = getLinkName(line.value[$index]); linkAlias = getLinkAlias(line.value[$index])" ></span>

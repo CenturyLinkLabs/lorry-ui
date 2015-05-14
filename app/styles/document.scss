@@ -76,7 +76,7 @@
 
   &.error {
     padding: 12px;
-    background-color: $orange;
+    background-color: $dark_red;
     color: $white;
   }
 
@@ -197,10 +197,6 @@
       @include border-box;
     }
 
-    .error {
-      color: red;
-    }
-
     .add-new-line {
 
       select {
@@ -227,6 +223,20 @@
 }
 
 .line-edit {
+  &.warning,
+  .warning {
+    input, select {
+      border: $orange 2px solid;
+    }
+  }
+
+  &.error,
+  .error {
+    input, select {
+      border: $dark_red 2px solid;
+    }
+  }
+
   .radio-edit-group {
     display: inline-block;
     height: 14px;
@@ -457,18 +467,18 @@
   }
 
   &.error {
-    background-color: $orange;
+    background-color: $dark_red;
     color: $white;
 
     .gutter{
-      background-color: $orange;
+      background-color: $dark_red;
       color: $white;
     }
 
 
     .line-text {
       background-image: image-url('document_line_error_bg.png');
-      background-color: $orange;
+      background-color: $dark_red;
       .service-key {
         color: $white;
       }

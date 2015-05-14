@@ -42,23 +42,92 @@ describe('Directive: serviceDefinitionEdit', function () {
       describe('when editableJson is populated', function () {
         beforeEach(function () {
           scope.sectionName = 'adapter';
-          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.serviceDefinition = [
+            {text:'agent:\n', lineKey:'agent', lineValue:'', lineNumber:8, errors:[], warnings:[]},
+            {text:'  build:\n', lineKey:'build', lineValue:'', lineNumber:9, errors:[{ line: 9, message: 'boom' }], warnings:[]},
+            {text:'  command:\n', lineKey:'command', lineValue:'', lineNumber:10, errors:[], warnings:[]},
+            {text:'  ports:\n', lineKey:'ports', lineValue:'', lineNumber:11, errors:[], warnings:[]},
+            {text:'   - 1111:2222\n', lineKey:'', lineValue:'1111:2222', lineNumber:12, errors:[{ line: 12 }], warnings:[]},
+            {text:'   - 3333:4444\n', lineKey:'', lineValue:'3333:4444', lineNumber:13, errors:[], warnings:[]},
+            {text:'   - 5555:6666\n', lineKey:'', lineValue:'5555:6666', lineNumber:14, errors:[{ line: 14 }], warnings:[{ line: 14 }]},
+            {text:'  links:\n', lineKey:'links', lineValue:'', lineNumber:15, errors:[], warnings:[{ line: 15 }]}
+          ];
+          element = compile('<service-definition-edit service-definition="serviceDefinition" section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
 
-          element.isolateScope().editableJson = [
+          var editableJson = [
             {name: 'build', value: 'foo'},
             {name: 'command', value: 'bar'},
-            {name: 'ports', value: ['1111:2222', '3333:4444']}
+            {name: 'ports', value: ['1111:2222', '3333:4444', '5555:6666']},
+            {name: 'links', value: ['foo:bar']},
+            {name: 'image', value: ''}
           ];
 
-          spyOn(element.isolateScope(), 'transformToYamlDocumentFragment');
-          spyOn(element.isolateScope(), 'transformToEditableJson');
+          element.isolateScope().editableJson = editableJson;
 
-          element.isolateScope().transformToJson();
+          spyOn(element.isolateScope(), 'transformToYamlDocumentFragment');
+          spyOn(element.isolateScope(), 'transformToEditableJson').and.returnValue(editableJson);
         });
 
         it('calls $scope.transformToYamlDocumentFragment', function () {
+          element.isolateScope().transformToJson();
           expect(element.isolateScope().transformToYamlDocumentFragment).toHaveBeenCalled();
+        });
+
+        it('attaches errors and warnings from the service definition lines', function() {
+          element.isolateScope().transformToJson();
+          var results = element.isolateScope().editableJson;
+          expect(results[0].name).toEqual('build');
+          expect(results[0].hasErrors).toEqual(true);
+          expect(results[0].hasWarnings).toBeFalsy();
+          expect(results[0].subErrors).toBeFalsy();
+          expect(results[0].subWarnings).toBeFalsy();
+
+          expect(results[1].name).toEqual('command');
+          expect(results[1].hasErrors).toBeFalsy();
+          expect(results[1].hasWarnings).toBeFalsy();
+          expect(results[1].subErrors).toBeFalsy();
+          expect(results[1].subWarnings).toBeFalsy();
+
+          expect(results[2].name).toEqual('ports');
+          expect(results[2].hasErrors).toBeFalsy();
+          expect(results[2].hasWarnings).toBeFalsy();
+          expect(results[2].subErrors).toEqual([1,3]);
+          expect(results[2].subWarnings).toEqual([3]);
+
+          expect(results[3].name).toEqual('links');
+          expect(results[3].hasErrors).toBeFalsy();
+          expect(results[3].hasWarnings).toEqual(true);
+          expect(results[3].subErrors).toBeFalsy();
+          expect(results[3].subWarnings).toBeFalsy();
+
+          expect(results[4].name).toEqual('image');
+          expect(results[4].hasErrors).toBeFalsy();
+        });
+
+        describe('when there is an error that is not accounted for', function() {
+          beforeEach(function() {
+            scope.serviceDefinition[0].errors = [ {line: 8} ];
+          });
+
+          it('places the error on the image', function() {
+            element.isolateScope().transformToJson();
+            var results = element.isolateScope().editableJson;
+
+            expect(results[4].hasErrors).toEqual(true);
+          });
+        });
+
+        describe('when editable JSON contains no image', function() {
+          beforeEach(function() {
+            element.isolateScope().editableJson = {};
+          });
+
+          it('does not blow up if for some unlikely reason an image does not exist', function() {
+            element.isolateScope().transformToJson();
+            var results = element.isolateScope().editableJson;
+            expect(results).toEqual({});
+          });
         });
       });
 
