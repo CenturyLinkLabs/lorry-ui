@@ -122,6 +122,18 @@ describe('Controller: DocumentImportCtrl', function () {
     });
   });
 
+  describe('$scope.dialogPaneLinkClasses', function () {
+    it('returns current when the argument matches the current dialogPane', function () {
+      scope.dialogOptions.dialogPane = 'pmx-paste';
+      expect(scope.dialogPaneLinkClasses('pmx-paste')).toBe('current');
+    });
+
+    it('does not return current when the argument does not match the current dialogPane', function () {
+      scope.dialogOptions.dialogPane = 'pmx-paste';
+      expect(scope.dialogPaneLinkClasses('pmx-upload')).not.toBe('current');
+    });
+  });
+
   describe('$scope.importYaml', function () {
     beforeEach(function () {
       scope.dialog = jasmine.createSpyObj('dialog', ['close']);

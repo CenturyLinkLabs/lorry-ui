@@ -143,6 +143,11 @@
         &:hover {
           color: $darker_grey;
         }
+
+        &.current {
+          color: $darker_grey;
+          text-decoration: none;
+        }
       }
     }
 

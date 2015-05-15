@@ -37,6 +37,12 @@
       $scope.dialogOptions.dialogPane = pane;
     };
 
+    $scope.dialogPaneLinkClasses = function (paneLink) {
+      if (paneLink === $scope.dialogOptions.dialogPane) {
+        return 'current';
+      }
+    };
+
     $scope.importYaml = function(docImport) {
       if (lodash.endsWith($scope.dialogOptions.dialogPane, 'paste')) {
         if (docImport && !lodash.isEmpty(docImport.raw)) {
