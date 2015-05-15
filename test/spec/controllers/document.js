@@ -33,6 +33,7 @@ describe('Controller: DocumentCtrl', function () {
     $httpBackend = _$httpBackend_;
 
     rootScope.markAsDeletedTracker = {};
+    rootScope.arrInstructions = {};
   }));
 
   describe('initialization', function () {
@@ -105,6 +106,32 @@ describe('Controller: DocumentCtrl', function () {
         scope.displayGist(uri);
         $httpBackend.flush();
         expect(scope.yamlDocument.raw).toEqual('raw gist content\n');
+      });
+
+      describe('and has special instructions markup', function(){
+        it('extracts the special instructions and stashes it into a root scoped object', function () {
+          remoteGistHandler.respond('INSTRUCTIONS:\n  foo: special instructions\nfoo: raw gist content\nbar: some other content');
+          scope.displayGist(uri);
+          $httpBackend.flush();
+          expect(scope.arrInstructions).toEqual({foo: 'special instructions'});
+          expect(scope.arrInstructions.foo).toEqual('special instructions');
+        });
+
+        it('removes the special instructions markup and sets yamlDocument.raw', function () {
+          remoteGistHandler.respond('INSTRUCTIONS:\n  foo: special instructions\nfoo: raw gist content\nbar: some other content');
+          scope.displayGist(uri);
+          $httpBackend.flush();
+          expect(scope.yamlDocument.raw).toContain('foo: raw gist content');
+        });
+
+        it('returns original yaml if special markup is bad', function () {
+          remoteGistHandler.respond('INSTRUCTIONS:\n@@@@bad markup@@@@\n  foo: special instructions\nfoo: raw gist content\nbar: some other content');
+          scope.displayGist(uri);
+          $httpBackend.flush();
+          expect(scope.arrInstructions).toEqual({});
+          expect(scope.yamlDocument.raw).toContain('foo: raw gist content');
+        });
+
       });
     });
 
