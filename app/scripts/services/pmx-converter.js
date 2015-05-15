@@ -21,7 +21,7 @@
       images = pmxJson.images;
       newJson = {};
       images.forEach(function (image) {
-        newJson[image.name] = imageToServiceDefinition(image);
+        newJson[image.name.replace(' ', '_')] = imageToServiceDefinition(image);
       });
 
       return jsyaml.safeDump(newJson);

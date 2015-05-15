@@ -23,6 +23,12 @@ describe('Service: PMXConverter', function () {
     expect(compose.bar).not.toBeNull();
   });
 
+  it('replaces spaces in the panamax image names with underscores', function () {
+    var pmx = '---\nimages:\n- name: foo bar\n  source: foo/bar\n';
+    var compose = jsyaml.safeLoad(PMXConverter.convert(pmx));
+    expect(compose.foo_bar).not.toBeNull();
+  });
+
   it('converts the panamax image source to service definition image attributes', function () {
     var pmx = '---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n';
     var compose = jsyaml.safeLoad(PMXConverter.convert(pmx));
