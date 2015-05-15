@@ -14,6 +14,7 @@
 
     $scope.doc = '';
     $scope.copyText = defaultCopyText;
+    $scope.copied = false;
 
     $scope.$watch('yamlDocument.json', function () {
       if (angular.isDefined($scope.yamlDocument)) {
@@ -55,9 +56,13 @@
     $scope.confirmCopy = function () {
       if ($scope.exportable()) {
         $scope.copyText = 'Copied!';
+        $scope.copied = true;
+
         $timeout(function () {
           $scope.copyText = defaultCopyText;
+          $scope.copied = false;
         }, 3000);
+
 
         // GA click tracking for save on first scratch block
         analyticsService.trackEvent('Save', 'clipboard', '');

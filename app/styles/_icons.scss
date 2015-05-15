@@ -27,6 +27,7 @@ $icons: (
   sad-face: 23,
   copy: 24,
   twitter: 25,
+  linkedin: 26,
   linked-in: 26,
   facebook: 27,
   link: 28,
@@ -50,6 +51,12 @@ $icons: (
   width: 10px;
   height: 10px;
   @include background-size(10px, 1000px);
+}
+
+@mixin icon-xlarge {
+  width: 25px;
+  height: 25px;
+  @include background-size(25px, 2500px);
 }
 
 @mixin icon-large {
@@ -96,6 +103,12 @@ $icons: (
     @include icon-base;
     @include icon-large;
     background-position: 0 -#{($position * 40)}px;
+  }
+
+  .icon-#{$icon}-xlarge {
+    @include icon-base;
+    @include icon-xlarge;
+    background-position: 0 -#{($position * 50)}px;
   }
 
   .icon-#{$icon}-for-button {

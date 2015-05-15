@@ -112,9 +112,26 @@ describe('Controller: DocumentExportCtrl', function () {
       });
 
       describe('$scope.confirmCopy', function () {
+        it('changes the value of copied to true', function () {
+          expect(scope.copied).toBeFalsy();
+          scope.confirmCopy();
+          expect(scope.copied).toBeTruthy();
+        });
+
+        it('sets copied to false after 3 seconds', function () {
+          scope.yamlDocument = {json: {foo: 'bar'}};
+          expect(scope.copied).toBeFalsy();
+          scope.confirmCopy();
+          expect(scope.copied).toBeTruthy();
+          $timeout.flush();
+          expect(scope.copied).toBeFalsy();
+        });
+
         it('confirms the copy action', function () {
+          expect(scope.copied).toBeFalsy();
           expect(scope.copyText).toEqual('Copy to Clipboard');
           scope.confirmCopy();
+          expect(scope.copied).toBeTruthy();
           expect(scope.copyText).toEqual('Copied!');
         });
 

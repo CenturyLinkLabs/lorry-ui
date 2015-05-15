@@ -513,50 +513,139 @@ main footer {
 }
 
 #documentExportPane {
+  overflow: hidden;
   position: relative;
   padding: 15px;
 
-  a.footer-link {
-    display: block;
+  .export-buttons {
     float: right;
-    line-height: 45px;
-    color: $dark_grey;
+    padding-left: 30px;
+    margin-top: 3px;
 
-    &:hover {
-      text-decoration: none;
-    }
-
-    &[disabled=disabled] {
-      opacity: .3;
-      &:hover {
-        text-decoration: underline;
-        cursor: not-allowed !important;
-      }
-    }
-  }
-
-  .button-negative {
-    &[disabled] {
-      background-color: $dark_red;
-      color: $white;
+    a.footer-link {
+      display: block;
+      float: right;
+      line-height: 45px;
+      color: $dark_grey;
 
       &:hover {
-        @include box-shadow(0, 0, 5px, rgba( $dark_red, 0.0 ));
-        cursor: not-allowed;
+        text-decoration: none;
       }
+
+      &[disabled=disabled] {
+        opacity: .3;
+        &:hover {
+          text-decoration: underline;
+          cursor: not-allowed !important;
+        }
+      }
+
+      &.copy {
+        cursor: pointer;
+        position: relative;
+        line-height: 16px;
+        margin-top: 13px;
+        outline: none;
+
+        &:before, &:after {
+          content: '';
+          width: 20px;
+          height: 20px;
+          border-radius: 10px;
+          position: absolute;
+          display: block;
+          left: -28px;
+          top: -2px;
+        }
+        &:before {
+          background: #AAAAAA;
+        }
+        &:after {
+          top: 2px;
+          left: -24px;
+          height: 13px;
+          width: 13px;
+          background-size: 13px 1300px;
+          background-position: 0 -130px;
+          @extend .icon-checkmark;
+          @include icon-white;
+        }
+        &.copied:before {
+          background: #91B748;
+        }
+      }
+    }
+
+    .button-negative {
+      &[disabled] {
+        background-color: $dark_red;
+        color: $white;
+
+        &:hover {
+          @include box-shadow(0, 0, 5px, rgba( $dark_red, 0.0 ));
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .button-primary,
+    .button-error,
+    .button-negative {
+      float: right;
+      margin-left: 15px;
+    }
+
+    .button-secondary {
+      float: right;
+      margin-left: 15px;
     }
   }
 
-  .button-primary,
-  .button-error,
-  .button-negative {
+  .addthis-icons {
     float: right;
-    margin-left: 15px;
-  }
+    > span, > span + div {
+      display: inline-block !important;
+    }
+    > span {
+      color: #666;
+      position: relative;
+      top: -9px;
+    }
+    padding: 8px 15px 8px 8px;
+    border-right: 1px solid #ccc;
+    margin: 0 20px 0 0;
+    a[class*=at-svc] {
+      float: left;
+      position: relative;
+      &:after {
+        height: 25px;
+        width: 25px;
+        content: '';
+        display: block;
+        top: 5px;
+        left: 5px;
+        position: absolute;
+        cursor: pointer;
+      }
+    }
 
-  .button-secondary {
-    float: right;
-    margin-left: 15px;
+    $sharing-icons: (facebook, twitter, linkedin, google_plus);
+    @each $icon in $sharing-icons {
+      a[class*=#{$icon}]:after {
+        @extend .icon-#{$icon}-xlarge;
+        @include icon-light-grey;
+      }
+      a[class*=#{$icon}]:hover:after {
+        @include icon-grey;
+      }
+    }
+    .at-circular {
+      background-color: transparent;
+    }
+
+    span[class*=aticon] {
+      display: none;
+    }
   }
 }
 
@@ -644,7 +733,7 @@ main footer {
   #samples {
     width: 855px;
     margin: 0 auto;
-    padding-top: 20px;
+    padding-top: 25px;
     overflow: hidden;
 
     .button-secondary {
@@ -685,6 +774,5 @@ main footer {
       }
     }
   }
-
 }
 
