@@ -122,6 +122,45 @@ describe('Controller: DocumentImportCtrl', function () {
     });
   });
 
+  describe('$scope.disableImport', function () {
+    it('returns true if on a paste panel without content in the model', function () {
+      scope.setDialogPane('paste');
+      scope.docImport = {};
+      expect(scope.disableImport()).toBe(true);
+    });
+
+    it('returns false if on a paste panel with content in the model', function () {
+      scope.setDialogPane('paste');
+      scope.docImport = { raw: 'stuff' };
+      expect(scope.disableImport()).toBe(false);
+    });
+
+    it('returns true if on a paste panel but with a file selected in the upload panel', function () {
+      scope.setDialogPane('paste');
+      scope.docImport = {};
+      scope.importFileName = 'filename';
+      expect(scope.disableImport()).toBe(true);
+    });
+
+    it('returns true if on an upload panel without a file selected', function () {
+      scope.setDialogPane('pmx-upload');
+      scope.importFileName = '';
+      expect(scope.disableImport()).toBe(true);
+    });
+
+    it('returns false if on an upload panel with a file selected', function () {
+      scope.setDialogPane('pmx-upload');
+      scope.importFileName = 'filename';
+      expect(scope.disableImport()).toBe(false);
+    });
+
+    it('returns true if on an upload panel but with content in the model from the paste panel', function () {
+      scope.setDialogPane('pmx-upload');
+      scope.docImport = { raw: 'stuff' };
+      expect(scope.disableImport()).toBe(true);
+    });
+  });
+
   describe('$scope.dialogPaneLinkClasses', function () {
     it('returns current when the argument matches the current dialogPane', function () {
       scope.dialogOptions.dialogPane = 'pmx-paste';

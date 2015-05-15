@@ -5,9 +5,9 @@
     .module('lorryApp')
     .controller('DocumentImportCtrl', DocumentImportCtrl);
 
-  DocumentImportCtrl.$inject = ['$log', '$scope', '$http', '$location', 'lodash', 'ngDialog', 'PMXConverter', 'analyticsService'];
+  DocumentImportCtrl.$inject = ['$scope', '$location', 'lodash', 'ngDialog', 'PMXConverter', 'analyticsService'];
 
-  function DocumentImportCtrl($log, $scope, $http, $location, lodash, ngDialog, PMXConverter, analyticsService) {
+  function DocumentImportCtrl($scope, $location, lodash, ngDialog, PMXConverter, analyticsService) {
     var self = this;
 
     $scope.dialogOptions = {};
@@ -35,6 +35,13 @@
 
     $scope.setDialogPane = function (pane) {
       $scope.dialogOptions.dialogPane = pane;
+    };
+
+    $scope.disableImport = function () {
+      // if on the paste pane without content OR
+      //    on the file upload pane with no file selected
+      return !!((lodash.endsWith($scope.dialogOptions.dialogPane, 'paste') && lodash.isEmpty($scope.docImport.raw)) ||
+      (lodash.endsWith($scope.dialogOptions.dialogPane, 'upload') && lodash.isEmpty($scope.importFileName)));
     };
 
     $scope.dialogPaneLinkClasses = function (paneLink) {

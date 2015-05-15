@@ -47,10 +47,10 @@
   </div>
 </div>
 <div class="dialog-footer">
-  <button class="button-primary" ng-click="importYaml(docImport)" ng-show="dialogOptions.dialogTab === 'compose'">
+  <button class="button-primary" ng-click="importYaml(docImport)" ng-show="dialogOptions.dialogTab === 'compose'" ng-disabled="disableImport()">
     Import Compose YAML
   </button>
-  <button class="button-primary" ng-click="importYaml(docImport)" ng-show="dialogOptions.dialogTab === 'pmx'">
+  <button class="button-primary" ng-click="importYaml(docImport)" ng-show="dialogOptions.dialogTab === 'pmx'" ng-disabled="disableImport()">
     Import PMX Template
   </button>
   <button class="button-secondary" ng-click="closeThisDialog()">
