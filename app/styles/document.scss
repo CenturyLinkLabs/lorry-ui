@@ -644,7 +644,8 @@ main footer {
   #samples {
     width: 855px;
     margin: 0 auto;
-    overflow: visible;
+    padding-top: 20px;
+    overflow: hidden;
 
     .button-secondary {
       float: left;
