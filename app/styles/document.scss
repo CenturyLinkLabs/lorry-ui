@@ -733,8 +733,7 @@ main footer {
   #samples {
     width: 855px;
     margin: 0 auto;
-    padding-top: 25px;
-    overflow: hidden;
+    @include clearfix;
 
     .button-secondary {
       float: left;

@@ -22,3 +22,14 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
+
+@mixin clearfix {
+  &:after {
+    clear: both;
+    content: ' ';
+    display: block;
+    height: 0;
+    font-size: 0;
+    visibility: hidden;
+  }
+}

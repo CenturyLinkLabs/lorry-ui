@@ -19,12 +19,32 @@
     <div><hr></div>
   </div>
 
-  <div id="samples" class="clear">
-    <a class="button-secondary" href="" ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/d93e02fc74d16e9952ef/raw/9a3b91710b176017e1aa4f3776ca44c632fed702/drupal_postgres.yml')">Drupal + PostgreSQL</a>
-    <a class="button-secondary" href="" ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/42528d0b4cc28f01df2d/raw/46fa899a08dad1f548216ead3e20cfebee1b5f06/mediawiki.yml')">MediaWiki</a>
-    <a class="button-secondary" href="" ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/152ade877718ad1b1c20/raw/908afa94a85328d6edad3c6ef3dce6fa37deb3e7/gitlab_postgres_redis.yml')">GitLab</a>
-    <a class="button-secondary" href="" ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/a1028e46962408751d75/raw/3672956889230c42a03f5d87e533329ca86fcb1e/wordpress_mysql.yml')">WordPress + MySQL</a>
-    <a class="button-secondary" href="" ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/5864eb2adccf5bde64cb/raw/cdd113e7712903460da09da58ce18b2805f1e1e3/broken_yml.yml')">Compose YAML<br>with errors</a>
+  <div id="samples">
+    <a class="button-secondary titip-bottom titip-default titip-wrapped"
+       href=""
+       ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/d93e02fc74d16e9952ef/raw/9a3b91710b176017e1aa4f3776ca44c632fed702/drupal_postgres.yml')">Drupal + PostgreSQL
+       <span class="titip-content">An example demonstrating a two service app leveraging links, exposed ports and environment variables.</span>
+    </a>
+    <a class="button-secondary titip-bottom titip-default titip-wrapped"
+       href=""
+       ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/42528d0b4cc28f01df2d/raw/46fa899a08dad1f548216ead3e20cfebee1b5f06/mediawiki.yml')">MediaWiki
+       <span class="titip-content">An example demonstrating a two service app leveraging volume mounts.</span>
+    </a>
+    <a class="button-secondary titip-bottom titip-default titip-wrapped"
+       href=""
+       ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/152ade877718ad1b1c20/raw/908afa94a85328d6edad3c6ef3dce6fa37deb3e7/gitlab_postgres_redis.yml')">GitLab
+       <span class="titip-content">An example demonstrating a 3 service app leveraging linking and link aliasing.</span>
+    </a>
+    <a class="button-secondary titip-bottom titip-default titip-wrapped"
+       href=""
+       ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/a1028e46962408751d75/raw/3672956889230c42a03f5d87e533329ca86fcb1e/wordpress_mysql.yml')">WordPress + MySQL
+       <span class="titip-content">An example demonstrating a 2 service app with linking , DNS, hostname and resource limits.</span>
+    </a>
+    <a class="button-secondary titip-bottom titip-default titip-wrapped"
+       href=""
+       ng-click="displayGist('https://gist.githubusercontent.com/ctl-labs/5864eb2adccf5bde64cb/raw/cdd113e7712903460da09da58ce18b2805f1e1e3/broken_yml.yml')">Compose YAML<br>with errors
+       <span class="titip-content">Use Lorry to to fix this broken YAML!</span>
+    </a>
   </div>
 
 </div>
