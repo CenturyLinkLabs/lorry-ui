@@ -43,36 +43,6 @@ describe('Controller: DocumentCtrl', function () {
       spyOn(scope, 'setNewSession');
     });
 
-    describe('when newSession is true in the querystring', function () {
-      it('starts a new session', function () {
-        loc.search({newSession: true});
-        DocumentCtrl.initialize();
-        expect(scope.setNewSession).toHaveBeenCalled();
-      });
-    });
-
-    describe('when newSession is false in the querystring', function () {
-      it('does not start a new session', function () {
-        loc.search({newSession: false});
-        DocumentCtrl.initialize();
-        expect(scope.setNewSession).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('when startImport is in the querystring', function () {
-      it('adds a scope variable', function () {
-        loc.search({startImport: 'compose'});
-        DocumentCtrl.initialize();
-        expect(scope.startImport).toEqual('compose');
-      });
-
-      it('starts a new session', function () {
-        loc.search({startImport: 'compose'});
-        DocumentCtrl.initialize();
-        expect(scope.setNewSession).toHaveBeenCalled();
-      });
-    });
-
     describe('when a gist url is not in the querystring', function () {
       beforeEach(function () {
         spyOn(scope, 'displayGist');
@@ -295,15 +265,13 @@ describe('Controller: DocumentCtrl', function () {
   });
 
   describe('DocumentCtrl.reset', function () {
-    it('destroys the scope', function () {
-      spyOn(scope, '$destroy');
+    it('deletes the yamlDocument from scope', function () {
       DocumentCtrl.reset();
-      expect(scope.$destroy).toHaveBeenCalled();
+      expect(scope.yamlDocument).toBeUndefined();
     });
-
-    it('redirects to the home page', function () {
+    it('deletes the serviceDefinitions from scope', function () {
       DocumentCtrl.reset();
-      expect(win.location.href).toEqual('/');
+      expect(scope.yamlDocument).toBeUndefined();
     });
   });
 

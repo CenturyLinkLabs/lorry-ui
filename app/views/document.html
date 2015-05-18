@@ -1,5 +1,5 @@
 <!--Screen for the adventure flow only when we have a new session-->
-<div ng-if="isNewSession()" id="homeAdventurePane" ng-include="'views/home.html'"></div>
+<div ng-show="isNewSession()" id="homeAdventurePane" ng-include="'views/home.html'" ng-controller="DocumentImportCtrl"></div>
 
 <!--Screen for the normal flow-->
 <div ng-if="!isNewSession()" >
