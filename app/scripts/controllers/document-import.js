@@ -69,7 +69,8 @@
         // GA click tracking
         analyticsService.trackEvent('create', 'PMX', 'via paste');
       } else {
-        $scope.yamlDocument.raw = content;
+        // remove blank and comment lines
+        $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(content);
         // GA click tracking
         analyticsService.trackEvent('create', 'docker-compose.yml', 'via paste');
       }
@@ -84,7 +85,8 @@
             // GA click tracking
             analyticsService.trackEvent('create', 'PMX', 'via upload');
           } else {
-            $scope.yamlDocument.raw = e.target.result;
+            // remove blank and comment lines
+            $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(e.target.result);
             // GA click tracking
             analyticsService.trackEvent('create', 'docker-compose.yml', 'via upload');
           }

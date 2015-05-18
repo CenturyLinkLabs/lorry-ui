@@ -284,7 +284,7 @@
         $http.get(gistUri)
           .then(function (response) {
             $scope.setNewSession();
-            $scope.yamlDocument.raw = response.data;
+            $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(response.data);
           })
           .catch(function (response) {
             $scope.setNewSession();
@@ -292,6 +292,20 @@
             $scope.yamlDocument.raw = null;
           });
       }
+    };
+
+    $scope.removeBlankAndCommentLinesFromYaml = function (yamlContent) {
+      // by using jsyaml to safeLoad the yaml and then immediately safeDump the resulting json
+      // will remove the blank and comment lines from the yaml
+      // this is based on standard functionality offered by all YAML parsers/validators
+      var yaml;
+      try {
+        yaml = jsyaml.safeDump(jsyaml.safeLoad(yamlContent));
+      }
+      catch (YamlException) {
+        yaml = yamlContent;
+      }
+      return yaml;
     };
 
     this.initialize = function () {

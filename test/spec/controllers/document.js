@@ -131,7 +131,13 @@ describe('Controller: DocumentCtrl', function () {
       it('assigns the response to yamlDocument.raw', function () {
         scope.displayGist(uri);
         $httpBackend.flush();
-        expect(scope.yamlDocument.raw).toEqual('raw gist content');
+        expect(scope.yamlDocument.raw).toEqual('raw gist content\n');
+      });
+      it('removes any blank and comment lines and assigns the response to yamlDocument.raw', function () {
+        remoteGistHandler.respond('       \nraw gist content\n### comment here');
+        scope.displayGist(uri);
+        $httpBackend.flush();
+        expect(scope.yamlDocument.raw).toEqual('raw gist content\n');
       });
     });
 

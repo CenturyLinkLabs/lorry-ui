@@ -15,6 +15,7 @@ describe('Controller: DocumentImportCtrl', function () {
   beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _$location_, _PMXConverter_) {
     $rootScope.validateYaml = function(){}; // mock the parent scope validateYaml()
     $rootScope.yamlDocument = {}; // mock the parent scope yamlDocument
+    $rootScope.removeBlankAndCommentLinesFromYaml = function(){}; // mock the parent scope removeBlankAndCommentLinesFromYaml()
     scope = $rootScope.$new();
     PMXConverter = _PMXConverter_;
     $httpBackend = _$httpBackend_;
@@ -179,6 +180,7 @@ describe('Controller: DocumentImportCtrl', function () {
       spyOn(DocumentImportCtrl, 'importPastedContent');
       spyOn(scope, 'validateYaml');
       spyOn(scope, 'upload');
+      spyOn(scope, 'removeBlankAndCommentLinesFromYaml');
     });
 
     describe('when the dialogPane ends with "paste"', function () {
@@ -207,11 +209,27 @@ describe('Controller: DocumentImportCtrl', function () {
 
   describe('importPastedContent', function () {
     describe('when the import compose tab is displayed', function  () {
+      beforeEach(function () {
+        spyOn(scope, 'removeBlankAndCommentLinesFromYaml').and.returnValue('asdf');
+      });
       it('sets the value pasted into $scope.yamlDocument.raw', function () {
         var docImport = {raw: 'asdf'};
         scope.dialogOptions.dialogTab = 'compose';
         DocumentImportCtrl.importPastedContent(docImport.raw);
         expect(scope.yamlDocument.raw).toEqual(docImport.raw);
+      });
+      it('for compose yaml, removeBlankAndCommentLinesFromYaml is called', function () {
+        var composeContent = 'foo: file content';
+        scope.dialogOptions.dialogTab = 'compose';
+        DocumentImportCtrl.importPastedContent(composeContent);
+        expect(scope.removeBlankAndCommentLinesFromYaml).toHaveBeenCalledWith(composeContent);
+        expect(scope.yamlDocument.raw).toEqual('asdf');
+      });
+      it('for pmx template, removeBlankAndCommentLinesFromYaml is not called', function () {
+        var pmxContent = '---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n';
+        scope.dialogOptions.dialogTab = 'pmx';
+        DocumentImportCtrl.importPastedContent(pmxContent);
+        expect(scope.removeBlankAndCommentLinesFromYaml).not.toHaveBeenCalledWith();
       });
     });
 
@@ -234,10 +252,11 @@ describe('Controller: DocumentImportCtrl', function () {
       scope.files = [fakeFile];
       spyOn(window, 'FileReader').and.returnValue(reader);
       spyOn(scope, 'validateYaml');
-      scope.upload();
+      spyOn(scope, 'removeBlankAndCommentLinesFromYaml').and.returnValue('foo: file content');
     });
 
     it('sets the uploaded document contents into scope', function() {
+      scope.upload();
       eventListener.calls.mostRecent().args[1]({
         target : {
           result : 'foo: file content'
@@ -245,5 +264,27 @@ describe('Controller: DocumentImportCtrl', function () {
       });
       expect(scope.yamlDocument.raw).toEqual('foo: file content');
     });
+    it('for compose yaml, removeBlankAndCommentLinesFromYaml is called', function () {
+      scope.dialogOptions.dialogTab = 'compose';
+      scope.upload();
+      eventListener.calls.mostRecent().args[1]({
+        target : {
+          result : 'foo: file content'
+        }
+      });
+      expect(scope.removeBlankAndCommentLinesFromYaml).toHaveBeenCalledWith('foo: file content');
+      expect(scope.yamlDocument.raw).toEqual('foo: file content');
+    });
+    it('for pmx template, removeBlankAndCommentLinesFromYaml is not called', function () {
+      scope.dialogOptions.dialogTab = 'pmx';
+      scope.upload();
+      eventListener.calls.mostRecent().args[1]({
+        target : {
+          result : '---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n'
+        }
+      });
+      expect(scope.removeBlankAndCommentLinesFromYaml).not.toHaveBeenCalled();
+    });
+
   });
 });
