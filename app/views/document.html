@@ -2,12 +2,8 @@
 <div ng-if="isNewSession()" id="homeAdventurePane" ng-include="'views/home.html'"></div>
 
 <!--Screen for the normal flow-->
-<div ng-show="!isNewSession()" >
-  <div id="documentActionsPane" ng-controller="DocumentImportCtrl">
-    <div id="documentImportPane" ng-if="importable">
-      <a id="importComposeBtn" class="button-primary" href="" ng-click="showImportDialog('compose')">Import Compose YAML</a>
-      <a class="button-primary" href="" ng-click="showImportDialog('pmx')">Import PMX Template</a>
-    </div>
+<div ng-if="!isNewSession()" >
+  <div id="documentActionsPane">
     <div id="documentResetPane" ng-if="resettable">
       <a class="button-secondary" href="" ng-click="resetWorkspace()">Reset Workspace</a>
     </div>
