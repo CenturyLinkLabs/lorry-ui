@@ -5,16 +5,14 @@
     .module('lorryApp')
     .controller('DocumentCtrl', DocumentCtrl);
 
-  DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', '$window', 'lodash', 'jsyaml', 'ngDialog',
+  DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', 'lodash', 'jsyaml', 'ngDialog',
     'yamlValidator', 'serviceDefTransformer', '$timeout', 'keysService', 'analyticsService'];
 
-  function DocumentCtrl($rootScope, $scope, $log, $http, $location, $window, lodash, jsyaml, ngDialog,
+  function DocumentCtrl($rootScope, $scope, $log, $http, $location, lodash, jsyaml, ngDialog,
                         yamlValidator, serviceDefTransformer, $timeout, keysService, analyticsService) {
 
     var self = this;
 
-    $scope.resettable = false;
-    $scope.importable = true;
     $scope.editedServiceYamlDocumentJson = {};
     $scope.newServiceBlock = false;
     $rootScope.serviceNameList = [];
@@ -48,15 +46,11 @@
     };
 
     $scope.$watchCollection('yamlDocument.raw', function () {
-      var documentDefined = (angular.isDefined($scope.yamlDocument) &&
-                             angular.isDefined($scope.yamlDocument.raw) &&
-                             !$scope.yamlDocument.loadFailure);
-      if (documentDefined) {
+      if (angular.isDefined($scope.yamlDocument) &&
+          angular.isDefined($scope.yamlDocument.raw) &&
+          !$scope.yamlDocument.loadFailure) {
         self.failFastOrValidateYaml();
       }
-      $scope.resettable = documentDefined ||
-                          (angular.isDefined($scope.yamlDocument) && !!$scope.yamlDocument.loadFailure);
-      $scope.importable = !$scope.resettable;
     });
 
     this.reset = function () {

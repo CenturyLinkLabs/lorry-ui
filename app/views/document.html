@@ -4,10 +4,10 @@
 <!--Screen for the normal flow-->
 <div ng-if="!isNewSession()" >
   <div id="documentActionsPane">
-    <div id="documentResetPane" ng-if="resettable">
+    <div id="documentResetPane">
       <a class="button-secondary" href="" ng-click="resetWorkspace()">Reset Workspace</a>
     </div>
-    <document-alerts id="documentAlertsPane" ng-if="resettable"></document-alerts>
+    <document-alerts id="documentAlertsPane"></document-alerts>
   </div>
 
   <div id="documentPane" ng-init="getValidKeys()">

@@ -14,18 +14,15 @@ describe('Controller: DocumentCtrl', function () {
     timeout,
     keysService,
     loc,
-    $httpBackend,
-    win;
+    $httpBackend;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, $location, _$httpBackend_, _yamlValidator_, _jsyaml_, _ngDialog_, $timeout, _keysService_) {
     scope = $rootScope.$new();
     rootScope = $rootScope;
     scope.yamlDocument = {};
-    win = { location: { href: '' } };
     DocumentCtrl = $controller('DocumentCtrl', {
-      $scope: scope,
-      $window: win
+      $scope: scope
     });
     yamlValidator = _yamlValidator_;
     jsyaml = _jsyaml_;
@@ -271,7 +268,7 @@ describe('Controller: DocumentCtrl', function () {
     });
     it('deletes the serviceDefinitions from scope', function () {
       DocumentCtrl.reset();
-      expect(scope.yamlDocument).toBeUndefined();
+      expect(scope.serviceDefinitions).toBeUndefined();
     });
   });
 
@@ -305,69 +302,45 @@ describe('Controller: DocumentCtrl', function () {
 
   describe('yamlDocument.raw watcher', function () {
     beforeEach(function () {
-      spyOn(DocumentCtrl, 'validateYaml');
-      scope.resettable = false;
-      scope.importable = true;
-      scope.yamlDocument = {};
+      spyOn(DocumentCtrl, 'failFastOrValidateYaml');
+    });
+
+    describe('when $scope.yamlDocument.raw is defined and there are no load failures', function () {
+      beforeEach(function () {
+        scope.yamlDocument.raw = {};
+        scope.yamlDocument.loadFailure = false;
+        scope.$digest();
+      });
+
+      it('calls #failFastOrValidateYaml', function () {
+        expect(DocumentCtrl.failFastOrValidateYaml).toHaveBeenCalled();
+      });
     });
 
     describe('when $scope.yamlDocument.raw is undefined', function () {
       beforeEach(function () {
         scope.yamlDocument.raw = undefined;
+        scope.yamlDocument.loadFailure = false;
         scope.$digest();
       });
 
-      it('sets $scope.resettable false', function () {
-        expect(scope.resettable).toBe(false);
-      });
-
-      it('sets $scope.importable true', function () {
-        expect(scope.importable).toBe(true);
-      });
-
-      describe('and there are fatal loadFailure errors', function () {
-        beforeEach(function () {
-          scope.yamlDocument.loadFailure = true;
-        });
-
-        it('sets $scope.resettable false', function () {
-          expect(scope.resettable).toBe(false);
-        });
-
-        it('sets $scope.importable true', function () {
-          expect(scope.importable).toBe(true);
-        });
+      it('does not call #failFastOrValidateYaml', function () {
+        expect(DocumentCtrl.failFastOrValidateYaml).not.toHaveBeenCalled();
       });
     });
 
-    describe('when $scope.yamlDocument.raw is defined', function () {
+    describe('when there are fatal loadFailure errors', function () {
       beforeEach(function () {
-        scope.yamlDocument.raw = 'asdf';
+        scope.yamlDocument.raw = {};
+        scope.yamlDocument.loadFailure = true;
         scope.$digest();
       });
 
-      it('sets $scope.resettable true', function () {
-        expect(scope.resettable).toBe(true);
-      });
-
-      it('sets $scope.importable false', function () {
-        expect(scope.importable).toBe(false);
-      });
-
-      describe('and there are fatal loadFailure errors', function () {
-        beforeEach(function () {
-          scope.yamlDocument.loadFailure = true;
-        });
-
-        it('sets $scope.resettable false', function () {
-          expect(scope.resettable).toBe(true);
-        });
-
-        it('sets $scope.importable true', function () {
-          expect(scope.importable).toBe(false);
-        });
+      it('does not call #failFastOrValidateYaml', function () {
+        expect(DocumentCtrl.failFastOrValidateYaml).not.toHaveBeenCalled();
       });
     });
+
   });
 
   describe('$scope.serviceName', function () {
