@@ -177,6 +177,7 @@ describe('Controller: DocumentImportCtrl', function () {
   describe('$scope.importYaml', function () {
     beforeEach(function () {
       scope.dialog = jasmine.createSpyObj('dialog', ['close']);
+      scope.setNewSession = jasmine.createSpy('setNewSession');
       spyOn(DocumentImportCtrl, 'importPastedContent');
       spyOn(scope, 'validateYaml');
       spyOn(scope, 'upload');
@@ -204,6 +205,11 @@ describe('Controller: DocumentImportCtrl', function () {
     it('triggers the closing of the import dialog', function(){
       scope.importYaml();
       expect(scope.dialog.close).toHaveBeenCalled();
+    });
+
+    it('starts a new editing session', function () {
+      scope.importYaml();
+      expect(scope.setNewSession).toHaveBeenCalled();
     });
   });
 

@@ -5,16 +5,14 @@
     .module('lorryApp')
     .controller('DocumentCtrl', DocumentCtrl);
 
-  DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', '$window', 'lodash', 'jsyaml', 'ngDialog',
+  DocumentCtrl.$inject = ['$rootScope', '$scope', '$log', '$http', '$location', 'lodash', 'jsyaml', 'ngDialog',
     'yamlValidator', 'serviceDefTransformer', '$timeout', 'keysService', 'analyticsService'];
 
-  function DocumentCtrl($rootScope, $scope, $log, $http, $location, $window, lodash, jsyaml, ngDialog,
+  function DocumentCtrl($rootScope, $scope, $log, $http, $location, lodash, jsyaml, ngDialog,
                         yamlValidator, serviceDefTransformer, $timeout, keysService, analyticsService) {
 
     var self = this;
 
-    $scope.resettable = false;
-    $scope.importable = true;
     $scope.editedServiceYamlDocumentJson = {};
     $scope.newServiceBlock = false;
     $rootScope.serviceNameList = [];
@@ -48,20 +46,16 @@
     };
 
     $scope.$watchCollection('yamlDocument.raw', function () {
-      var documentDefined = (angular.isDefined($scope.yamlDocument) &&
-                             angular.isDefined($scope.yamlDocument.raw) &&
-                             !$scope.yamlDocument.loadFailure);
-      if (documentDefined) {
+      if (angular.isDefined($scope.yamlDocument) &&
+          angular.isDefined($scope.yamlDocument.raw) &&
+          !$scope.yamlDocument.loadFailure) {
         self.failFastOrValidateYaml();
       }
-      $scope.resettable = documentDefined ||
-                          (angular.isDefined($scope.yamlDocument) && !!$scope.yamlDocument.loadFailure);
-      $scope.importable = !$scope.resettable;
     });
 
     this.reset = function () {
-      $scope.$destroy();
-      $window.location.href = '/';
+      delete $scope.yamlDocument;
+      delete $scope.serviceDefinitions;
     };
 
     this.validateJson = function () {
@@ -309,16 +303,8 @@
     };
 
     this.initialize = function () {
-      var gistUri = $location.search().gist,
-        newSession = $location.search().newSession,
-        startImport = $location.search().startImport;
-      if (angular.isDefined(newSession) && newSession) {
-        $scope.setNewSession();
-      }
-      if (angular.isDefined(startImport)) {
-        $scope.setNewSession();
-        $scope.startImport = startImport;
-      } else if (angular.isDefined(gistUri)) {
+      var gistUri = $location.search().gist;
+        if (angular.isDefined(gistUri)) {
         $scope.displayGist(gistUri);
       }
     };

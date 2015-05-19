@@ -1,17 +1,13 @@
 <!--Screen for the adventure flow only when we have a new session-->
-<div ng-if="isNewSession()" id="homeAdventurePane" ng-include="'views/home.html'"></div>
+<div ng-show="isNewSession()" id="homeAdventurePane" ng-include="'views/home.html'" ng-controller="DocumentImportCtrl"></div>
 
 <!--Screen for the normal flow-->
-<div ng-show="!isNewSession()" >
-  <div id="documentActionsPane" ng-controller="DocumentImportCtrl">
-    <div id="documentImportPane" ng-if="importable">
-      <a id="importComposeBtn" class="button-primary" href="" ng-click="showImportDialog('compose')">Import Compose YAML</a>
-      <a class="button-primary" href="" ng-click="showImportDialog('pmx')">Import PMX Template</a>
-    </div>
-    <div id="documentResetPane" ng-if="resettable">
+<div ng-if="!isNewSession()" >
+  <div id="documentActionsPane">
+    <div id="documentResetPane">
       <a class="button-secondary" href="" ng-click="resetWorkspace()">Reset Workspace</a>
     </div>
-    <document-alerts id="documentAlertsPane" ng-if="resettable"></document-alerts>
+    <document-alerts id="documentAlertsPane"></document-alerts>
   </div>
 
   <div id="documentPane" ng-init="getValidKeys()">
