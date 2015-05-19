@@ -744,6 +744,10 @@ main footer {
       width: 155px;
       margin-right: 20px;
       @include border-box;
+
+      .titip-content {
+        margin-bottom: 20px;
+      }
     }
 
     .button-secondary:last-child {
