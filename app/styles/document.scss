@@ -232,7 +232,9 @@
 
   &.error,
   .error {
-    input, select {
+    input,
+    select,
+    input:focus {
       border: $dark_red 2px solid;
     }
   }
