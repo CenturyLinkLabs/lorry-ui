@@ -122,6 +122,7 @@ describe('Controller: DocumentCtrl', function () {
           scope.displayGist(uri);
           $httpBackend.flush();
           expect(scope.yamlDocument.raw).toContain('foo: raw gist content');
+          expect(scope.yamlDocument.raw).not.toContain('INSTRUCTIONS');
         });
 
         it('returns original yaml if special markup is bad', function () {
@@ -130,6 +131,18 @@ describe('Controller: DocumentCtrl', function () {
           $httpBackend.flush();
           expect(scope.arrInstructions).toEqual({});
           expect(scope.yamlDocument.raw).toContain('foo: raw gist content');
+        });
+
+        it('after workspace reset, extracts the special instructions and removes it from yaml', function () {
+          scope.arrInstructions.foo = 'old instructions'; // simulate document processed once
+          DocumentCtrl.reset();
+          scope.yamlDocument = {};  // simulate init
+          remoteGistHandler.respond('INSTRUCTIONS:\n  foo: new instructions\nfoo: raw gist content\nbar: some other content');
+          scope.displayGist(uri);
+          $httpBackend.flush();
+          expect(scope.arrInstructions).toEqual({foo: 'new instructions'});
+          expect(scope.yamlDocument.raw).toContain('foo: raw gist content');
+          expect(scope.yamlDocument.raw).not.toContain('INSTRUCTIONS');
         });
 
       });
@@ -318,6 +331,10 @@ describe('Controller: DocumentCtrl', function () {
     it('deletes the serviceDefinitions from scope', function () {
       DocumentCtrl.reset();
       expect(scope.serviceDefinitions).toBeUndefined();
+    });
+    it('resets the arrInstructions to empty from rootScope', function () {
+      DocumentCtrl.reset();
+      expect(scope.arrInstructions).toEqual({});
     });
   });
 

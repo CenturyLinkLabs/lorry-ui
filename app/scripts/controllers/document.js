@@ -48,6 +48,7 @@
     this.reset = function () {
       delete $scope.yamlDocument;
       delete $scope.serviceDefinitions;
+      $rootScope.arrInstructions = {};
     };
 
     $scope.$watchCollection('yamlDocument.raw', function () {
