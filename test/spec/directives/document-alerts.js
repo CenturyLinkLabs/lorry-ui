@@ -111,23 +111,44 @@ describe('Directive: documentAlerts', function () {
   });
 
   describe('when the document has no errors', function () {
-    beforeEach(function () {
-      element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
-      element = compile(element)(scope);
-      scope.$digest();
+    describe('but there are no serviceDefinitions (i.e. starting from scratch)', function () {
+      beforeEach(function () {
+        scope.serviceDefinitions = [];
+        element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
+
+      it('scope.dismissable value is undefined (and the dismiss link will not display)', function () {
+        expect(scope.dismissible).toBeUndefined();
+      });
+
+      it('does not populate a message to display', function () {
+        expect(scope.message).toBeUndefined();
+      });
     });
 
-    it('the valid class is added', function () {
-      expect(element.hasClass('valid')).toBeTruthy();
+    describe('and there are serviceDefinitions', function () {
+      beforeEach(function () {
+        scope.serviceDefinitions = ['not-empty'];
+        element = angular.element('<document-alerts id="documentAlertsPane"></document-alerts>');
+        element = compile(element)(scope);
+        scope.$digest();
+      });
+
+      it('the valid class is added', function () {
+        expect(element.hasClass('valid')).toBeTruthy();
+      });
+
+      it('the warning class is removed', function () {
+        expect(element.hasClass('warning')).toBeFalsy();
+      });
+
+      it('the error class is removed', function () {
+        expect(element.hasClass('error')).toBeFalsy();
+      });
     });
 
-    it('the warning class is removed', function () {
-      expect(element.hasClass('warning')).toBeFalsy();
-    });
-
-    it('the error class is removed', function () {
-      expect(element.hasClass('error')).toBeFalsy();
-    });
   });
 
   describe('#scope.dismiss', function () {
