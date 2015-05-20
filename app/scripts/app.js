@@ -13,7 +13,8 @@
       'config',
       'directive-templates',
       'angular.filter',
-      'ngClipboard'
+      'ngClipboard',
+      'konami'
     ])
     .config(configure)
     .service('cfgData', cfgData);

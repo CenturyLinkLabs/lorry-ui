@@ -54,13 +54,13 @@
     </script>
     <!-- Google Analytics snippet -->
   </head>
-  <body ng-app="lorryApp" ng-controller="MainCtrl">
+  <body konami-code="swoosh()" ng-app="lorryApp" ng-controller="MainCtrl">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <header>
-      <div id="lorryLogo" ng-click="resetWorkspace()" ng-dblclick="swoosh()"><h1>Lorry.io</h1></div>
+      <div id="lorryLogo" ng-click="resetWorkspace()"><h1>Lorry.io</h1></div>
       <nav class="ctl">
         <ul>
           <li><a href="">About</a>
@@ -144,6 +144,7 @@
     <script src="bower_components/js-yaml/dist/js-yaml.js"></script>
     <script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
     <script src="bower_components/ng-clip/src/ngClip.js"></script>
+    <script src="bower_components/angular-konami/angular-konami.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

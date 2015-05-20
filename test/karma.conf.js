@@ -32,6 +32,7 @@ module.exports = function(config) {
       'bower_components/js-yaml/dist/js-yaml.js',
       'bower_components/zeroclipboard/dist/ZeroClipboard.js',
       'bower_components/ng-clip/src/ngClip.js',
+      'bower_components/angular-konami/angular-konami.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
