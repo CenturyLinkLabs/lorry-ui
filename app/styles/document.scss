@@ -230,6 +230,10 @@
     }
   }
 
+  .label.error {
+    color: $dark_red;
+  }
+
   &.error,
   .error {
     input,
