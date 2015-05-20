@@ -1,4 +1,7 @@
 <div class="line" ng-class="lineClasses()">
+  <div class="special-instr" ng-if="hasSpecialInstructions()">
+    <p>{{getSpecialInstructions()}}</p>
+  </div>
   <div class="imagelayers titip-right titip-default titip-large"
        ng-if="isImageLine()"
        ng-click="showImageLayers()">

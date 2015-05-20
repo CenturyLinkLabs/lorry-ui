@@ -246,4 +246,66 @@ describe('Directive: documentLine', function () {
       expect(scope.tooltip()).toEqual('Inspect foo/bar:oldest with ImageLayers.io');
     });
   });
-});
+
+  describe('scope.hasSpecialInstructions', function () {
+    beforeEach(function () {
+      scope.line = { text: 'foo: bar', lineKey: 'foo', lineNumber: 1, errors: [] };
+      element = angular.element('<document-line></document-line>');
+      element = compile(element)(scope);
+      scope.$digest();
+    });
+
+    describe('when line has special instructions markup', function () {
+      it('returns true', function () {
+        scope.arrInstructions = {foo: 'special instructions'};
+        expect(scope.hasSpecialInstructions()).toBeTruthy();
+      });
+    });
+
+    describe('when line does not have special instructions markup', function () {
+      it('returns false', function () {
+        scope.arrInstructions = {};
+        expect(scope.hasSpecialInstructions()).toBeFalsy();
+      });
+    });
+
+    describe('when line has special instructions markup with mismatched key', function () {
+      it('returns false', function () {
+        scope.arrInstructions = {other: 'special instructions'};
+        expect(scope.hasSpecialInstructions()).toBeFalsy();
+      });
+    });
+
+  });
+
+  describe('scope.getSpecialInstructions', function () {
+    beforeEach(function () {
+      scope.line = {text: 'foo: bar', lineKey: 'foo', lineNumber: 1, errors: []};
+      element = angular.element('<document-line></document-line>');
+      element = compile(element)(scope);
+      scope.$digest();
+    });
+
+    describe('when line has special instructions markup', function () {
+      it('returns instructions', function () {
+        scope.arrInstructions = {foo: 'special instructions'};
+        expect(scope.getSpecialInstructions()).toBe('special instructions');
+      });
+    });
+
+    describe('when line does not have special instructions markup', function () {
+      it('returns undefined', function () {
+        scope.arrInstructions = {};
+        expect(scope.getSpecialInstructions()).toBeUndefined();
+      });
+    });
+
+    describe('when line has special instructions markup with mismatched key', function () {
+      it('returns false', function () {
+        scope.arrInstructions = {other: 'special instructions'};
+        expect(scope.getSpecialInstructions()).toBeUndefined();
+      });
+    });
+  });
+
+  });

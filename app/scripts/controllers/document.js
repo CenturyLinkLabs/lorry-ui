@@ -17,6 +17,7 @@
     $scope.newServiceBlock = false;
     $rootScope.serviceNameList = [];
     $rootScope.markAsDeletedTracker = {};
+    $rootScope.arrInstructions = {};
 
     $scope.hasErrors = function () {
       return lodash.any($scope.yamlDocument.errors);
@@ -278,7 +279,10 @@
         $http.get(gistUri)
           .then(function (response) {
             $scope.setNewSession();
-            $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(response.data);
+            // extract special instructions markup before loading raw yaml
+            var yaml = self.extractSpecialInstructionsMarkup(response.data);
+            // remove blank and comment lines
+            $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(yaml);
           })
           .catch(function (response) {
             $scope.setNewSession();
@@ -298,6 +302,31 @@
       }
       catch (YamlException) {
         yaml = yamlContent;
+      }
+      return yaml;
+    };
+
+    this.extractSpecialInstructionsMarkup = function (rawYaml) {
+      var yaml = rawYaml;
+      var markupKey = 'INSTRUCTIONS';
+      if (lodash.isEmpty($rootScope.arrInstructions)) {
+        try {
+          var json = jsyaml.safeLoad(rawYaml);
+          // extract special markup
+          var markup = json[markupKey];
+          if (angular.isDefined(markup) && markup) {
+            angular.forEach(markup, function (v, k) {
+              $rootScope.arrInstructions[k] = v;
+            });
+            // remove special markup
+            delete json[markupKey];
+            // convert back to yaml
+            yaml = jsyaml.safeDump(json);
+          }
+        }
+        catch (YamlException) {
+          yaml = rawYaml;
+        }
       }
       return yaml;
     };

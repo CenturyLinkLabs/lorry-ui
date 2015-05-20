@@ -105,6 +105,18 @@
           return 'Inspect ' + imageName() + ' with ImageLayers.io';
         };
 
+        scope.hasSpecialInstructions = function () {
+          if (scope.arrInstructions && scope.line.lineKey) {
+            return lodash.has(scope.arrInstructions, scope.line.lineKey);
+          }
+        };
+
+        scope.getSpecialInstructions = function () {
+          if (scope.arrInstructions && scope.line.lineKey) {
+            return scope.arrInstructions[scope.line.lineKey];
+          }
+        };
+
         initialize();
 
       },
