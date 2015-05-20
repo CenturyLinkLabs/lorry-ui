@@ -130,10 +130,9 @@ main {
       margin-bottom: 30px;
     }
 
-    h4 {
-      color: $light_grey;
-      text-align: center;
-      margin-bottom: 40px;
+    .button-primary {
+      margin: 0 auto;
+      width: 300px;
     }
   }
 }
