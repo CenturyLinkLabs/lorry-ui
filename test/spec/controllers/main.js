@@ -16,4 +16,13 @@ describe('Controller: MainCtrl', function () {
     });
   }));
 
+
+  describe('$scope.resetWorkspace', function () {
+    it ('broadcasts the document.reset event', function () {
+      spyOn(scope, '$broadcast');
+      scope.resetWorkspace();
+      expect(scope.$broadcast).toHaveBeenCalledWith('document.reset');
+    });
+  });
+
 });

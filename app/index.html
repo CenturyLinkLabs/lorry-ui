@@ -54,13 +54,13 @@
     </script>
     <!-- Google Analytics snippet -->
   </head>
-  <body ng-app="lorryApp">
+  <body ng-app="lorryApp" ng-controller="MainCtrl">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <header>
-      <div id="lorryLogo" ng-controller="MainCtrl" ng-dblclick="swoosh()"><h1>Lorry.io</h1></div>
+      <div id="lorryLogo" ng-click="resetWorkspace()" ng-dblclick="swoosh()"><h1>Lorry.io</h1></div>
       <nav class="ctl">
         <ul>
           <li><a href="">About</a>
@@ -124,7 +124,7 @@
       <div id="ctlLogo">CenturyLink</div>
     </header>
 
-    <main ng-controller="MainCtrl">
+    <main>
       <div ng-include="'views/document.html'" ng-controller="DocumentCtrl"></div>
     </main>
     <footer>

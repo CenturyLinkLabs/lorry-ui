@@ -47,6 +47,10 @@ header {
     text-indent: 100%;
     white-space: nowrap;
     overflow: hidden;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   #ctlLogo {

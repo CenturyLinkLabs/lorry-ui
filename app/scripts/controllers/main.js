@@ -13,6 +13,10 @@
       viewHelpers.animateLogo();
     };
 
+    $scope.resetWorkspace = function () {
+      $scope.$broadcast('document.reset');
+    };
+
   }
 
 })();

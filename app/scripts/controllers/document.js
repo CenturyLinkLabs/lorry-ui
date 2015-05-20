@@ -23,6 +23,12 @@
       return lodash.any($scope.yamlDocument.errors);
     };
 
+    $scope.$on('document.reset', function () {
+      if (angular.isDefined($scope.yamlDocument)) {
+        $scope.resetWorkspace();
+      }
+    });
+
     $scope.resetWorkspace = function () {
 
       $scope.confirmMessage = 'Are you sure you want to reset the workspace?';
@@ -39,11 +45,9 @@
         });
     };
 
-    $scope.deleteService = function (serviceName) {
-      if ($scope.yamlDocument.json.hasOwnProperty(serviceName)) {
-        delete $scope.yamlDocument.json[serviceName];
-        self.validateJson();
-      }
+    this.reset = function () {
+      delete $scope.yamlDocument;
+      delete $scope.serviceDefinitions;
     };
 
     $scope.$watchCollection('yamlDocument.raw', function () {
@@ -53,11 +57,6 @@
         self.failFastOrValidateYaml();
       }
     });
-
-    this.reset = function () {
-      delete $scope.yamlDocument;
-      delete $scope.serviceDefinitions;
-    };
 
     this.validateJson = function () {
       if (lodash.isEmpty($scope.yamlDocument.json)) {
@@ -122,6 +121,13 @@
 
     $scope.serviceName = function (srvcDef) {
       return srvcDef[0].text.split(':')[0];
+    };
+
+    $scope.deleteService = function (serviceName) {
+      if ($scope.yamlDocument.json.hasOwnProperty(serviceName)) {
+        delete $scope.yamlDocument.json[serviceName];
+        self.validateJson();
+      }
     };
 
     $scope.editService = function (serviceName) {

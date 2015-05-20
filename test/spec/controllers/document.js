@@ -288,6 +288,28 @@ describe('Controller: DocumentCtrl', function () {
 
   });
 
+  describe('document.reset event handler', function () {
+    beforeEach(function () {
+      spyOn(scope, 'resetWorkspace');
+    });
+
+    describe('when scope.yamlDocument has been defined (i.e. not on the home page)', function () {
+      it('calls reset to reset the document', function () {
+        scope.yamlDocument = {};
+        rootScope.$broadcast('document.reset');
+        expect(scope.resetWorkspace).toHaveBeenCalled();
+      });
+    });
+
+    describe('when scope.yamlDocument has not been defined', function () {
+      it('does not call reset', function () {
+        scope.yamlDocument = undefined;
+        rootScope.$broadcast('document.reset');
+        expect(scope.resetWorkspace).not.toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('DocumentCtrl.reset', function () {
     it('deletes the yamlDocument from scope', function () {
       DocumentCtrl.reset();
