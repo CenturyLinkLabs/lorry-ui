@@ -3,9 +3,9 @@
     <div class="gutter">&nbsp;</div>
     <div class="section">
       <input name="sectionname" class="section-name" ng-model="newSectionName" type="text" placeholder="sectionname"
-             required ng-pattern="/^[a-zA-Z0-9-_]*$/" ng-trim="false" unique-service-name />
+             required ng-pattern="/^[a-zA-Z0-9]*$/" ng-trim="false" unique-service-name />
       <span class="error" ng-show="editForm.sectionname.$dirty && editForm.sectionname.$invalid">Error:
-        <span ng-show="editForm.sectionname.$error.pattern">Valid characters are A-Z a-z 0-9 _ -</span>
+        <span ng-show="editForm.sectionname.$error.pattern">Valid characters are [a-zA-Z0-9]</span>
         <span ng-show="editForm.sectionname.$error.required">Service name is required</span>
         <span ng-show="editForm.sectionname.$error.uniqueservicename">Service name already exists</span>
       </span>
