@@ -152,7 +152,9 @@
         scope.getHelpTextForKey = function() {
           var helpText = '';
           if (!lodash.isEmpty($rootScope.keysHelpText)) {
-            var node = lodash.find($rootScope.keysHelpText, scope.line.name);
+            var node = lodash.find($rootScope.keysHelpText, function(l) {
+              return (scope.line.name in l);
+            });
             helpText = node ? node[scope.line.name] : 'Key is invalid.';
           }
           return helpText;

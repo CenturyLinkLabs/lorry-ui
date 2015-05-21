@@ -722,7 +722,7 @@ describe('Directive: documentLineEdit', function () {
     describe('scope.getHelpTextForKey', function () {
       describe('when $rootScope.keysHelpText has help text', function () {
         beforeEach(function () {
-          rootScope.keysHelpText = [{'image': 'image help'}, {'command': 'command help'}];
+          rootScope.keysHelpText = [{'domainname': ''}, {'image': 'image help'}, {'command': 'command help'}];
           scope.line = {name: 'image', value: 'foo:bar'};
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
@@ -734,6 +734,18 @@ describe('Directive: documentLineEdit', function () {
 
         it('adds the tooltip to the info div', function () {
           expect(element.find('.info .titip-content').html()).toEqual(element.isolateScope().getHelpTextForKey());
+        });
+
+        describe('when key is valid, but has no associated text', function() {
+          beforeEach(function () {
+            scope.line = {name: 'domainname', value: 'foo:bar'};
+            element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+            scope.$digest();
+          });
+
+          it('sets the help text to blank', function () {
+            expect(element.isolateScope().getHelpTextForKey()).toEqual('');
+          });
         });
 
         describe('when key is invalid', function () {
