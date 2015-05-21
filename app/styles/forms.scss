@@ -42,9 +42,12 @@ input[type='number'] {
   padding-right: 5px;
 }
 
+span.error {
+  color: $dark_red;
+}
 input[type='text'] {
   &.ng-dirty.ng-invalid {
-    border: 2px solid red;
+    border: 2px solid $dark_red;
   }
 }
 
