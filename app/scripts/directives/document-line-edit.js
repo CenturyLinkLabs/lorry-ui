@@ -33,7 +33,7 @@
         };
 
         scope.classesForSubLine = function(i) {
-          var classes = [];
+          var classes = ['sub-value'];
           if (has('Error', i)) {
             classes.push('error');
           }
@@ -49,6 +49,7 @@
 
         scope.lineClasses = function() {
           var classes = [];
+          classes.push(scope.hasMultipleItems() ? 'multi-value' : 'single-value');
           if (!scope.isValidKey(scope.line.name)) {
             classes.push('error');
           } else if (scope.line.hasErrors) {

@@ -152,17 +152,14 @@ describe('Directive: documentLineEdit', function () {
     });
 
     describe('scope.classesForSubLine', function () {
-      describe('when line has no subErrors or subWarnings', function () {
-        beforeEach(function () {
-          scope.line = {name: 'linkes', value: ['bla:bla']};
-          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
-          scope.$digest();
-        });
+      beforeEach(function () {
+        scope.line = {name: 'linkes', value: ['bla:bla']};
+        element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+        scope.$digest();
+      });
 
-        it('returns classes that does not include error', function () {
-          expect(element.isolateScope().classesForSubLine(0)).not.toContain('error');
-          expect(element.isolateScope().classesForSubLine(0)).not.toContain('warning');
-        });
+      it('returns just the sub-value', function() {
+        expect(element.isolateScope().classesForSubLine(0)).toEqual(['sub-value']);
       });
 
       describe('when line has subErrors and subWarnings', function () {
@@ -193,6 +190,30 @@ describe('Directive: documentLineEdit', function () {
     });
 
     describe('scope.lineClasses', function () {
+      describe('when multiple lines exist', function() {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: ['bar', 'foo']};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('has the multi-value class', function() {
+          expect(element.isolateScope().lineClasses()).toEqual(['multi-value']);
+        });
+      });
+
+      describe('when only a single line exists', function() {
+        beforeEach(function () {
+          scope.line = {name: 'command', value: 'bar'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('has the multi-value class', function() {
+          expect(element.isolateScope().lineClasses()).toEqual(['single-value']);
+        });
+      });
+
       describe('when line has valid key, no warnings, and no errors', function () {
         beforeEach(function () {
           scope.line = {name: 'command', value: 'bar'};

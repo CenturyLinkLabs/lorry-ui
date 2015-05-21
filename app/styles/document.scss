@@ -223,24 +223,24 @@
 }
 
 .line-edit {
-  &.warning,
-  .warning {
+  &.single-value.warning,
+  .sub-value.warning {
     input, select {
       border: $orange 2px solid;
     }
   }
 
-  .label.error {
-    color: $dark_red;
-  }
-
-  &.error,
-  .error {
+  &.single-value.error,
+  .sub-value.error {
     input,
     select,
     input:focus {
       border: $dark_red 2px solid;
     }
+  }
+
+  .label.error {
+    color: $dark_red;
   }
 
   .radio-edit-group {
