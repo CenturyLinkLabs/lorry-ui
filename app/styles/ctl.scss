@@ -180,3 +180,14 @@ nav.ctl {
     }
   }
 }
+
+@media screen and (max-width: 1060px) {
+  nav.ctl > ul > li > ul {
+    left: -211px;
+  }
+}
+@media screen and (max-width: 850px) {
+  nav.ctl {
+    display: none;
+  }
+}
