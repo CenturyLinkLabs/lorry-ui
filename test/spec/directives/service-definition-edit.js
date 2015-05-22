@@ -370,36 +370,88 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
       });
 
-    });
-
-    describe('$scope.transformToYamlDocumentFragment', function () {
-
-      describe('when editableJson is passed', function () {
+      describe('when yaml json has environment keys with seq values', function () {
         var editableJson = [
-          { name: 'build', value: 'foo'},
-          { name: 'command', value: 'bar'},
-          { name: 'ports', value: ['1111:2222', '3333:4444']},
-          { name: 'environment', value: ['foo:bar', 'flip:flop', 'dash:']}
+          { name: 'environment', value: ['foo:bar', 'flip:flop']},
+          { name: 'build', value: 'bar'}
         ];
         beforeEach(function () {
           scope.sectionName = 'adapter';
           scope.fullJson = {
             'adapter': {
-              'build': 'foo',
-              'command': 'bar',
-              'ports': ['1111:2222', '3333:4444'],
-              'environment': {'foo':'bar', 'flip':'flop', 'dash':''}
+              'environment': ['foo=bar', 'flip=flop'],
+              'build': 'bar'
             }};
           element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
         });
 
-        it ('returns valid yamlDocument fragment', function () {
-          var result = element.isolateScope().transformToYamlDocumentFragment(editableJson);
-          expect(result).toEqual(scope.fullJson[scope.sectionName]);
+        it ('converts the seq values into a values array', function () {
+          var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
+          expect(result).toEqual(editableJson);
         });
       });
 
+    });
+
+    describe('$scope.transformToYamlDocumentFragment', function () {
+
+      describe('when editableJson is passed', function () {
+        describe('and has hash values for environment key', function () {
+          var editableJson = [
+            {name: 'build', value: 'foo'},
+            {name: 'command', value: 'bar'},
+            {name: 'ports', value: ['1111:2222', '3333:4444']},
+            {name: 'environment', value: ['foo:bar', 'flip:flop', 'dash:']}
+          ];
+          beforeEach(function () {
+            scope.sectionName = 'adapter';
+            scope.fullJson = {
+              'adapter': {
+                'build': 'foo',
+                'command': 'bar',
+                'ports': ['1111:2222', '3333:4444'],
+                'environment': {'foo': 'bar', 'flip': 'flop', 'dash': ''}
+              }
+            };
+            element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+            scope.$digest();
+          });
+
+          it('returns valid yamlDocument fragment', function () {
+            var result = element.isolateScope().transformToYamlDocumentFragment(editableJson);
+            expect(result).toEqual(scope.fullJson[scope.sectionName]);
+          });
+        });
+
+        describe('and has seq values for environment key', function () {
+          var editableJson = [
+            {name: 'build', value: 'foo'},
+            {name: 'command', value: 'bar'},
+            {name: 'ports', value: ['1111:2222', '3333:4444']},
+            {name: 'environment', value: ['foo:bar', 'flip:flop', 'dash:']}
+          ];
+          beforeEach(function () {
+            scope.sectionName = 'adapter';
+            scope.fullJson = {
+              'adapter': {
+                'build': 'foo',
+                'command': 'bar',
+                'ports': ['1111:2222', '3333:4444'],
+                'environment': {'foo': 'bar', 'flip': 'flop', 'dash': ''}
+              }
+            };
+            element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+            scope.$digest();
+          });
+
+          it('returns valid yamlDocument fragment', function () {
+            var result = element.isolateScope().transformToYamlDocumentFragment(editableJson);
+            expect(result).toEqual(scope.fullJson[scope.sectionName]);
+          });
+
+        });
+      });
     });
 
     describe('$scope.saveServiceDefinition', function () {
