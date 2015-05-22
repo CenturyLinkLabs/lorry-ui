@@ -83,7 +83,16 @@
         scope.transformToYamlDocumentFragment = function (editedJson) {
           var yamlFrag = {};
           angular.forEach(editedJson, function(svalue) {
-            yamlFrag[svalue.name] = svalue.value;
+            if (svalue.name === 'environment') {
+              var obj = {};
+              angular.forEach(svalue.value, function (sv) {
+                var hash = sv.split(':');
+                obj[hash[0]] = hash.length === 2 ? hash[1] : '';  // sometimes hash keys dont have any value
+              });
+              yamlFrag[svalue.name] = obj;
+            } else {
+              yamlFrag[svalue.name] = svalue.value;
+            }
           });
           return yamlFrag;
         };
@@ -250,7 +259,7 @@
           if (skey !== 'environment') {
             return svalue;
           }
-          
+
           var valueArr = [];
           if (Array.isArray(svalue) && angular.isObject(svalue)) {
             angular.forEach(svalue, function(lvalue) {
