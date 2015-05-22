@@ -3,7 +3,7 @@
 
 The initial import and subsequent modifications of a document triggers validation against a YAML schema derived from the latest [Compose documentation](https://docs.docker.com/compose/).  The utility differentiates between errors which prevent the application defined in the docker-compose.yml from being stood up with Compose and warnings which simply point out things in the document that might not be what you want.  
 
-The Lorry project will make creating docker-compose.yml files easier with its user-friendly interface that provides documentation for Compose options and limits choices to known good values. 
+The Lorry project will make creating docker-compose.yml files easier with its user-friendly interface that provides documentation for Compose options and limits choices of keys to those specified in the [docker-compose.yml reference](https://docs.docker.com/compose/yml/). 
 
 Once you're done crafting the docker-compose.yml, Lorry makes it simple to save your document as a file, copy it to the clipboard, and even share it with others as a Gist or with a Lorry URL for collaborative editing.
 
@@ -35,6 +35,6 @@ Running `grunt test` will run the unit tests with karma.
 
 ## Environment configuration
 By default, the application will assume you are running, testing, or building in development mode.  If you want to 
-change that for some reason, you can set a 'LORRY_ENV' environment variable to â€˜develop', â€˜qa', or â€˜productionâ€™.  
+change that for some reason, you can set a 'LORRY_ENV' environment variable to 'develop', 'qa', or 'production'.  
 It is this environment variable that will determine which of the config files in the '/config' directory are used when 
 the grunt task generates the app.js file.
