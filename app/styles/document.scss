@@ -2,6 +2,7 @@
 @import 'variables';
 @import 'mixins';
 @import 'icons';
+@import 'forms';
 
 [class*='titip']
 {
@@ -230,7 +231,7 @@
   &.warning,
   .warning {
     input, select {
-      border: $orange 2px solid;
+      @extend input.warning;
     }
   }
 
@@ -243,7 +244,7 @@
     input,
     select,
     input:focus {
-      border: $dark_red 2px solid;
+      @extend input.error;
     }
   }
 

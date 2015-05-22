@@ -110,11 +110,11 @@ describe('Directive: serviceDefinitionEdit', function () {
             scope.serviceDefinition[0].errors = [ {line: 8} ];
           });
 
-          it('places the error on the image', function() {
-            element.isolateScope().transformToJson();
-            var results = element.isolateScope().editableJson;
+          it('places the error on scope', function() {
+            var s = element.isolateScope();
+            s.transformToJson();
 
-            expect(results[4].hasErrors).toEqual(true);
+            expect(s.topLevelError).toEqual(true);
           });
         });
 
@@ -859,6 +859,22 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
       });
 
+    });
+
+    describe('$scope.sectionClasses', function() {
+      it('returns nothing', function() {
+        expect(element.isolateScope().sectionClasses()).toEqual('');
+      });
+
+      describe('when a topLevelError is present', function() {
+        beforeEach(function() {
+          element.isolateScope().topLevelError = true;
+        });
+
+        it('returns error', function() {
+          expect(element.isolateScope().sectionClasses()).toEqual('error');
+        });
+      });
     });
 
     describe('$scope.doesServiceNameExists', function () {

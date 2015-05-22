@@ -73,6 +73,10 @@
           return fixedJson;
         };
 
+        scope.sectionClasses = function() {
+          return scope.topLevelError ? 'error' : '';
+        };
+
         scope.transformToYamlDocumentFragment = function (editedJson) {
           var yamlFrag = {};
           angular.forEach(editedJson, function(svalue) {
@@ -271,10 +275,11 @@
                 }
               } else {
                 lineWithErrors = lodash.findWhere(editableJson, { name: key });
-                if (!lineWithErrors) {
-                  lineWithErrors = lodash.findWhere(editableJson, { name: 'image' }) || {};
+                if (lineWithErrors) {
+                  lineWithErrors['has' + type] = true;
+                } else {
+                  scope.topLevelError = true;
                 }
-                lineWithErrors['has' + type] = true;
               }
             }
           }

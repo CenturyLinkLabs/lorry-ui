@@ -31,6 +31,14 @@ textarea {
     outline: none;
   }
 }
+
+input.warning {
+  border: $orange 2px solid;
+}
+input.error {
+  border: $dark_red 2px solid;
+}
+
 select {
   padding: 6px;
   font-size: 13px;
