@@ -10,19 +10,19 @@
   function PMXConverter(jsyaml) {
 
     function convert(pmxYaml) {
-      var pmxJson, images, newJson;
+      var pmxJson,
+        images,
+        newJson = {};
 
       try {
         pmxJson = jsyaml.safeLoad(pmxYaml);
-      } catch (YamlException) {
-        return null;
+        images = pmxJson.images;
+        images.forEach(function (image) {
+          newJson[image.name.replace(' ', '_')] = imageToServiceDefinition(image);
+        });
+      } catch (error) {
+        throw 'The document is not a valid Panamax template.';
       }
-
-      images = pmxJson.images;
-      newJson = {};
-      images.forEach(function (image) {
-        newJson[image.name.replace(' ', '_')] = imageToServiceDefinition(image);
-      });
 
       return jsyaml.safeDump(newJson);
     }

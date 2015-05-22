@@ -66,9 +66,14 @@
 
     this.importPastedContent = function (content) {
       if ($scope.dialogOptions.dialogTab === 'pmx') {
-        $scope.yamlDocument.raw = PMXConverter.convert(content);
-        // GA click tracking
-        analyticsService.trackEvent('create', 'PMX', 'via paste');
+        try {
+          $scope.yamlDocument.raw = PMXConverter.convert(content);
+          // GA click tracking
+          analyticsService.trackEvent('create', 'PMX', 'via paste');
+        } catch (error) {
+          $scope.yamlDocument.errors = [{error: {message: error}}];
+          $scope.yamlDocument.loadFailure = true;
+        }
       } else {
         // remove blank and comment lines
         $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(content);

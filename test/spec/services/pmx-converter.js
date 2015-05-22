@@ -11,9 +11,10 @@ describe('Service: PMXConverter', function () {
     jsyaml = _jsyaml_;
   }));
 
-  it('convert returns null if the pmx template cannot be parsed', function () {
-    spyOn(jsyaml, 'safeLoad').and.throwError('YamlException');
-    expect(PMXConverter.convert('boom')).toBeNull();
+  it('raises an exception if the argument to convert() is not a valid pmx template', function () {
+    expect(function () {
+      PMXConverter.convert('---\nfoo: bar\n');
+    }).toThrow('The document is not a valid Panamax template.');
   });
 
   it('converts the panamax image names to top-level service definition keys', function () {

@@ -240,11 +240,32 @@ describe('Controller: DocumentImportCtrl', function () {
     });
 
     describe('when the import pmx template tab is displayed', function () {
-      it('sets the PMXConverter converted value pasted into $scope.yamlDocument.raw', function () {
-        var docImport = {raw: '---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n'};
+      var docImport;
+
+      beforeEach(function () {
+        docImport = {raw: '---\nimages:\n- name: foo\n  source: foo/bar\n- name: bar\n  source: baz/quux\n'};
         scope.dialogOptions.dialogTab = 'pmx';
+      });
+
+      it('sets the PMXConverter converted value pasted into $scope.yamlDocument.raw', function () {
         DocumentImportCtrl.importPastedContent(docImport.raw);
         expect(scope.yamlDocument.raw).toEqual(PMXConverter.convert(docImport.raw));
+      });
+
+      describe('when the converter throws an exception', function () {
+        beforeEach(function () {
+          spyOn(PMXConverter, 'convert').and.callFake(function () { throw 'boom'; });
+        });
+
+        it('sets an error onto yamlDocument.errors', function () {
+          DocumentImportCtrl.importPastedContent(docImport.raw);
+          expect(scope.yamlDocument.errors).toEqual([{error: {message: 'boom'}}]);
+        });
+
+        it('sets yamlDocument.loadFailure true', function () {
+          DocumentImportCtrl.importPastedContent(docImport.raw);
+          expect(scope.yamlDocument.loadFailure).toBe(true);
+        });
       });
     });
   });
