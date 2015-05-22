@@ -280,7 +280,8 @@ describe('Directive: serviceDefinitionEdit', function () {
         var editableJson = [
           { name: 'build', value: 'foo'},
           { name: 'command', value: 'bar'},
-          { name: 'ports', value: ['1111:2222', '3333:4444']}
+          { name: 'ports', value: ['1111:2222', '3333:4444']},
+          { name: 'environment', value: ['foo:bar', 'flip:flop']}
         ];
         beforeEach(function () {
           scope.sectionName = 'adapter';
@@ -288,7 +289,8 @@ describe('Directive: serviceDefinitionEdit', function () {
             'adapter': {
               'build': 'foo',
               'command': 'bar',
-              'ports': ['1111:2222', '3333:4444']
+              'ports': ['1111:2222', '3333:4444'],
+              'environment': {'foo':'bar', 'flip':'flop'}
             }};
           element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
@@ -341,6 +343,28 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
 
         it ('returns the string value as is', function () {
+          var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
+          expect(result).toEqual(editableJson);
+        });
+      });
+
+      describe('when yaml json has environment keys with hash values', function () {
+        var editableJson = [
+          { name: 'environment', value: ['foo:bar', 'flip:flop']},
+          { name: 'build', value: 'bar'}
+        ];
+        beforeEach(function () {
+          scope.sectionName = 'adapter';
+          scope.fullJson = {
+            'adapter': {
+              'environment': {'foo':'bar', 'flip':'flop'},
+              'build': 'bar'
+            }};
+          element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+          scope.$digest();
+        });
+
+        it ('converts the values hash into a values array', function () {
           var result = element.isolateScope().transformToEditableJson(scope.fullJson[scope.sectionName]);
           expect(result).toEqual(editableJson);
         });

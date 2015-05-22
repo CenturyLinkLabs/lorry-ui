@@ -46,6 +46,9 @@
             // if sequence type keys have string value, convert them to array
             svalue = convertSeqKeyValueToArray(svalue, skey);
 
+            // if environment key values are a sequence, convert them to a hash array
+            svalue = convertEnvironmentHashToArray(svalue, skey);
+
             // weird way to check if the array is a real array
             // or the array has objects in it
             // if [{"foo": "bar"}] the length is undefined
@@ -239,6 +242,26 @@
             }
           }
           return svalue;
+        };
+
+        var convertEnvironmentHashToArray = function (svalue, skey) {
+          // ENV_KEY_1: some value -> [ENV_KEY_1: some value]
+
+          if (skey !== 'environment') {
+            return svalue;
+          }
+          
+          var valueArr = [];
+          if (Array.isArray(svalue) && angular.isObject(svalue)) {
+            angular.forEach(svalue, function(lvalue) {
+              if (angular.isObject(lvalue)) {
+                angular.forEach(lvalue,  function(lv, lk) {
+                  valueArr.push(lk+':'+lv);
+                });
+              }
+            });
+          }
+          return valueArr;
         };
 
         var isKeyTypeSequence = function (skey) {
