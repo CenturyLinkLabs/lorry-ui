@@ -132,6 +132,10 @@
         }
       }
 
+      .special-instr {
+        background-color: $darker_grey;
+      }
+
       .line:not(.error),
       .action-menu {
         background-color: $darker_grey;
@@ -404,6 +408,18 @@
 
 }
 
+.special-instr {
+  background-color: $dark_grey;
+
+  .instr-text {
+    margin-left: 55px;
+    margin-right: 50px;
+    padding: 10px 10px 10px 20px;
+    background-color: $darkest_grey;
+    line-height: 1.5em;
+  }
+}
+
 .line {
   font-family: $monospace_font_family;
   position: relative;
@@ -508,12 +524,6 @@
     }
   }
 
-  .special-instr {
-    margin-left: 55px;
-    padding: 10px 10px 10px 20px;
-    background-color: $darkest_grey;
-    line-height: 1.5em;
-  }
 }
 
 main footer {

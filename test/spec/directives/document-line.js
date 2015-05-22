@@ -64,7 +64,7 @@ describe('Directive: documentLine', function () {
 
     it('adds the error class to the element', function () {
       expect(scope.lineClasses()).toEqual('error');
-      expect(element.hasClass('error')).toBeTruthy();
+      expect(element.find('.line').hasClass('error')).toBeTruthy();
     });
 
     it('shows the line-info div', function () {
@@ -115,7 +115,7 @@ describe('Directive: documentLine', function () {
 
     it('adds the warning class to the element', function () {
       expect(scope.lineClasses()).toEqual('warning');
-      expect(element.hasClass('warning')).toBeTruthy();
+      expect(element.find('.line').hasClass('warning')).toBeTruthy();
     });
 
     it('adds the warning message to the line text wrapper', function () {

@@ -1,16 +1,18 @@
-<div class="line" ng-class="lineClasses()">
+<div>
   <div class="special-instr" ng-if="hasSpecialInstructions()">
-    <p>{{getSpecialInstructions()}}</p>
+    <p class="instr-text">{{getSpecialInstructions()}}</p>
   </div>
-  <div class="imagelayers titip-right titip-default titip-large"
-       ng-if="isImageLine()"
-       ng-click="showImageLayers()">
-    <span class="titip-content">{{tooltip()}}</span>
-  </div>
-  <div class="gutter">{{line.lineNumber}}</div>
-  <div class="line-text"></div>
-  <div class="line-info titip-left titip-default titip-large"
-       ng-if="hasLineErrors()">
-    <span class="titip-content">{{errMessage()}}</span>
+  <div class="line" ng-class="lineClasses()">
+    <div class="imagelayers titip-right titip-default titip-large"
+         ng-if="isImageLine()"
+         ng-click="showImageLayers()">
+      <span class="titip-content">{{tooltip()}}</span>
+    </div>
+    <div class="gutter">{{line.lineNumber}}</div>
+    <div class="line-text"></div>
+    <div class="line-info titip-left titip-default titip-large"
+         ng-if="hasLineErrors()">
+      <span class="titip-content">{{errMessage()}}</span>
+    </div>
   </div>
 </div>
