@@ -84,17 +84,39 @@
           var yamlFrag = {};
           angular.forEach(editedJson, function(svalue) {
             if (svalue.name === 'environment') {
-              var obj = {};
-              angular.forEach(svalue.value, function (sv) {
-                var hash = sv.split(':');
-                obj[hash[0]] = hash.length === 2 ? hash[1] : '';  // sometimes hash keys dont have any value
-              });
-              yamlFrag[svalue.name] = obj;
+              yamlFrag[svalue.name] = convertSeqSyntaxToHashSyntaxForEnvironmentVars(svalue);
             } else {
               yamlFrag[svalue.name] = svalue.value;
             }
           });
           return yamlFrag;
+        };
+
+        var convertSeqSyntaxToHashSyntaxForEnvironmentVars = function (svalue) {
+          var obj = {};
+          for(var i = 0; i < svalue.value.length; i++) {
+            var item = svalue.value[i];
+            // look for the first occurance of ':' or '='
+            // favor the ':' syntax when mixed chars ae present
+            if (item !== '') {
+              var subval = '', subkey = '';
+              var index = item.indexOf(':');
+              // if incoming value has : syntax
+              if ( index !== -1) {
+                subkey = item.substring(0, index);
+                subval = item.substring(index+1, item.length);
+              } else {
+                // if incoming value has = syntax
+                subval = ''; subkey = '';
+                index = item.indexOf('=');
+                if ( index !== -1) {
+                  subkey = item.substring(0, index);
+                  subval = item.substring(index+1, item.length);
+                }                  }
+              obj[subkey] = subval;
+            }
+          }
+          return obj;
         };
 
         scope.saveServiceDefinition = function (isFormValid) {

@@ -423,13 +423,39 @@ describe('Directive: serviceDefinitionEdit', function () {
             expect(result).toEqual(scope.fullJson[scope.sectionName]);
           });
         });
+        describe('and has hash values with special chars for environment key', function () {
+          var editableJson = [
+            {name: 'build', value: 'foo'},
+            {name: 'command', value: 'bar'},
+            {name: 'ports', value: ['1111:2222', '3333:4444']},
+            {name: 'environment', value: ['foo=bar=&&*^text', 'flip:flop:$$%&=text', 'mixed=up=&&*^:stuff', 'dash:']}
+          ];
+          beforeEach(function () {
+            scope.sectionName = 'adapter';
+            scope.fullJson = {
+              'adapter': {
+                'build': 'foo',
+                'command': 'bar',
+                'ports': ['1111:2222', '3333:4444'],
+                'environment': {'foo': 'bar=&&*^text', 'flip': 'flop:$$%&=text', 'mixed=up=&&*^': 'stuff', 'dash': ''}
+              }
+            };
+            element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+            scope.$digest();
+          });
+
+          it('returns valid yamlDocument fragment', function () {
+            var result = element.isolateScope().transformToYamlDocumentFragment(editableJson);
+            expect(result).toEqual(scope.fullJson[scope.sectionName]);
+          });
+        });
 
         describe('and has seq values for environment key', function () {
           var editableJson = [
             {name: 'build', value: 'foo'},
             {name: 'command', value: 'bar'},
             {name: 'ports', value: ['1111:2222', '3333:4444']},
-            {name: 'environment', value: ['foo:bar', 'flip:flop', 'dash:']}
+            {name: 'environment', value: ['foo:bar', 'flip=flop', 'dash:']}
           ];
           beforeEach(function () {
             scope.sectionName = 'adapter';
@@ -637,6 +663,20 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
         });
 
+        describe('environment key is added', function () {
+          beforeEach(function () {
+            element.isolateScope().addNewKey('environment');
+          });
+
+          it('should add a new key to the editable json with empty subkeys', function () {
+            expect(element.isolateScope().editableJson).toContain({'name': 'environment', 'value': ['']});
+          });
+          it('should add a new key to the edited service with empty subkeys', function () {
+            expect(scope.editedServiceYamlDocumentJson.environment).toBeDefined();
+            expect(scope.editedServiceYamlDocumentJson.environment).toEqual({});
+          });
+        });
+
       });
     });
 
@@ -658,7 +698,8 @@ describe('Directive: serviceDefinitionEdit', function () {
 
         element.isolateScope().editableJson = [
           {'name': 'build', 'value': 'foo'},
-          {'name': 'ports', 'value': ['1111:2222', '3333:4444']}
+          {'name': 'ports', 'value': ['1111:2222', '3333:4444']},
+          {'name': 'environment', 'value': ['foo:bar', 'flip:flop']}
         ];
 
       });
@@ -694,6 +735,18 @@ describe('Directive: serviceDefinitionEdit', function () {
           expect(element.isolateScope().editableJson[1]).toEqual({'name': 'ports', 'value': ['1111:2222', '3333:4444', '']});
           expect(scope.editedServiceYamlDocumentJson.ports).toBeDefined();
           expect(scope.editedServiceYamlDocumentJson.ports).toEqual(['1111:2222', '3333:4444', '']);
+        });
+      });
+
+      describe('when an environment key value is added', function () {
+        beforeEach(function () {
+          element.isolateScope().$emit('addNewValueForExistingKey', 'environment');
+        });
+
+        it('should add a new key value to the service with empty sequence', function () {
+          expect(element.isolateScope().editableJson[2]).toEqual({'name': 'environment', 'value': ['foo:bar', 'flip:flop', '']});
+          expect(scope.editedServiceYamlDocumentJson.environment).toBeDefined();
+          expect(scope.editedServiceYamlDocumentJson.environment).toEqual({'foo':'bar', 'flip':'flop'});
         });
       });
 
