@@ -33,9 +33,7 @@
         <a href="" ng-class="{ 'copied': copied }" class="footer-link copy" ng-if="exportable()" clip-copy="doc" clip-click="confirmCopy()">{{copyText}}</a>
         <a href="" class="footer-link copy" ng-if="!exportable()" disabled="disabled">{{copyText}}</a>
       </div>
-      <div class="addthis-icons addthis_custom_sharing">
-        <span>Share URL</span>
-      </div>
+      <share-menu></share-menu>
     </div>
   </footer>
 </div>
