@@ -242,7 +242,7 @@
         };
 
         var isKeyTypeSequence = function (skey) {
-          var seqKeys = ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search' ];
+          var seqKeys = ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search', 'labels' ];
           return lodash.includes(seqKeys, skey);
         };
 

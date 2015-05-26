@@ -776,7 +776,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         scope.$digest();
       });
 
-      ['command', 'image', 'build'].forEach(function (key) {
+      ['command', 'image', 'build', 'net', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'].forEach(function (key) {
         describe('when the key (' + key + ') represents a string value', function () {
           it('returns an empty string', function () {
             var result = element.isolateScope().createNewEmptyValueForKey(key);
@@ -785,9 +785,9 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
       });
 
-      ['links', 'external_links', 'ports', 'volumes', 'environment'].forEach(function (key) {
-        describe('when the key (' + key + ') represents a string value', function () {
-          it('returns an empty array', function () {
+      ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search', 'labels'].forEach(function (key) {
+        describe('when the key (' + key + ') represents a sequence value', function () {
+          it('returns an array with an empty string', function () {
             var result = element.isolateScope().createNewEmptyValueForKey(key);
             expect(result).toEqual(['']);
           });
