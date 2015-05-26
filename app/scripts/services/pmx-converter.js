@@ -18,7 +18,7 @@
         pmxJson = jsyaml.safeLoad(pmxYaml);
         images = pmxJson.images;
         images.forEach(function (image) {
-          newJson[image.name.replace(' ', '_')] = imageToServiceDefinition(image);
+          newJson[image.name.replace(/\s/g, '')] = imageToServiceDefinition(image);
         });
       } catch (error) {
         throw 'The document is not a valid Panamax template.';
