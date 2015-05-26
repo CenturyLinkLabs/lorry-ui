@@ -167,7 +167,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line has subErrors and subWarnings', function () {
         beforeEach(function () {
-          scope.line = {name: 'linkes', value: ['bla:bla'], subErrors: [1], subWarnings: [1]};
+          scope.line = {name: 'linkes', value: ['bla:bla'], subErrors: { 1: ['boom'] }, subWarnings: { 1: ['watchout'] }};
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -180,7 +180,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line has subErrors on the 2nd child', function () {
         beforeEach(function () {
-          scope.line = {name: 'linkes', value: ['bla:bla'], subErrors: [2], subWarnings: []};
+          scope.line = {name: 'linkes', value: ['bla:bla'], subErrors: { 2: ['boom'] }, subWarnings: []};
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -221,7 +221,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line has errors, but with valid keys', function () {
         beforeEach(function () {
-          scope.line = {name: 'command', value: 'bar', hasErrors: true};
+          scope.line = {name: 'command', value: 'bar', errors: ['foo']};
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
         });
@@ -234,7 +234,7 @@ describe('Directive: documentLineEdit', function () {
 
       describe('when line has warnings', function () {
         beforeEach(function () {
-          scope.line = {name: 'command', value: 'bar', hasWarnings: true};
+          scope.line = {name: 'command', value: 'bar', warnings: ['bar']};
           element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
           scope.$digest();
         });

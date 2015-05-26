@@ -47,10 +47,10 @@ describe('Directive: serviceDefinitionEdit', function () {
             {text:'  build:\n', lineKey:'build', lineValue:'', lineNumber:9, errors:[{ line: 9, message: 'boom' }], warnings:[]},
             {text:'  command:\n', lineKey:'command', lineValue:'', lineNumber:10, errors:[], warnings:[]},
             {text:'  ports:\n', lineKey:'ports', lineValue:'', lineNumber:11, errors:[], warnings:[]},
-            {text:'   - 1111:2222\n', lineKey:'', lineValue:'1111:2222', lineNumber:12, errors:[{ line: 12 }], warnings:[]},
+            {text:'   - 1111:2222\n', lineKey:'', lineValue:'1111:2222', lineNumber:12, errors:[{ line: 12, message: 'some message' }], warnings:[]},
             {text:'   - 3333:4444\n', lineKey:'', lineValue:'3333:4444', lineNumber:13, errors:[], warnings:[]},
-            {text:'   - 5555:6666\n', lineKey:'', lineValue:'5555:6666', lineNumber:14, errors:[{ line: 14 }], warnings:[{ line: 14 }]},
-            {text:'  links:\n', lineKey:'links', lineValue:'', lineNumber:15, errors:[], warnings:[{ line: 15 }]}
+            {text:'   - 5555:6666\n', lineKey:'', lineValue:'5555:6666', lineNumber:14, errors:[{ line: 14, message: 'another message' }, { line: 14, message: 'one more message' }], warnings:[{ line: 14, message: 'look out' }]},
+            {text:'  links:\n', lineKey:'links', lineValue:'', lineNumber:15, errors:[], warnings:[{ line: 15, message: 'caution' }]}
           ];
           element = compile('<service-definition-edit service-definition="serviceDefinition" section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
@@ -78,43 +78,43 @@ describe('Directive: serviceDefinitionEdit', function () {
           element.isolateScope().transformToJson();
           var results = element.isolateScope().editableJson;
           expect(results[0].name).toEqual('build');
-          expect(results[0].hasErrors).toEqual(true);
-          expect(results[0].hasWarnings).toBeFalsy();
+          expect(results[0].errors).toEqual(['boom']);
+          expect(results[0].warnings).toBeFalsy();
           expect(results[0].subErrors).toBeFalsy();
           expect(results[0].subWarnings).toBeFalsy();
 
           expect(results[1].name).toEqual('command');
-          expect(results[1].hasErrors).toBeFalsy();
-          expect(results[1].hasWarnings).toBeFalsy();
+          expect(results[1].errors).toBeFalsy();
+          expect(results[1].warnings).toBeFalsy();
           expect(results[1].subErrors).toBeFalsy();
           expect(results[1].subWarnings).toBeFalsy();
 
           expect(results[2].name).toEqual('ports');
-          expect(results[2].hasErrors).toBeFalsy();
-          expect(results[2].hasWarnings).toBeFalsy();
-          expect(results[2].subErrors).toEqual([1,3]);
-          expect(results[2].subWarnings).toEqual([3]);
+          expect(results[2].errors).toBeFalsy();
+          expect(results[2].warnings).toBeFalsy();
+          expect(results[2].subErrors).toEqual({ 1: ['some message'], 3: ['another message', 'one more message'] });
+          expect(results[2].subWarnings).toEqual({ 3: ['look out'] });
 
           expect(results[3].name).toEqual('links');
-          expect(results[3].hasErrors).toBeFalsy();
-          expect(results[3].hasWarnings).toEqual(true);
+          expect(results[3].errors).toBeFalsy();
+          expect(results[3].warnings).toEqual(['caution']);
           expect(results[3].subErrors).toBeFalsy();
           expect(results[3].subWarnings).toBeFalsy();
 
           expect(results[4].name).toEqual('image');
-          expect(results[4].hasErrors).toBeFalsy();
+          expect(results[4].errors).toBeFalsy();
         });
 
         describe('when there is an error that is not accounted for', function() {
           beforeEach(function() {
-            scope.serviceDefinition[0].errors = [ {line: 8} ];
+            scope.serviceDefinition[0].errors = [ {line: 8, message: 'boom'} ];
           });
 
           it('places the error on scope', function() {
             var s = element.isolateScope();
             s.transformToJson();
 
-            expect(s.topLevelError).toEqual(true);
+            expect(s.topLevelError).toEqual(['boom']);
           });
         });
 

@@ -43,7 +43,9 @@
           return classes;
 
           function has(type, index) {
-            return lodash.contains(scope.line['sub' + type + 's'], index + 1);
+            if (scope.line && scope.line['sub' + type + 's']) {
+              return (index + 1) in scope.line['sub' + type + 's'];
+            }
           }
         };
 
@@ -51,10 +53,10 @@
           var classes = [];
           if (!scope.isValidKey(scope.line.name)) {
             classes.push('error');
-          } else if (scope.line.hasErrors) {
+          } else if (!lodash.isEmpty(scope.line.errors)) {
             classes.push('error');
           }
-          if (scope.line.hasWarnings) {
+          if (!lodash.isEmpty(scope.line.warnings)) {
             classes.push('warning');
           }
           return classes;
