@@ -44,13 +44,13 @@ describe('Directive: serviceDefinitionEdit', function () {
           scope.sectionName = 'adapter';
           scope.serviceDefinition = [
             {text:'agent:\n', lineKey:'agent', lineValue:'', lineNumber:8, errors:[], warnings:[]},
-            {text:'  build:\n', lineKey:'build', lineValue:'', lineNumber:9, errors:[{ line: 9, message: 'boom' }], warnings:[]},
+            {text:'  build:\n', lineKey:'build', lineValue:'', lineNumber:9, errors:[{error: { line: 9, message: 'boom' }}], warnings:[]},
             {text:'  command:\n', lineKey:'command', lineValue:'', lineNumber:10, errors:[], warnings:[]},
             {text:'  ports:\n', lineKey:'ports', lineValue:'', lineNumber:11, errors:[], warnings:[]},
-            {text:'   - 1111:2222\n', lineKey:'', lineValue:'1111:2222', lineNumber:12, errors:[{ line: 12, message: 'some message' }], warnings:[]},
+            {text:'   - 1111:2222\n', lineKey:'', lineValue:'1111:2222', lineNumber:12, errors:[{ error: { line: 12, message: 'some message' }}], warnings:[]},
             {text:'   - 3333:4444\n', lineKey:'', lineValue:'3333:4444', lineNumber:13, errors:[], warnings:[]},
-            {text:'   - 5555:6666\n', lineKey:'', lineValue:'5555:6666', lineNumber:14, errors:[{ line: 14, message: 'another message' }, { line: 14, message: 'one more message' }], warnings:[{ line: 14, message: 'look out' }]},
-            {text:'  links:\n', lineKey:'links', lineValue:'', lineNumber:15, errors:[], warnings:[{ line: 15, message: 'caution' }]}
+            {text:'   - 5555:6666\n', lineKey:'', lineValue:'5555:6666', lineNumber:14, errors:[{error: { line: 14, message: 'another message' }}, {error: { line: 14, message: 'one more message' }}], warnings:[{warning: { line: 14, message: 'look out' }}]},
+            {text:'  links:\n', lineKey:'links', lineValue:'', lineNumber:15, errors:[], warnings:[{warning: { line: 15, message: 'caution' }}]}
           ];
           element = compile('<service-definition-edit service-definition="serviceDefinition" section-name="sectionName"></service-definition-edit>')(scope);
           scope.$digest();
@@ -107,7 +107,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
         describe('when there is an error that is not accounted for', function() {
           beforeEach(function() {
-            scope.serviceDefinition[0].errors = [ {line: 8, message: 'boom'} ];
+            scope.serviceDefinition[0].errors = [ {error: { line: 8, message: 'boom'}} ];
           });
 
           it('places the error on scope', function() {

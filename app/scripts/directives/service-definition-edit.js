@@ -261,7 +261,7 @@
 
           function checkFor(type, line, count, currentKey) {
             var collectionType = type.toLowerCase(),
-                messages = collectMessages(line[collectionType]);
+                messages = collectMessagesFrom(line[collectionType]);
             if (line[collectionType] && line[collectionType].length > 0) {
               var lineWithErrors = {};
               if (lodash.isEmpty(line.lineKey)) {
@@ -280,12 +280,14 @@
                 }
               }
             }
-          }
 
-          function collectMessages(collection) {
-            return lodash.map(collection, function(item) {
-              return item.message;
-            });
+            function collectMessagesFrom(collection) {
+              return lodash.map(collection, function(item) {
+                var singular = collectionType.replace(/s$/,''),
+                    object = item[singular] || {};
+                return object.message;
+              });
+            }
           }
         }
 

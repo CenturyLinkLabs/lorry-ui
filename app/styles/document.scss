@@ -375,6 +375,15 @@
       background-position: 0px -20px;
     }
 
+    .error, .warning {
+      display: block;
+    }
+    .error {
+      color: $dark_red;
+    }
+    .warning {
+      color: $orange;
+    }
   }
 
   .delete {

@@ -719,6 +719,106 @@ describe('Directive: documentLineEdit', function () {
 
     });
 
+    describe('scope.warningMessages', function () {
+      describe('when a line has subWarnings', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar', subWarnings: {1: ['busted', 'wrong']}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the warnings together', function() {
+          expect(element.isolateScope().warningMessages(0)).toEqual('busted<br/>wrong');
+        });
+      });
+
+      describe('when a line has warnings', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar', warnings: ['broke', 'wrong']};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the warnings together', function() {
+          expect(element.isolateScope().warningMessages()).toEqual('broke<br/>wrong');
+        });
+      });
+
+      describe('when a line has neither', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the warnings together', function() {
+          expect(element.isolateScope().warningMessages()).toEqual('');
+        });
+      });
+
+      describe('when a line has both', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar', warnings: ['messed', 'up'], subWarnings: {1: ['busted', 'wrong']}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the subwarnings together and ignores the top level warnings', function() {
+          expect(element.isolateScope().warningMessages(0)).toEqual('busted<br/>wrong');
+        });
+      });
+    });
+
+    describe('scope.errorMessages', function () {
+      describe('when a line has subErrors', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar', subErrors: {1: ['busted', 'wrong']}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the errors together', function() {
+          expect(element.isolateScope().errorMessages(0)).toEqual('busted<br/>wrong');
+        });
+      });
+
+      describe('when a line has errors', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar', errors: ['broke', 'wrong']};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the errors together', function() {
+          expect(element.isolateScope().errorMessages()).toEqual('broke<br/>wrong');
+        });
+      });
+
+      describe('when a line has neither', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar'};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the errors together', function() {
+          expect(element.isolateScope().errorMessages()).toEqual('');
+        });
+      });
+
+      describe('when a line has both', function() {
+        beforeEach(function () {
+          scope.line = {name: 'image', value: 'foo:bar', errors: ['messed', 'up'], subErrors: {1: ['busted', 'wrong']}};
+          element = compile('<document-line-edit line="line"></document-line-edit>')(scope);
+          scope.$digest();
+        });
+
+        it('joins the subErrors together and ignores the top level errors', function() {
+          expect(element.isolateScope().errorMessages(0)).toEqual('busted<br/>wrong');
+        });
+      });
+    });
+
     describe('scope.getHelpTextForKey', function () {
       describe('when $rootScope.keysHelpText has help text', function () {
         beforeEach(function () {
@@ -733,7 +833,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('adds the tooltip to the info div', function () {
-          expect(element.find('.info .titip-content').html()).toEqual(element.isolateScope().getHelpTextForKey());
+          expect(element.find('.info .titip-content .help').html()).toEqual(element.isolateScope().getHelpTextForKey());
         });
 
         describe('when key is valid, but has no associated text', function() {
@@ -748,7 +848,7 @@ describe('Directive: documentLineEdit', function () {
           });
         });
 
-        describe('when key is invalid', function () {
+        describe('when key is not found', function () {
           beforeEach(function () {
             rootScope.keysHelpText = [{'image': 'image help'}, {'command': 'command help'}];
             scope.line = {name: 'blah', value: 'foo:bar'};
@@ -757,8 +857,8 @@ describe('Directive: documentLineEdit', function () {
 
           });
 
-          it('sets the help text for invalid key to invalid message', function () {
-            expect(element.isolateScope().getHelpTextForKey()).toEqual('Key is invalid.');
+          it('sets the help text for invalid key to empty', function () {
+            expect(element.isolateScope().getHelpTextForKey()).toEqual('');
           });
         });
 
@@ -782,7 +882,7 @@ describe('Directive: documentLineEdit', function () {
         });
 
         it('adds the tooltip to the info div', function () {
-          expect(element.find('.info .titip-content').html()).toEqual(element.isolateScope().getHelpTextForKey());
+          expect(element.find('.info .titip-content .help').html()).toEqual(element.isolateScope().getHelpTextForKey());
         });
       });
     });

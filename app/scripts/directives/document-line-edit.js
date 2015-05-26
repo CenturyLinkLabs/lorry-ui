@@ -151,13 +151,21 @@
           return scope.numLines > 1;
         };
 
+        scope.warningMessages = function(i) {
+          return messageFor('Warning', i);
+        };
+
+        scope.errorMessages = function(i) {
+          return messageFor('Error', i);
+        };
+
         scope.getHelpTextForKey = function() {
           var helpText = '';
           if (!lodash.isEmpty($rootScope.keysHelpText)) {
             var node = lodash.find($rootScope.keysHelpText, function(l) {
               return (scope.line.name in l);
             });
-            helpText = node ? node[scope.line.name] : 'Key is invalid.';
+            helpText = node ? node[scope.line.name] : '';
           }
           return helpText;
         };
@@ -170,6 +178,18 @@
           var keys = scope.isExtendsLine() ? lodash.keys(scope.line.value) : [];
           return lodash.isEmpty(keys) ? null : keys[index];
         };
+
+        function messageFor(type, i) {
+          var subType = 'sub' + type + 's',
+              pluralType = type.toLowerCase() + 's',
+              messages = [];
+          if (scope.line[subType]) {
+            messages = messages.concat(scope.line[subType][i + 1]);
+          } else if (scope.line[pluralType]) {
+            messages = messages.concat(scope.line[pluralType]);
+          }
+          return messages.join('<br/>');
+        }
 
         scope.serviceNameList = $rootScope.serviceNameList;
 

@@ -10,7 +10,11 @@
     <div class="spacer" ng-hide="serviceHasMultipleLines()" ></div>
     <div class="delete" ng-show="serviceHasMultipleLines()" ng-class="deleteIconClasses()" ng-click="markLineForDeletion()"></div>
     <div class="info titip-bottom-left titip-default titip-wrapped-large">
-      <span class="titip-content">{{getHelpTextForKey()}}</span>
+      <span class="titip-content">
+        <em class='error'>{{errorMessages()}}</em>
+        <em class='warning'>{{warningMessages()}}</em>
+        <em class='help'>{{getHelpTextForKey()}}</em>
+      </span>
     </div>
     <div class="search-link">Or <a ng-class="searchLinkClasses()" href="" ng-controller="SearchCtrl" ng-click="searchDialog()">Search Docker Hub</a></div>
   </div>
@@ -24,7 +28,11 @@
           <span class="subkey-label">{{getExtendsSubKey(1)}}</span><input type="text" class="extends-service-text" ng-class="markForDeletionClasses()" ng-model="line.value.service" />
           <div class="delete" ng-class="deleteIconClasses()" ng-click="markLineForDeletion()"></div>
           <div class="info titip-bottom-left titip-default titip-wrapped-large">
-            <span class="titip-content">{{getHelpTextForKey()}}</span>
+            <span class="titip-content">
+              <em class='error'>{{errorMessages()}}</em>
+              <em class='warning'>{{warningMessages()}}</em>
+              <em class='help'>{{getHelpTextForKey()}}</em>
+            </span>
           </div>        </div>
       </div>
       <!-- Show single-value key block -->
@@ -33,7 +41,11 @@
         <input type="text" ng-class="markForDeletionClasses()" ng-model="line.value" value='{{line.value}}' />
         <div class="delete" ng-class="deleteIconClasses()" ng-click="markLineForDeletion()"></div>
         <div class="info titip-bottom-left titip-default titip-wrapped-large">
-          <span class="titip-content">{{getHelpTextForKey()}}</span>
+          <span class="titip-content">
+            <em class='error'>{{errorMessages()}}</em>
+            <em class='warning'>{{warningMessages()}}</em>
+            <em class='help'>{{getHelpTextForKey()}}</em>
+          </span>
         </div>
       </div>
     </div>
@@ -47,7 +59,11 @@
         <input type='text' class="link-alias-text" placeholder="alias" ng-class="markForDeletionClasses($index)" ng-if="line.name === 'links'" ng-model="linkAlias" ng-blur="setLinkAlias($index, linkAlias)"/>
         <div class="delete" ng-class="deleteIconClasses($index)" ng-click="markLineItemForDeletion($index)"></div>
         <div class="info titip-bottom-left titip-default titip-wrapped-large">
-          <span class="titip-content">{{getHelpTextForKey()}}</span>
+          <span class="titip-content">
+            <em class='error'>{{errorMessages($index)}}</em>
+            <em class='warning'>{{warningMessages($index)}}</em>
+            <em class='help'>{{getHelpTextForKey()}}</em>
+          </span>
         </div>
       </div>
       <div class="add-link" ng-if="isValidKey()">+ <a href="" ng-click="addNewValueForLine()">Add {{line.name}}</a></div>
