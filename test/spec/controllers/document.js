@@ -89,6 +89,11 @@ describe('Controller: DocumentCtrl', function () {
       expect(scope.setNewSession).toHaveBeenCalled();
     });
 
+    it('sets the loading state to true', function () {
+      scope.displayGist(uri);
+      expect(scope.loading).toEqual(true);
+    });
+
     it('fetches the gist', function () {
       $httpBackend.expectGET(uri);
       scope.displayGist(uri);
@@ -243,6 +248,10 @@ describe('Controller: DocumentCtrl', function () {
       it ('sets the parseErrors flag for message display true', function () {
         expect(scope.yamlDocument.parseErrors).toBe(true);
       });
+
+      it('sets the loading state to false', function () {
+        expect(scope.loading).toEqual(false);
+      });
     });
 
     describe('when validation fails', function() {
@@ -275,6 +284,10 @@ describe('Controller: DocumentCtrl', function () {
         it ('sets the parseErrors flag for message display false', function () {
           expect(scope.yamlDocument.parseErrors).toBe(false);
         });
+
+        it('sets the loading state to false', function () {
+          expect(scope.loading).toEqual(false);
+        });
       });
 
       describe('when validation fails because of a non-422 error', function () {
@@ -296,6 +309,9 @@ describe('Controller: DocumentCtrl', function () {
           expect(scope.yamlDocument.parseErrors).toBe(false);
         });
 
+        it('sets the loading state to false', function () {
+          expect(scope.loading).toEqual(false);
+        });
       });
     });
 
@@ -407,6 +423,13 @@ describe('Controller: DocumentCtrl', function () {
       });
     });
 
+  });
+
+  describe('$scope.setLoading', function () {
+    it('sets the value of scope.loading to the argument passed', function () {
+      scope.setLoading(true);
+      expect(scope.loading).toEqual(true);
+    });
   });
 
   describe('$scope.serviceName', function () {

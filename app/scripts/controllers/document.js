@@ -112,8 +112,13 @@
         .finally(function () {
           self.buildServiceDefinitions();
           $rootScope.serviceNameList = $scope.serviceNames();
+          $scope.setLoading(false);
         }
       );
+    };
+
+    $scope.setLoading = function (state) {
+      $scope.loading = state;
     };
 
     this.buildServiceDefinitions = function () {
@@ -283,16 +288,16 @@
 
     $scope.displayGist = function (gistUri) {
       if (decodeURIComponent(gistUri).match(/^https:\/\/gist\.githubusercontent\.com/i)) {
+        $scope.setLoading(true);
+        $scope.setNewSession();
         $http.get(gistUri)
           .then(function (response) {
-            $scope.setNewSession();
             // extract special instructions markup before loading raw yaml
             var yaml = self.extractSpecialInstructionsMarkup(response.data);
             // remove blank and comment lines
             $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(yaml);
           })
           .catch(function (response) {
-            $scope.setNewSession();
             $log.error(response);
             $scope.yamlDocument.raw = null;
           });

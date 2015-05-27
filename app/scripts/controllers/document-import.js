@@ -52,6 +52,7 @@
 
     $scope.importYaml = function(docImport) {
       $scope.setNewSession();
+      $scope.setLoading(true);
       if (lodash.endsWith($scope.dialogOptions.dialogPane, 'paste')) {
         if (docImport && !lodash.isEmpty(docImport.raw)) {
           self.importPastedContent(docImport.raw);

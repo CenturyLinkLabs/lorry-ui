@@ -10,11 +10,16 @@
     <document-alerts id="documentAlertsPane"></document-alerts>
   </div>
 
-  <div id="documentPane" ng-init="getValidKeys()">
+  <div ng-show="loading" class="loading">
+    <img src="./images/712.GIF">
+  </div>
+
+  <div id="documentPane" ng-init="getValidKeys()" ng-show="!loading">
     <div ng-repeat="serviceDefinition in serviceDefinitions">
       <service-definition-display ng-if="!yamlDocument.json[serviceName(serviceDefinition)].editMode"></service-definition-display>
       <service-definition-edit ng-if="yamlDocument.json[serviceName(serviceDefinition)].editMode" service-definition="serviceDefinition" section-name="serviceName(serviceDefinition)"></service-definition-edit>
     </div>
+
     <div ng-if="!hasLoadFailure()">
       <div id="newServiceBlockBtn" ng-if="showAddServiceBlockOrBtn()">
         <a class="button-secondary" href="" ng-disabled="inEditMode()" ng-click="addNewServiceDef()">Add a New Service Block</a>
