@@ -210,6 +210,14 @@
           return (serviceName === scope.sectionName) ? false : lodash.includes(scope.$parent.serviceNames(), serviceName);
         };
 
+        scope.hasTopLevelErrors = function() {
+          return !lodash.isEmpty(scope.topLevelError);
+        };
+
+        scope.topLevelTooltip = function() {
+          return (scope.topLevelError || []).join('<br/>');
+        };
+
         var fixExtendsKeyStructure = function () {
           var node = lodash.findWhere(scope.editableJson, {name: 'extends'});
           if (node) {
@@ -248,39 +256,45 @@
           count = 0;
 
           lodash.forEach(scope.serviceDefinition, function(line) {
-            var key = line.lineKey;
-
-            if (lodash.isEmpty(key)) {
+            if (lodash.isEmpty(line.lineKey)) {
               count += 1;
             } else {
-              currentKey = key;
+              currentKey = line.lineKey;
               count = 0;
             }
 
-            checkFor('Errors', line, count, key, currentKey);
-            checkFor('Warnings', line, count, key, currentKey);
+            checkFor('Errors', line, count, currentKey);
+            checkFor('Warnings', line, count, currentKey);
           });
 
-          function checkFor(type, line, count, key, currentKey) {
-            var collectionType = type.toLowerCase();
+          function checkFor(type, line, count, currentKey) {
+            var collectionType = type.toLowerCase(),
+                messages = collectMessagesFrom(line[collectionType]);
             if (line[collectionType] && line[collectionType].length > 0) {
               var lineWithErrors = {};
-              if (lodash.isEmpty(key)) {
+              if (lodash.isEmpty(line.lineKey)) {
                 lineWithErrors = lodash.findWhere(editableJson, { name: currentKey }) || {};
                 var s = 'sub' + type;
-                if (lineWithErrors[s]) {
-                  lineWithErrors[s].push(count);
-                } else {
-                  lineWithErrors[s] = [count];
+                if (!lineWithErrors[s]) {
+                  lineWithErrors[s] = {};
                 }
+                lineWithErrors[s][count] = messages;
               } else {
-                lineWithErrors = lodash.findWhere(editableJson, { name: key });
+                lineWithErrors = lodash.findWhere(editableJson, { name: line.lineKey });
                 if (lineWithErrors) {
-                  lineWithErrors['has' + type] = true;
+                  lineWithErrors[collectionType] = messages;
                 } else {
-                  scope.topLevelError = true;
+                  scope.topLevelError = messages;
                 }
               }
+            }
+
+            function collectMessagesFrom(collection) {
+              return lodash.map(collection, function(item) {
+                var singular = collectionType.replace(/s$/,''),
+                    object = item[singular] || {};
+                return object.message;
+              });
             }
           }
         }
