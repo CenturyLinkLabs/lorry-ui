@@ -900,6 +900,31 @@ describe('Directive: serviceDefinitionEdit', function () {
 
     });
 
+    describe('$scope.hasTopLevelErrors', function() {
+      it('returns true if there are top level errors present', function() {
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+        scope.$digest();
+        element.isolateScope().topLevelError = ['boom'];
+        expect(element.isolateScope().hasTopLevelErrors()).toEqual(true);
+      });
+
+      it('returns false if there are no top level errors', function() {
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+        scope.$digest();
+        element.isolateScope().topLevelError = null;
+        expect(element.isolateScope().hasTopLevelErrors()).toEqual(false);
+      });
+    });
+
+    describe('$scope.topLevelTooltip', function() {
+      it('returns the errors joined by a break', function() {
+        element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+        scope.$digest();
+        element.isolateScope().topLevelError = ['boom shaka', 'err'];
+        expect(element.isolateScope().topLevelTooltip()).toEqual('boom shaka<br/>err');
+      });
+    });
+
   });
 
 });

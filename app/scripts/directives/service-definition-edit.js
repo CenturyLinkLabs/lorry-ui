@@ -210,6 +210,14 @@
           return (serviceName === scope.sectionName) ? false : lodash.includes(scope.$parent.serviceNames(), serviceName);
         };
 
+        scope.hasTopLevelErrors = function() {
+          return !lodash.isEmpty(scope.topLevelError);
+        };
+
+        scope.topLevelTooltip = function() {
+          return (scope.topLevelError || []).join('<br/>');
+        };
+
         var fixExtendsKeyStructure = function () {
           var node = lodash.findWhere(scope.editableJson, {name: 'extends'});
           if (node) {

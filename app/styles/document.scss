@@ -195,6 +195,10 @@
     margin-bottom: 10px;
     margin-left: 70px;
 
+    > .info-tip {
+      margin-bottom: -6px;
+    }
+
     .section-name {
       margin-top: 10px;
       margin-bottom: 5px;
@@ -224,6 +228,35 @@
       margin-top: 10px;
       margin-right: 65px;
     }
+  }
+}
+
+.info-tip {
+  display: inline-block;
+  background-image: url('../images/icon_info.svg');
+  background-repeat: no-repeat;
+  @include background-size(40px, 60px);
+  background-position: 0 0;
+  width: 30px;
+  height: 20px;
+  color: $lighter_grey;
+  margin-top: 14px;
+  margin-left: 1px;
+  margin-right: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-position: 0px -20px;
+  }
+
+  .error, .warning {
+    display: block;
+  }
+  .error {
+    color: $dark_red;
+  }
+  .warning {
+    color: $orange;
   }
 }
 
@@ -357,33 +390,8 @@
   }
 
   .info {
-    display: inline-block;
+    @extend .info-tip;
     float: right;
-    background-image: url('../images/icon_info.svg');
-    background-repeat: no-repeat;
-    @include background-size(40px, 60px);
-    background-position: 0 0;
-    width: 30px;
-    height: 20px;
-    color: $lighter_grey;
-    margin-top: 14px;
-    margin-left: 1px;
-    margin-right: 5px;
-    cursor: pointer;
-
-    &:hover {
-      background-position: 0px -20px;
-    }
-
-    .error, .warning {
-      display: block;
-    }
-    .error {
-      color: $dark_red;
-    }
-    .warning {
-      color: $orange;
-    }
   }
 
   .delete {
