@@ -776,7 +776,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         scope.$digest();
       });
 
-      ['command', 'image', 'build', 'net', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'].forEach(function (key) {
+      ['command', 'image', 'build', 'net', 'pid', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'].forEach(function (key) {
         describe('when the key (' + key + ') represents a string value', function () {
           it('returns an empty string', function () {
             var result = element.isolateScope().createNewEmptyValueForKey(key);
