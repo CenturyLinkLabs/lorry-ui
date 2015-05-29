@@ -202,6 +202,10 @@ describe('Controller: DocumentCtrl', function () {
       it('sets parseErrors to false on the yamlDocument', function () {
         expect(scope.yamlDocument.parseErrors).toBe(false);
       });
+
+      it('sets the loading state to false', function () {
+        expect(scope.loading).toEqual(false);
+      });
     });
 
     describe('when jsyaml loads the document without exception', function () {
@@ -217,6 +221,10 @@ describe('Controller: DocumentCtrl', function () {
 
       it('sets the parsed json on the yamlDocument', function () {
         expect(scope.yamlDocument.json).toEqual({});
+      });
+
+      it('sets the loading state to false', function () {
+        expect(scope.loading).toEqual(false);
       });
     });
   });
