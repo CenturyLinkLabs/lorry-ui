@@ -33,7 +33,7 @@ describe('Directive: serviceDefinitionEdit', function () {
       return ['foo', 'bar'];
     };
     rootScope.markAsDeletedTracker = {};
-    rootScope.validKeys = ['image', 'build', 'extends', 'command', 'links', 'ports', 'volumes', 'environment', 'external_links'];
+    rootScope.validKeys = ['image', 'build', 'extends', 'command', 'links', 'ports', 'volumes', 'environment', 'external_links', 'net'];
   }));
 
   describe('Controller: serviceDefinitionEdit', function () {
@@ -622,17 +622,16 @@ describe('Directive: serviceDefinitionEdit', function () {
 
         describe('string key is added', function () {
           beforeEach(function () {
-            element.isolateScope().addNewKey('command');
+            element.isolateScope().addNewKey('net');
           });
 
           it('should add a new key to the editable json with empty value', function () {
-            expect(element.isolateScope().editableJson).toContain({'name': 'command', 'value': ''});
+            expect(element.isolateScope().editableJson).toContain({'name': 'net', 'value': ''});
           });
           it('should add a new key to the edited service with empty value', function () {
-            expect(scope.editedServiceYamlDocumentJson.command).toBeDefined();
-            expect(scope.editedServiceYamlDocumentJson.command).toBe('');
+            expect(scope.editedServiceYamlDocumentJson.net).toBeDefined();
+            expect(scope.editedServiceYamlDocumentJson.net).toBe('');
           });
-
         });
 
         describe('sequence key is added', function () {
@@ -677,6 +676,20 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
         });
 
+        describe('command key is added', function () {
+          beforeEach(function () {
+            element.isolateScope().addNewKey('command');
+          });
+
+          it('should add a new key to the editable json with empty value', function () {
+            expect(element.isolateScope().editableJson).toContain({'name': 'command', 'value': ''});
+          });
+          it('should add a new key to the edited service with empty value', function () {
+            expect(scope.editedServiceYamlDocumentJson.command).toBeDefined();
+            expect(scope.editedServiceYamlDocumentJson.command).toBe('');
+          });
+        });
+
       });
     });
 
@@ -699,19 +712,20 @@ describe('Directive: serviceDefinitionEdit', function () {
         element.isolateScope().editableJson = [
           {'name': 'build', 'value': 'foo'},
           {'name': 'ports', 'value': ['1111:2222', '3333:4444']},
-          {'name': 'environment', 'value': ['foo:bar', 'flip:flop']}
+          {'name': 'environment', 'value': ['foo:bar', 'flip:flop']},
+          {'name': 'command', 'value': ['foo', 'param1']}
         ];
 
       });
 
       describe('when a string key value is added', function () {
         beforeEach(function () {
-          element.isolateScope().$emit('addNewValueForExistingKey', 'command');
+          element.isolateScope().$emit('addNewValueForExistingKey', 'net');
         });
 
         it('should not add a new key value', function () {
-          expect(element.isolateScope().editableJson).not.toContain({'name': 'command', 'value': ''});
-          expect(scope.editedServiceYamlDocumentJson.command).toBeUndefined();
+          expect(element.isolateScope().editableJson).not.toContain({'name': 'net', 'value': ''});
+          expect(scope.editedServiceYamlDocumentJson.net).toBeUndefined();
         });
       });
 
@@ -747,6 +761,18 @@ describe('Directive: serviceDefinitionEdit', function () {
           expect(element.isolateScope().editableJson[2]).toEqual({'name': 'environment', 'value': ['foo:bar', 'flip:flop', '']});
           expect(scope.editedServiceYamlDocumentJson.environment).toBeDefined();
           expect(scope.editedServiceYamlDocumentJson.environment).toEqual({'foo':'bar', 'flip':'flop'});
+        });
+      });
+
+      describe('when a command (sequence) key value is added', function () {
+        beforeEach(function () {
+          element.isolateScope().$emit('addNewValueForExistingKey', 'command');
+        });
+
+        it('should add a new command key value to the service with empty sequence', function () {
+          expect(element.isolateScope().editableJson[3]).toEqual({'name': 'command', 'value': ['foo', 'param1', '']});
+          expect(scope.editedServiceYamlDocumentJson.command).toBeDefined();
+          expect(scope.editedServiceYamlDocumentJson.command).toEqual(['foo', 'param1', '']);
         });
       });
 
@@ -866,7 +892,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['build', 'environment', 'extends', 'external_links', 'image', 'links', 'volumes']);
+        expect(result).toEqual(['build', 'environment', 'extends', 'external_links', 'image', 'links', 'net', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });
@@ -879,7 +905,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         ];
 
         var result = element.isolateScope().buildValidKeyList();
-        expect(result).toEqual(['environment', 'extends', 'external_links', 'links', 'volumes']);
+        expect(result).toEqual(['environment', 'extends', 'external_links', 'links', 'net', 'volumes']);
         expect(result).not.toContain('command');
         expect(result).not.toContain('ports');
       });
@@ -907,7 +933,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         scope.$digest();
       });
 
-      ['command', 'image', 'build', 'net', 'pid', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'].forEach(function (key) {
+      ['image', 'build', 'net', 'pid', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'].forEach(function (key) {
         describe('when the key (' + key + ') represents a string value', function () {
           it('returns an empty string', function () {
             var result = element.isolateScope().createNewEmptyValueForKey(key);
@@ -916,7 +942,7 @@ describe('Directive: serviceDefinitionEdit', function () {
         });
       });
 
-      ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search', 'labels'].forEach(function (key) {
+      ['command', 'links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search', 'labels'].forEach(function (key) {
         describe('when the key (' + key + ') represents a sequence value', function () {
           it('returns an array with an empty string', function () {
             var result = element.isolateScope().createNewEmptyValueForKey(key);

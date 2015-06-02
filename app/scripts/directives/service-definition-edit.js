@@ -149,7 +149,13 @@
 
         scope.addNewKey = function (key) {
           if (lodash.includes($rootScope.validKeys, key)) {
-            var keyValue = scope.createNewEmptyValueForKey(key);
+            var keyValue;
+            // restrict the create from scratch for 'command' key to a string type
+            if (key === 'command') {
+              keyValue = '';
+            } else {
+              keyValue = scope.createNewEmptyValueForKey(key);
+            }
             scope.editableJson.push({name: key, value: keyValue});
             scope.transformToJson();
           }
@@ -264,12 +270,15 @@
         };
 
         var convertSeqKeyValueToArray = function (svalue, skey) {
-          // if sequence type keys have string value, convert them to array
-          if (isKeyTypeSequence(skey)) {
-            if (!Array.isArray(svalue)) {
-              var temp = svalue;
-              svalue = [];
-              svalue.push(temp);
+          // unless it is the hybrid 'command' key
+          if (skey !== 'command') {
+            // if sequence type keys have string value, convert them to array
+            if (isKeyTypeSequence(skey)) {
+              if (!Array.isArray(svalue)) {
+                var temp = svalue;
+                svalue = [];
+                svalue.push(temp);
+              }
             }
           }
           return svalue;
@@ -298,12 +307,12 @@
         };
 
         var isKeyTypeSequence = function (skey) {
-          var seqKeys = ['links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search', 'labels' ];
+          var seqKeys = ['command', 'links', 'external_links', 'ports', 'expose', 'volumes', 'volumes_from', 'environment', 'env_file', 'dns', 'cap_add', 'cap_drop', 'dns_search', 'labels'];
           return lodash.includes(seqKeys, skey);
         };
 
         var isKeyTypeString = function (skey) {
-          var stringKeys = ['command', 'image', 'build', 'net', 'pid', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'];
+          var stringKeys = ['image', 'build', 'net', 'pid', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mem_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'];
           return lodash.includes(stringKeys, skey);
         };
 
