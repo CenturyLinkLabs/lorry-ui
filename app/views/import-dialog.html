@@ -18,9 +18,10 @@
   <div class="dialog-instructions" ng-show="dialogOptions.dialogTab === 'pmx'">
     <p>
       If you have an existing Panamax template you'd like to import, you can
-      <a href="" ng-click="setDialogPane('pmx-paste')" ng-class="dialogPaneLinkClasses('pmx-paste')">copy &amp; paste your file</a> or
-      <a href="" ng-click="setDialogPane('pmx-upload')" ng-class="dialogPaneLinkClasses('pmx-upload')">browse your local Panamax template (.pmx) files</a>
+      browse your local Panamax template (.pmx) files or copy &amp; paste your file.
     </p>
+    <br/><br/>
+    <h3><a href="" ng-click="setDialogPane('pmx-upload')" ng-class="dialogPaneLinkClasses('pmx-upload')">Select your local Panamax template</a> or <a href="" ng-click="setDialogPane('pmx-paste')" ng-class="dialogPaneLinkClasses('pmx-paste')">Copy &amp; paste your file</a></h3>
   </div>
 </div>
 <div class="dialog-content" ng-show="dialogOptions.dialogTab === 'compose'">
@@ -36,13 +37,12 @@
 </div>
 <div class="dialog-content" ng-show="dialogOptions.dialogTab === 'pmx'">
   <div ng-show="dialogOptions.dialogPane === 'pmx-upload'">
-    <h3>Select your local Panamax template</h3>
     <label for="pmxFileInput" class="button-secondary">Browse local files</label>
     <span class="importFileName">{{importFileName}}</span>
     <input id="pmxFileInput" type="file" file-input accept=".pmx"/>
   </div>
   <div ng-show="dialogOptions.dialogPane === 'pmx-paste'">
-    <h3>Paste your Panamax template contents below</h3>
+    <h3>Paste your Panamax template contents below:</h3>
     <textarea ng-model="docImport.raw"></textarea>
   </div>
 </div>
