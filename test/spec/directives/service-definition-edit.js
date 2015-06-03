@@ -449,7 +449,6 @@ describe('Directive: serviceDefinitionEdit', function () {
             expect(result).toEqual(scope.fullJson[scope.sectionName]);
           });
         });
-
         describe('and has seq values for environment key', function () {
           var editableJson = [
             {name: 'build', value: 'foo'},
@@ -477,7 +476,37 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
 
         });
+
+        describe('and environment key items are marked for deletion', function () {
+          var editableJson = [
+            {name: 'build', value: 'foo'},
+            {name: 'environment', value: ['foo:bar', 'flip:flop', 'dash:']}
+          ];
+          beforeEach(function () {
+            scope.sectionName = 'adapter';
+            scope.fullJson = {
+              'adapter': {
+                'build': 'foo',
+                'environment': {'foo': 'bar', 'flip': 'flop', 'dash': ''}
+              }
+            };
+            element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+            scope.$digest();
+
+            // mark key items for deletion
+            element.isolateScope().markItemForDeletion('environment', 0);
+            element.isolateScope().markItemForDeletion('environment', 2);
+          });
+
+          it('replaces the index in the delete marker with the corresponding key', function () {
+            element.isolateScope().transformToYamlDocumentFragment(editableJson);
+            expect(scope.markAsDeletedTracker.environment).toEqual(['foo', 'dash']);
+          });
+
+        });
       });
+
+
     });
 
     describe('$scope.saveServiceDefinition', function () {
@@ -994,11 +1023,13 @@ describe('Directive: serviceDefinitionEdit', function () {
         beforeEach(function () {
           element.isolateScope().markItemForDeletion('key2', 0);
           element.isolateScope().markItemForDeletion('key2', 1);
+          element.isolateScope().markItemForDeletion('environment', 1);
         });
 
         it('should add the key item indexes to the delete tracker', function () {
           expect(scope.markAsDeletedTracker.key2).toBeDefined();
           expect(scope.markAsDeletedTracker.key2).toEqual([0,1]);
+          expect(scope.markAsDeletedTracker.environment).toEqual([1]);
         });
       });
 
@@ -1006,13 +1037,16 @@ describe('Directive: serviceDefinitionEdit', function () {
         beforeEach(function () {
           element.isolateScope().markItemForDeletion('key2', 0);
           element.isolateScope().markItemForDeletion('key2', 1);
+          element.isolateScope().markItemForDeletion('environment', 1);
         });
 
         it('should remove the key item index from the delete tracker', function () {
-          // undelete only one item
+          // undelete items
           element.isolateScope().markItemForDeletion('key2', 1);
+          element.isolateScope().markItemForDeletion('environment', 1);
           expect(scope.markAsDeletedTracker.key2).toBeDefined();
           expect(scope.markAsDeletedTracker.key2).toEqual([0]);
+          expect(scope.markAsDeletedTracker.environment).toBeUndefined();
         });
       });
 
