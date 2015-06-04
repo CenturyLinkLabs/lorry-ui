@@ -139,6 +139,7 @@
 
       a {
         color: $light_grey;
+        text-decoration: underline;
 
         &:hover {
           color: $darker_grey;
@@ -147,19 +148,22 @@
         &.current {
           color: $darker_grey;
           text-decoration: none;
+          cursor: default;
         }
       }
-    }
-
-    .dialog-content {
-      border-bottom: 1px solid $lighter_grey;
-      overflow: auto;
 
       h3 {
         color: $darker_grey;
         font-weight: bold;
         font-size: 1.1em;
       }
+
+    }
+
+    .dialog-content {
+      border-bottom: 1px solid $lighter_grey;
+      overflow: auto;
+      padding-top: 5px;
 
       .success {
         color: $white;
@@ -233,6 +237,7 @@
 
     .dialog-instructions {
       line-height: 1.2em;
+      padding-bottom: 5px;
     }
 
     textarea {
