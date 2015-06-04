@@ -94,6 +94,7 @@
 
         var convertSeqSyntaxToHashSyntaxForEnvironmentVars = function (svalue) {
           var obj = {};
+          var newEnvTracker = [];
           for(var i = 0; i < svalue.value.length; i++) {
             var item = svalue.value[i];
             // look for the first occurance of ':' or '='
@@ -114,8 +115,17 @@
                   subval = item.substring(index+1, item.length);
                 }                  }
               obj[subkey] = subval;
+              // If items for the environment key was marked for deletion
+              // substitute the index no. by the actual key
+              var envTracker = $rootScope.markAsDeletedTracker.environment;
+              if (angular.isDefined(envTracker) && !lodash.isEmpty(envTracker)) {
+                if (lodash.includes(envTracker, i)) {
+                  newEnvTracker.push(subkey);
+                }
+              }
             }
           }
+          $rootScope.markAsDeletedTracker.environment = newEnvTracker;
           return obj;
         };
 

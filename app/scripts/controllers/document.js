@@ -207,6 +207,16 @@
     this.deleteItemsMarkedForDeletion = function (data) {
       var tracker = $rootScope.markAsDeletedTracker;
 
+      // handle deletion of environment key items
+      var newEnvObj;
+      if (angular.isDefined(tracker.environment) && !lodash.isEmpty(tracker.environment) && angular.isDefined(data.environment) ) {
+        newEnvObj = lodash.omit(data.environment, tracker.environment);
+        if (newEnvObj) {
+          data.environment = newEnvObj;
+        }
+      }
+
+      // handle all other keys
       angular.forEach(tracker, function (v, k) {
         if (v[0] === 'delete me') {
           delete data[k];

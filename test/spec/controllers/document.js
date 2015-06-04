@@ -613,17 +613,21 @@ describe('Controller: DocumentCtrl', function () {
         // simulate deletes as marked
         scope.markAsDeletedTracker.build = ['delete me'];
         scope.markAsDeletedTracker.ports = ['0'];
+        scope.markAsDeletedTracker.environment = ['flip'];
       });
 
       it('should delete the items marked for deletion', function () {
         var sectionData = {
           'build': 'foo',
-          'ports': ['1111:2222', '3333:4444']
+          'ports': ['1111:2222', '3333:4444'],
+          'environment': {foo:'bar', flip:'flop'}
         };
         var result = DocumentCtrl.deleteItemsMarkedForDeletion(sectionData);
 
         expect(result.build).toBeUndefined();
         expect(result.ports.length).toBe(1);
+        expect(result.ports).toEqual(['3333:4444']);
+        expect(result.environment).toEqual({foo:'bar'});
       });
 
       it('should reset the delete tracker', function () {

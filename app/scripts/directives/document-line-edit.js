@@ -70,7 +70,7 @@
           var tracker = $rootScope.markAsDeletedTracker;
           var key = scope.line.name;
 
-          if (!index) {
+          if (angular.isUndefined(index)) {
             return (tracker.hasOwnProperty(key)) ? 'mark-for-deletion' : '';
           } else {
             if (tracker.hasOwnProperty(key)) {
@@ -95,7 +95,7 @@
           var tracker = $rootScope.markAsDeletedTracker;
           var key = scope.line.name;
 
-          if (!index) {
+          if (angular.isUndefined(index)) {
             return (tracker.hasOwnProperty(key)) ? 'marked' : '';
           } else {
             if (tracker.hasOwnProperty(key)) {
