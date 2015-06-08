@@ -222,10 +222,6 @@ describe('Controller: DocumentCtrl', function () {
       it('sets the parsed json on the yamlDocument', function () {
         expect(scope.yamlDocument.json).toEqual({});
       });
-
-      it('sets the loading state to false', function () {
-        expect(scope.loading).toEqual(false);
-      });
     });
   });
 

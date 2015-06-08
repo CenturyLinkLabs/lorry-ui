@@ -83,7 +83,6 @@
         $scope.yamlDocument.errors = [{error: {message: YamlException.message}}];
         $scope.yamlDocument.parseErrors = false;
         $scope.yamlDocument.loadFailure = true;
-      } finally {
         $scope.setLoading(false);
       }
     };

@@ -260,6 +260,7 @@ describe('Controller: DocumentImportCtrl', function () {
 
       describe('when the converter throws an exception', function () {
         beforeEach(function () {
+          scope.setLoading = jasmine.createSpy('setLoading');
           spyOn(PMXConverter, 'convert').and.callFake(function () { throw 'boom'; });
         });
 
@@ -271,6 +272,11 @@ describe('Controller: DocumentImportCtrl', function () {
         it('sets yamlDocument.loadFailure true', function () {
           DocumentImportCtrl.importPastedContent(docImport.raw);
           expect(scope.yamlDocument.loadFailure).toBe(true);
+        });
+
+        it('sets the loading state to false', function () {
+          DocumentImportCtrl.importPastedContent(docImport.raw);
+          expect(scope.setLoading).toHaveBeenCalledWith(false);
         });
       });
     });

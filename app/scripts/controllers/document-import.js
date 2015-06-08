@@ -66,40 +66,54 @@
     };
 
     this.importPastedContent = function (content) {
-      if ($scope.dialogOptions.dialogTab === 'pmx') {
-        try {
-          $scope.yamlDocument.raw = PMXConverter.convert(content);
-          // GA click tracking
-          analyticsService.trackEvent('create', 'PMX', 'via paste');
-        } catch (error) {
-          $scope.yamlDocument.errors = [{error: {message: error}}];
-          $scope.yamlDocument.loadFailure = true;
+      var trackEventAction;
+
+      try {
+        if ($scope.dialogOptions.dialogTab === 'pmx') {
+            trackEventAction = 'PMX';
+            $scope.yamlDocument.raw = PMXConverter.convert(content);
+        } else {
+          trackEventAction = 'docker-compose.yml';
+          // remove blank and comment lines
+          $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(content);
         }
-      } else {
-        // remove blank and comment lines
-        $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(content);
+      } catch (error) {
+        self.handleImportError(error);
+      } finally {
         // GA click tracking
-        analyticsService.trackEvent('create', 'docker-compose.yml', 'via paste');
+        analyticsService.trackEvent('create', trackEventAction, 'via paste');
       }
     };
 
     $scope.upload = function() {
       var fr = new FileReader();
+      var trackEventAction;
+
       fr.addEventListener('load', function(e) {
         $scope.$apply(function(){
-          if ($scope.dialogOptions.dialogTab === 'pmx') {
-            $scope.yamlDocument.raw = PMXConverter.convert(e.target.result);
+          try {
+            if ($scope.dialogOptions.dialogTab === 'pmx') {
+              trackEventAction = 'PMX';
+              $scope.yamlDocument.raw = PMXConverter.convert(e.target.result);
+            } else {
+              trackEventAction = 'docker-compose.yml';
+              $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(e.target.result);
+            }
+          } catch (error) {
+            self.handleImportError(error);
+          } finally {
             // GA click tracking
-            analyticsService.trackEvent('create', 'PMX', 'via upload');
-          } else {
-            // remove blank and comment lines
-            $scope.yamlDocument.raw = $scope.removeBlankAndCommentLinesFromYaml(e.target.result);
-            // GA click tracking
-            analyticsService.trackEvent('create', 'docker-compose.yml', 'via upload');
+            analyticsService.trackEvent('create', trackEventAction, 'via upload');
           }
         });
       });
       fr.readAsText($scope.files[0]);
+    };
+
+    this.handleImportError = function (error) {
+      $scope.setLoading(false);
+      $scope.yamlDocument.errors = [{error: {message: error}}];
+      $scope.yamlDocument.loadFailure = true;
     };
 
     this.initialize = function () {
