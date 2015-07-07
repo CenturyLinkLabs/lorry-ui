@@ -316,8 +316,8 @@
                   valueArr.push(lk+':'+lv);
                 });
               } else {
-                // ['ENV_KEY_1=some value'] -> ['ENV_KEY_1:some value']
-                valueArr.push(lvalue.replace('=', ':'));
+                // ['ENV_KEY_1=some value'] -> don't change
+                valueArr.push(lvalue);
               }
             });
           }

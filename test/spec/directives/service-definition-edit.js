@@ -372,7 +372,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       describe('when yaml json has environment keys with seq values', function () {
         var editableJson = [
-          { name: 'environment', value: ['foo:bar', 'flip:flop']},
+          { name: 'environment', value: ['foo=bar', 'flip=flop']},
           { name: 'build', value: 'bar'}
         ];
         beforeEach(function () {
