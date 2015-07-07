@@ -476,6 +476,29 @@ describe('Directive: serviceDefinitionEdit', function () {
           });
 
         });
+        describe('and has special seq values for environment key', function () {
+          var editableJson = [
+            {name: 'build', value: 'foo'},
+            {name: 'environment', value: ['DOCKER_HOST', 'flip=', 'dash:', 'constraint:node==swarm-master']}
+          ];
+          beforeEach(function () {
+            scope.sectionName = 'adapter';
+            scope.fullJson = {
+              'adapter': {
+                'build': 'foo',
+                'environment': {'DOCKER_HOST': null, 'flip': '', 'dash': '', 'constraint': 'node==swarm-master'}
+              }
+            };
+            element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+            scope.$digest();
+          });
+
+          it('returns valid yamlDocument fragment', function () {
+            var result = element.isolateScope().transformToYamlDocumentFragment(editableJson);
+            expect(result).toEqual(scope.fullJson[scope.sectionName]);
+          });
+
+        });
 
         describe('and environment key items are marked for deletion', function () {
           var editableJson = [
