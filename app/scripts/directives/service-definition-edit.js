@@ -101,20 +101,28 @@
             // favor the ':' syntax when mixed chars ae present
             if (item !== '') {
               var subval = '', subkey = '';
-              var index = item.indexOf(':');
-              // if incoming value has : syntax
-              if ( index !== -1) {
-                subkey = item.substring(0, index);
-                subval = item.substring(index+1, item.length);
+              // if incoming value has neither : nor = e.g. DOCKER_HOST
+              if (item.indexOf(':') === -1 && item.indexOf('=') === -1) {
+                obj[item] = null;
               } else {
-                // if incoming value has = syntax
-                subval = ''; subkey = '';
-                index = item.indexOf('=');
+                // if incoming value has : syntax
+                var index = item.indexOf(':');
                 if ( index !== -1) {
                   subkey = item.substring(0, index);
                   subval = item.substring(index+1, item.length);
-                }                  }
-              obj[subkey] = subval;
+                  subval = subval === 'null' ? null : subval;
+                } else {
+                  // if incoming value has = syntax
+                  subval = ''; subkey = '';
+                  index = item.indexOf('=');
+                  if ( index !== -1) {
+                    subkey = item.substring(0, index);
+                    subval = item.substring(index+1, item.length);
+                    subval = subval === 'null' ? null : subval;
+                  }
+                }
+                obj[subkey] = subval;
+              }
               // If items for the environment key was marked for deletion
               // substitute the index no. by the actual key
               var envTracker = $rootScope.markAsDeletedTracker.environment;
@@ -308,8 +316,8 @@
                   valueArr.push(lk+':'+lv);
                 });
               } else {
-                // ['ENV_KEY_1=some value'] -> ['ENV_KEY_1:some value']
-                valueArr.push(lvalue.replace('=', ':'));
+                // ['ENV_KEY_1=some value'] -> don't change
+                valueArr.push(lvalue);
               }
             });
           }

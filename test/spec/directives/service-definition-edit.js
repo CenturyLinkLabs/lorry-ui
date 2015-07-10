@@ -372,7 +372,7 @@ describe('Directive: serviceDefinitionEdit', function () {
 
       describe('when yaml json has environment keys with seq values', function () {
         var editableJson = [
-          { name: 'environment', value: ['foo:bar', 'flip:flop']},
+          { name: 'environment', value: ['foo=bar', 'flip=flop']},
           { name: 'build', value: 'bar'}
         ];
         beforeEach(function () {
@@ -464,6 +464,29 @@ describe('Directive: serviceDefinitionEdit', function () {
                 'command': 'bar',
                 'ports': ['1111:2222', '3333:4444'],
                 'environment': {'foo': 'bar', 'flip': 'flop', 'dash': ''}
+              }
+            };
+            element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
+            scope.$digest();
+          });
+
+          it('returns valid yamlDocument fragment', function () {
+            var result = element.isolateScope().transformToYamlDocumentFragment(editableJson);
+            expect(result).toEqual(scope.fullJson[scope.sectionName]);
+          });
+
+        });
+        describe('and has special seq values for environment key', function () {
+          var editableJson = [
+            {name: 'build', value: 'foo'},
+            {name: 'environment', value: ['DOCKER_HOST', 'flip=', 'dash:', 'constraint:node==swarm-master']}
+          ];
+          beforeEach(function () {
+            scope.sectionName = 'adapter';
+            scope.fullJson = {
+              'adapter': {
+                'build': 'foo',
+                'environment': {'DOCKER_HOST': null, 'flip': '', 'dash': '', 'constraint': 'node==swarm-master'}
               }
             };
             element = compile('<service-definition-edit section-name="sectionName"></service-definition-edit>')(scope);
