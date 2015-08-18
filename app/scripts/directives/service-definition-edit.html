@@ -3,14 +3,14 @@
     <div class="gutter">&nbsp;</div>
     <div class="section">
       <input name="sectionname" class="section-name" ng-class="sectionClasses()" ng-model="newSectionName" type="text" placeholder="sectionname"
-             required ng-pattern="/^[a-zA-Z0-9]+(?:[._-][a-zA-Z0-9]+)*/" ng-trim="false" unique-service-name />
+             required ng-pattern="/^[a-zA-Z0-9]+(?:[._-][a-zA-Z0-9]+)*$/" ng-trim="false" unique-service-name />
       <div ng-if="hasTopLevelErrors()" class="info-tip titip-bottom-right titip-default titip-wrapped-large">
         <span class="titip-content">
           <em class='error'>{{topLevelTooltip()}}</em>
         </span>
       </div>
       <span class="error" ng-show="editForm.sectionname.$dirty && editForm.sectionname.$invalid">Error:
-        <span ng-show="editForm.sectionname.$error.pattern">Valid characters are [a-zA-Z0-9\._\-] but not starting with [.-_]</span>
+        <span ng-show="editForm.sectionname.$error.pattern">Valid characters are [a-zA-Z0-9\._\-] but not starting or ending with [.-_]</span>
         <span ng-show="editForm.sectionname.$error.required">Service name is required</span>
         <span ng-show="editForm.sectionname.$error.uniqueservicename">Service name already exists</span>
       </span>
