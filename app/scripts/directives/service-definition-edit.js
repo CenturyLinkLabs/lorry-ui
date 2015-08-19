@@ -330,7 +330,7 @@
         };
 
         var isKeyTypeString = function (skey) {
-          var stringKeys = ['image', 'build', 'net', 'pid', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mac_address', 'mem_limit', 'memswap_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares'];
+          var stringKeys = ['image', 'build', 'net', 'pid', 'working_dir', 'entrypoint', 'user', 'hostname', 'domainname', 'mac_address', 'mem_limit', 'memswap_limit', 'privileged', 'restart', 'stdin_open', 'tty', 'cpu_shares', 'cpuset'];
           return lodash.includes(stringKeys, skey);
         };
 
