@@ -7,6 +7,10 @@ The Lorry project will make creating docker-compose.yml files easier with its us
 
 Once you're done crafting the docker-compose.yml, Lorry makes it simple to save your document as a file, copy it to the clipboard, and even share it with others as a Gist or with a Lorry URL for collaborative editing.
 
+## NOTE
+
+This repo is no longer being maintained. Users are welcome to fork it, but we make no warranty of its functionality.
+
 ## Usage
 You can access the hosted version of Lorry at [lorry.io](https://lorry.io). For local development, the lorry-ui project requires services provided by the [Lorry API](https://github.com/CenturyLinkLabs/lorry). The Lorry API must be available in order for the Lorry UI to function.
 
